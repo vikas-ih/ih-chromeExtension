@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Insight-Health AI",
+  "version": "1.0.0",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "host_permissions": ["https://*/*", "http://*/*"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src https://app-jabl76n0368q.frontegg.com chrome-extension://dnkgojodanfpeoomapmpeomnbppkddan"
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "*://*.frontegg.com/*",
+    "identity"
+  ]
+}
