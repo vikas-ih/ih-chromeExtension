@@ -17,7 +17,7 @@ const Home = () => {
   } else {
     return (
       <div>
-        <div>Welcome {user?.name}, you are authenticated</div>
+        <div style={{color:"black"}}>Welcome {user?.name}, you are authenticated</div>
         <div>
           <img
             className="card-img"
