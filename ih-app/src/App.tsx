@@ -1,6 +1,6 @@
 import "./App.css";
 import { useAuth, useLoginWithRedirect } from "@frontegg/react";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 function App() {
@@ -10,13 +10,15 @@ function App() {
     // if you are using hosted login box change the value to 'oauth/account/logout'
     navigate("/account/logout");
   };
-  const loginWithRedirect = useLoginWithRedirect();
+  // const loginWithRedirect = useLoginWithRedirect();
   // Uncomment this to redirect to login automatically
-  useEffect(() => {
-    if (!isAuthenticated) {
-      loginWithRedirect();
-    }
-  }, [isAuthenticated, loginWithRedirect]);
+  console.log("isAuthenticated",isAuthenticated);
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     console.log("loginWithRedirect", loginWithRedirect);
+  //     loginWithRedirect();
+  //   }
+  // }, [isAuthenticated, loginWithRedirect]);
   return (
     <div>
       {isAuthenticated && (

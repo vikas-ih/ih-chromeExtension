@@ -1,7 +1,9 @@
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
 import { useCallback } from "react";
 
-const APP_URL = "http://localhost:5174/";
+const APP_URL = "http://localhost:5174/account/login"; //PORT should be where the ih-app is running
+// const APP_URL = "https://auth.lumi.build/oauth/account/login";
+
 
 const Home = () => {
   const user = useAuthUserOrNull();
@@ -15,7 +17,7 @@ const Home = () => {
   } else {
     return (
       <div>
-        <div>Welcome {user.name}, you are authenticated</div>
+        <div>Welcome {user?.name}, you are authenticated</div>
         <div>
           <img
             className="card-img"

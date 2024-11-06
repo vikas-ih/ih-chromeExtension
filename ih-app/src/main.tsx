@@ -2,12 +2,12 @@ import ReactDOM from "react-dom/client";
 import { FronteggProvider } from "@frontegg/react";
 
 import "./index.css";
-import App from "./App";
+import App from "./App.tsx";
 
 const contextOptions = {
-  baseUrl: "https://app-jabl76n0368q.frontegg.com",
-  clientId: "c5c45429-71e8-4c53-9c62-5bd33aeaab0f",
-  appId: "201597ba-bc17-4d76-ba3b-c1e82dc8b7fc",
+  baseUrl: "https://app-dur7z3jxz6xz.us.frontegg.com",
+  clientId: "a2232153-71a3-4b40-a026-4d6051b47564",
+  appId: "5597c702-9c72-4643-aed8-029f27283aa9",
 };
 const authOptions = {
   keepSessionAlive: true,

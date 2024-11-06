@@ -24,12 +24,13 @@ import { useEffect } from "react";
 //   // appId: "[YOUR_APP_ID]",
 // };
 const contextOptions: ContextOptions = {
-  baseUrl: "https://app-jabl76n0368q.frontegg.com",
-  clientId: "c5c45429-71e8-4c53-9c62-5bd33aeaab0f",
-  appId: "201597ba-bc17-4d76-ba3b-c1e82dc8b7fc",
+  baseUrl: "https://app-dur7z3jxz6xz.us.frontegg.com",
+  clientId: "a2232153-71a3-4b40-a026-4d6051b47564",
+  appId: "5597c702-9c72-4643-aed8-029f27283aa9",
   requestCredentials: "include",
 };
-ContextHolder.for("Insight-Health").setContext(contextOptions);
+
+ContextHolder.for("Care Connect").setContext(contextOptions);
 
 const fronteggApp: FronteggApp = new FronteggApp(
   {
@@ -41,7 +42,7 @@ const fronteggApp: FronteggApp = new FronteggApp(
 
 function App() {
   useEffect(() => {
-    createApiClient("Insight-Health")
+    createApiClient("Care Connect")
       .auth.refreshTokenV3()
       .then((user) => {
         fronteggApp?.store.dispatch({
