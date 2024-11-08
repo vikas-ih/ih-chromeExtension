@@ -23,7 +23,7 @@ const Home = () => {
     return (
       <TopNavBar/>
     );
-  // }
+  }
 };
 
 export default Home;
