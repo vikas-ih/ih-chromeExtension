@@ -4,6 +4,7 @@ export { Header } from "./Header";
 // export { Logo } from "./Logo";
 // export { ProfileLogo } from "./ProfileLogo";
 export { Text } from "./Text";
+export { Image } from "./Image";
 // export { ModalComponent } from "./Modal";
 // export { CustomDropdown } from "./Dropdown";
 // export { SingleSelect } from "./SingleSelect";

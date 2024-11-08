@@ -1,11 +1,11 @@
-import { Tooltip } from 'antd';
-import { classNames } from '../utilities';
-import { useSelector } from 'react-redux';
+import { Tooltip } from "antd";
+import { classNames } from "../utilities";
+// import { useSelector } from 'react-redux';
 
 export const ProIconSvg = ({
   className,
   onClick,
-  fill = '#FFE082',
+  fill = "#FFE082",
   size = 15,
 }) => {
   return (
@@ -16,7 +16,7 @@ export const ProIconSvg = ({
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       role="img"
-      className={classNames('iconify iconify--fxemoji', className)}
+      className={classNames("iconify iconify--fxemoji", className)}
       preserveAspectRatio="xMidYMid meet"
       onClick={onClick}
     >
@@ -29,7 +29,7 @@ export const ProIconSvg = ({
 };
 
 export const ProIcon = ({
-  fill = '#FFE082',
+  fill = "#FFE082",
   className,
   onClick,
   forceFlashIcon = false,

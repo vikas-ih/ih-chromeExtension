@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header, Text } from "./baseComponents";
 import { Dropdown as AntDropdown, Divider, AutoComplete, Menu } from "antd";
 import {
@@ -11,7 +11,7 @@ import {
 import { MicroPhone } from "../icons/Microphone.icon";
 
 import { BankOutlined, CheckOutlined } from "@ant-design/icons";
-// import { ProfileTopNavbar } from "../baseComponents/ProfileTopNavbar";
+import { ProfileTopNavbar } from "./baseComponents/ProfileTopNavbar";
 
 import {
   AdminPortal,
@@ -23,14 +23,17 @@ import {
 } from "@frontegg/react";
 import { getFromStorage } from "../lib/storage";
 import { NavLink } from "react-router-dom";
+import { useAuthUserOrNull } from "@frontegg/react-hooks";
 
 const TopNavBar = () => {
-  let { tenants } = useTenantsState();
-  console.log("tenants", tenants);
+  // let { tenants } = useTenantsState();
+  const data = useAuthUserOrNull();
+  const { user, tenants } = data;
+  console.log("tenants", data.tenants);
+  console.log("user", data.user);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [filteredTenantsNames, setFilteredTenantsNames] = useState(tenants);
-  const { currentPractitioner, currentPractitionerEntitlements } = {}; //todo
+  const [filteredTenantsNames, setFilteredTenantsNames] = useState([]);
 
   const cachedUserName = getFromStorage(`user_name`);
   const cachedUserEmail = getFromStorage(`user_email`);
@@ -48,6 +51,10 @@ const TopNavBar = () => {
     //  });
     AdminPortal.show();
   };
+
+  useEffect(() => {
+    setFilteredTenantsNames(data.tenants);
+  }, [data.tenants]);
   const logout = () => {
     setDropdownVisible(false);
     const baseUrl = ContextHolder.getContext().baseUrl;
@@ -71,35 +78,26 @@ const TopNavBar = () => {
     setFilteredTenantsNames(filtered);
   };
 
+  const switchOrganization = (e) => {
+    localStorage.removeItem("filter_practitioner_id");
+    localStorage.removeItem("selectedPractitioners");
+    localStorage.removeItem("show_current_practitioner");
+    localStorage.clear();
+    // dispatch(getPractitionersAndPatientsSlice([]));
+    // dispatch(getAppointmentByFilterSlice([]));
+    // dispatch(getAppointmentsByStatusSlice([]));
+    const selectedId = e.key;
+    // switchTenant({ tenantId: selectedId });
+  };
+
+  const currentPractitioner = user;
+  let fullName = currentPractitioner.name;
+  let nameWithoutTitle = fullName.replace("Dr ", "");
+
   const singleOrganisationAccessAccount = filteredTenantsNames.length <= 1;
 
   const topNavbarDropdownOptions = singleOrganisationAccessAccount
     ? [
-        {
-          label: (
-            <div className="flex p-4">
-              <EditIcon className={"mr-2"} />
-              <span className="font-sans text-sm"> Settings</span>
-            </div>
-          ),
-          key: "settings",
-          onClick: settings,
-        },
-        {
-          label: (
-            <>
-              <Divider className="m-0 p-0" />
-            </>
-          ),
-          className: "p-0",
-        },
-        currentPractitioner?.stripe_customer_id && {
-          key: "billing",
-          label: <StripeBillingCustomerPortal />,
-        },
-        currentPractitioner?.stripe_customer_id && {
-          label: <Divider className="m-0 p-0" />,
-        },
         {
           label: (
             <div className="flex p-4">
@@ -112,24 +110,6 @@ const TopNavBar = () => {
         },
       ]
     : [
-        {
-          label: (
-            <div className="flex p-4">
-              <EditIcon className={"mr-2"} />
-              <span className="font-sans text-sm"> Settings</span>
-            </div>
-          ),
-          key: "settings",
-          onClick: settings,
-        },
-        {
-          label: (
-            <>
-              <Divider className="m-0 p-0" />
-            </>
-          ),
-          className: "p-0",
-        },
         {
           label: (
             <div className="flex p-4">
@@ -165,6 +145,7 @@ const TopNavBar = () => {
                 maxHeight: "200px",
                 overflowY: "auto",
                 backgroundColor: "white",
+                width: "100%",
               }}
               id="menuorganization"
               items={filteredTenantsNames.map((tenant) => ({
@@ -185,13 +166,6 @@ const TopNavBar = () => {
               }))}
             />
           ),
-        },
-        currentPractitioner?.stripe_customer_id && {
-          label: <Divider className="m-0 p-0" />,
-        },
-        currentPractitioner?.stripe_customer_id && {
-          key: "billing",
-          label: <StripeBillingCustomerPortal />,
         },
         {
           label: <Divider className="m-0 p-0" />,
@@ -216,9 +190,9 @@ const TopNavBar = () => {
             Encounters
           </h1>
         </div>
-        <div className="h-7 w-7 rounded-full bg-[#ACD7C4] absolute right-10 flex items-center justify-center">
+        {/* <div className="h-7 w-7 rounded-full bg-[#ACD7C4] absolute right-10 flex items-center justify-center">
           <span className="relative text-white">T</span>
-        </div>
+        </div> */}
         <div className="top-navbar-right flex items-center">
           <AntDropdown
             className="profile-dropdown"
@@ -240,15 +214,19 @@ const TopNavBar = () => {
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <div className="profile-wrapper flex items-center cursor-pointer">
+                <ProfileTopNavbar
+                  name={nameWithoutTitle}
+                  className={"profile-popover-logo mr-1 sm:mr-2 lg:mr-3"}
+                />
                 <Text
                   type={"span"}
                   className={
                     tenants.length > 1
-                      ? "user-name mt-4 hidden sm:block mr-1 sm:mr-2 lg:mr-3"
+                      ? "user-name  hidden sm:block mr-1 sm:mr-2 lg:mr-3"
                       : "user-name hidden sm:block mr-1 sm:mr-2 lg:mr-3"
                   }
                 >
-                  {cachedUserName}
+                  {nameWithoutTitle}
                   {tenants.length > 1 && (
                     <div className="text-xs text-right text-gray-500">
                       <BankOutlined className="mr-1" />
@@ -273,7 +251,7 @@ const TopNavBar = () => {
       </div>
       <div className="absolute bottom-5 right-4">
         <div className="bg-[#00D090] rounded-full p-5 flex items-center justify-center mb-7 cursor-pointer">
-          <MicroPhone  />
+          <MicroPhone />
         </div>
       </div>
 
