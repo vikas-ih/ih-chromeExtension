@@ -24,7 +24,7 @@ import { useEffect } from "react";
 //   // appId: "[YOUR_APP_ID]",
 // };
 const contextOptions: ContextOptions = {
-  baseUrl: "https://app-dur7z3jxz6xz.us.frontegg.com",
+  baseUrl: "https://auth.lumi.build",
   clientId: "a2232153-71a3-4b40-a026-4d6051b47564",
   appId: "5597c702-9c72-4643-aed8-029f27283aa9",
   requestCredentials: "include",

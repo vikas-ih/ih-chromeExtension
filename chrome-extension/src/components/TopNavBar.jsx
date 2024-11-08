@@ -1,0 +1,292 @@
+import { useState } from "react";
+import { Header, Text } from "./baseComponents";
+import { Dropdown as AntDropdown, Divider, AutoComplete, Menu } from "antd";
+import {
+  DropdownIcon,
+  EditIcon,
+  SearchIcon,
+  SignoutIcon,
+  AmbientMblHoverIcon,
+} from "../icons";
+import { MicroPhone } from "../icons/Microphone.icon";
+
+import { BankOutlined, CheckOutlined } from "@ant-design/icons";
+// import { ProfileTopNavbar } from "../baseComponents/ProfileTopNavbar";
+
+import {
+  AdminPortal,
+  // ContextHolder,
+  // useAuth,
+  // useAuthActions,
+  // useFeatureEntitlements,
+  useTenantsState,
+} from "@frontegg/react";
+import { getFromStorage } from "../lib/storage";
+import { NavLink } from "react-router-dom";
+
+const TopNavBar = () => {
+  let { tenants } = useTenantsState();
+  console.log("tenants", tenants);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [filteredTenantsNames, setFilteredTenantsNames] = useState(tenants);
+  const { currentPractitioner, currentPractitionerEntitlements } = {}; //todo
+
+  const cachedUserName = getFromStorage(`user_name`);
+  const cachedUserEmail = getFromStorage(`user_email`);
+  const cachedUserId = getFromStorage(`user_id`);
+  const resetDropdown = () => {
+    setDropdownVisible(false);
+    setSearchText("");
+    setFilteredTenantsNames(tenants);
+  };
+  const settings = () => {
+    setDropdownVisible(false);
+    //  analytics.track("Viewed Settings", {
+    //    email: user?.email,
+    //    orgId: org_id,
+    //  });
+    AdminPortal.show();
+  };
+  const logout = () => {
+    setDropdownVisible(false);
+    const baseUrl = ContextHolder.getContext().baseUrl;
+    analytics.track("Signed Out", {
+      email: user?.email,
+      orgId: org_id,
+    });
+    clearLoggedInUser();
+    localStorage.removeItem("user_name");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("show_current_practitioner");
+    localStorage.clear();
+    window.location.href = `${baseUrl}/oauth/logout?post_logout_redirect_uri=${window.location}`;
+  };
+  const handleSearch = (value) => {
+    setSearchText(value);
+    const filtered = tenants.filter((tenant) =>
+      tenant.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredTenantsNames(filtered);
+  };
+
+  const singleOrganisationAccessAccount = filteredTenantsNames.length <= 1;
+
+  const topNavbarDropdownOptions = singleOrganisationAccessAccount
+    ? [
+        {
+          label: (
+            <div className="flex p-4">
+              <EditIcon className={"mr-2"} />
+              <span className="font-sans text-sm"> Settings</span>
+            </div>
+          ),
+          key: "settings",
+          onClick: settings,
+        },
+        {
+          label: (
+            <>
+              <Divider className="m-0 p-0" />
+            </>
+          ),
+          className: "p-0",
+        },
+        currentPractitioner?.stripe_customer_id && {
+          key: "billing",
+          label: <StripeBillingCustomerPortal />,
+        },
+        currentPractitioner?.stripe_customer_id && {
+          label: <Divider className="m-0 p-0" />,
+        },
+        {
+          label: (
+            <div className="flex p-4">
+              <SignoutIcon className={"mr-2"} />
+              <span className="font-sans text-sm">Sign out</span>
+            </div>
+          ),
+          key: "logout",
+          onClick: logout,
+        },
+      ]
+    : [
+        {
+          label: (
+            <div className="flex p-4">
+              <EditIcon className={"mr-2"} />
+              <span className="font-sans text-sm"> Settings</span>
+            </div>
+          ),
+          key: "settings",
+          onClick: settings,
+        },
+        {
+          label: (
+            <>
+              <Divider className="m-0 p-0" />
+            </>
+          ),
+          className: "p-0",
+        },
+        {
+          label: (
+            <div className="flex p-4">
+              <div className="text-sm">
+                <BankOutlined className="mr-2" />
+                Organizations
+              </div>
+            </div>
+          ),
+        },
+        {
+          label: (
+            <div className="p-2">
+              <div className=" w-[19rem] ant-select-selector drop-shadow-md bg-white rounded-xl">
+                <AutoComplete
+                  bordered={false}
+                  className="border-none font-sans h-10 flex items-center border-0 focus:outline-nones"
+                  style={{ WebkitTextFillColor: "#000" }}
+                  placeholder="Search organization"
+                  suffixIcon={<SearchIcon />}
+                  onSearch={handleSearch}
+                  value={searchText}
+                  id="Searchorganization"
+                />
+              </div>
+            </div>
+          ),
+        },
+        {
+          label: (
+            <Menu
+              style={{
+                maxHeight: "200px",
+                overflowY: "auto",
+                backgroundColor: "white",
+              }}
+              id="menuorganization"
+              items={filteredTenantsNames.map((tenant) => ({
+                label: (
+                  <div
+                    key={tenant.tenantId}
+                    className="flex items-center p-2 text-sm text-gray-600"
+                  >
+                    {tenant.name}
+                    {tenant.tenantId === user.tenantId && (
+                      <CheckOutlined className="ml-4 w-3 h-3" />
+                    )}
+                  </div>
+                ),
+                key: tenant.tenantId,
+                disabled: tenant.tenantId === user.tenantId,
+                onClick: switchOrganization,
+              }))}
+            />
+          ),
+        },
+        currentPractitioner?.stripe_customer_id && {
+          label: <Divider className="m-0 p-0" />,
+        },
+        currentPractitioner?.stripe_customer_id && {
+          key: "billing",
+          label: <StripeBillingCustomerPortal />,
+        },
+        {
+          label: <Divider className="m-0 p-0" />,
+        },
+        {
+          label: (
+            <div className="flex p-4">
+              <SignoutIcon className={"mr-2"} />
+              <span className="font-sans text-sm">Sign out</span>
+            </div>
+          ),
+          key: "logout",
+          onClick: logout,
+        },
+      ];
+
+  return (
+    <>
+      <nav className="sticky top-0 left-0 z-[98] bg-[#d9f6fd] flex justify-between items-center py-5 px-3">
+        <div className="top-navbar-left flex items-center justify-start ">
+          <h1 className="text-black text-[18px] font-semibold mx-2">
+            Encounters
+          </h1>
+        </div>
+        <div className="h-7 w-7 rounded-full bg-[#ACD7C4] absolute right-10 flex items-center justify-center">
+          <span className="relative text-white">T</span>
+        </div>
+        <div className="top-navbar-right flex items-center">
+          <AntDropdown
+            className="profile-dropdown"
+            overlayClassName="profile-dropdown-overlay"
+            open={dropdownVisible}
+            onClick={() => setDropdownVisible(true)}
+            onVisibleChange={(visible) => {
+              resetDropdown();
+            }}
+            menu={{
+              items: topNavbarDropdownOptions,
+            }}
+            placement="bottomRight"
+            trigger={["click"]}
+          >
+            <div
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <div className="profile-wrapper flex items-center cursor-pointer">
+                <Text
+                  type={"span"}
+                  className={
+                    tenants.length > 1
+                      ? "user-name mt-4 hidden sm:block mr-1 sm:mr-2 lg:mr-3"
+                      : "user-name hidden sm:block mr-1 sm:mr-2 lg:mr-3"
+                  }
+                >
+                  {cachedUserName}
+                  {tenants.length > 1 && (
+                    <div className="text-xs text-right text-gray-500">
+                      <BankOutlined className="mr-1" />
+                      {
+                        tenants.find(
+                          (tenant) => tenant.tenantId === user.tenantId
+                        )?.name
+                      }
+                    </div>
+                  )}
+                </Text>
+                <DropdownIcon className={"mt-1"} />
+              </div>
+            </div>
+          </AntDropdown>
+        </div>
+      </nav>
+      <div className="mt-2 mb-24 p-4 relative ">
+        <div
+          className={`min-h-screen grid shadow-xl ant-table-wrappers rounded-xl bg-white relative  `}
+        ></div>
+      </div>
+      <div className="absolute bottom-5 right-4">
+        <div className="bg-[#00D090] rounded-full p-5 flex items-center justify-center mb-7 cursor-pointer">
+          <MicroPhone  />
+        </div>
+      </div>
+
+      {/* <nav className="fixed z-[100] h-10 bottom-0 left-0 right-0 bg-white rounded-t-xl px-0">
+        <div className=" text-sm flex flex-col items-center justify-center">
+          <div className="active-icon">
+            <AmbientMblHoverIcon />
+          </div>
+          Aura AI Scribe
+        </div>
+      </nav> */}
+    </>
+  );
+};
+
+export default TopNavBar;

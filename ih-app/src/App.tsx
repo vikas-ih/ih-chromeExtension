@@ -1,7 +1,6 @@
 import "./App.css";
-import { useAuth, useLoginWithRedirect } from "@frontegg/react";
+import { useAuth, useTenantsState } from "@frontegg/react";
 // import { useEffect } from "react";
-
 import { useNavigate } from "react-router-dom";
 function App() {
   const { isAuthenticated } = useAuth();
@@ -13,6 +12,8 @@ function App() {
   // const loginWithRedirect = useLoginWithRedirect();
   // Uncomment this to redirect to login automatically
   console.log("isAuthenticated",isAuthenticated);
+  const { tenants } = useTenantsState();
+ console.log("tenantsApp", tenants);
   // useEffect(() => {
   //   if (!isAuthenticated) {
   //     console.log("loginWithRedirect", loginWithRedirect);

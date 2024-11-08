@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 :root {
-  height: 900px;
+  height: 1000px;
   width: 400px;
+}
+
+h1{
+  font-size: 1.2em;
+  line-height: 1.1;
+  font-weight: 500;
 }
