@@ -6,7 +6,7 @@ const APP_URL = "http://localhost:5174/account/login"; //PORT should be where th
 import { isEmpty } from "lodash";
 
 const Home = () => {
-  const user = useAuthUserOrNull();
+  const user = useAuthUserOrNull() ;
   const login = useCallback(() => {
     chrome.tabs.create({ url: APP_URL });
   }, []);
@@ -15,7 +15,8 @@ const Home = () => {
     return <button onClick={login}>Click me to login</button>;
   } else {
     return (
-      <TopNavBar/>
+      <TopNavBar
+      />
     );
   }
 };

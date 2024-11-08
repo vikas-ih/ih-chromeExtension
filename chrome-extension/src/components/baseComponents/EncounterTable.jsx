@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Table as AntTable } from "antd";
-import { classNames } from "src/utilities";
+import { classNames } from "../../utilities";
 
 export const EncounterTable = ({
   className,
   rowClassName,
-  ClassName,
   columns,
   rowKey,
   data,
