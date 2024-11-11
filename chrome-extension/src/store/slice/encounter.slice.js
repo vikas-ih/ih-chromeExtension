@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getAuthHeaders } from "../apiConfig";
-// import { showToastError } from "../../utilities/toast";
-// import { AxiosAmbient } from "../../lib";
 import { showToastSuccess } from "../../utilities/toast";
 import { AxiosAmbient } from "../../lib";
 import { showToastError } from "../../utilities/errortoast";
@@ -21,6 +19,44 @@ export const listEncounters = createAsyncThunk(
 
       if (status === 200) {
         return { encounters: data.encounters, total: data.total };
+      } else {
+        showToastError("Failed to load encounters");
+        return rejectWithValue("Failed to load encounters");
+      }
+    } catch (error) {
+      showToastError("Failed to load encounters");
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// New async thunk for getting encounter details
+export const getEncounter = createAsyncThunk(
+  "encounters/getEncounter",
+  async (
+    { encounter_id, callback, accessToken },
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      const headers = getAuthHeaders(accessToken);
+
+      const result = await AxiosAmbient.get(`/encounters/${encounter_id}`, {
+        headers,
+      });
+      const response = result?.data;
+
+      if (result?.status === 200) {
+        dispatch(encounterDetailsSlice(response));
+        dispatch(setMobileRecord(true));
+
+        // Check if the encounter is completed and has a summary
+        if (response?.status === "completed" && response?.summary_id) {
+          dispatch(getSummary(response?.summary_id,accessToken));
+        }
+
+        // Invoke callback if provided
+        if (callback) callback(response);
+        return response;
       } else {
         showToastError("Failed to load encounters");
         return rejectWithValue("Failed to load encounters");
@@ -191,6 +227,18 @@ const encounterSlice = createSlice({
         state.isEncounterListLoading = false;
         state.error =
           action.payload || "An error occurred while loading encounters";
+      })
+      .addCase(getEncounter.pending, (state) => {
+        state.isEncounterDetailsLoading = true;
+        state.error = null;
+      })
+      .addCase(getEncounter.fulfilled, (state, action) => {
+        state.isEncounterDetailsLoading = false;
+        state.encounterDetails = action.payload;
+      })
+      .addCase(getEncounter.rejected, (state, action) => {
+        state.isEncounterDetailsLoading = false;
+        state.error = action.payload || "Failed to load encounter details";
       })
       .addCase(updateEncounter.pending, (state) => {
         state.isEncounterDetailsLoading = true;

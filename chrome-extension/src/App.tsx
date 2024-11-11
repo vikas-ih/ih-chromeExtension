@@ -1,11 +1,4 @@
-// import { FronteggProvider } from "@frontegg/react";
-// import {
-//   BrowserRouter as Router,
-//   Routes,
-//   Route,
-//   // Navigate,
-//   // useLocation,
-// } from "react-router-dom";
+
 import "./App.css";
 import { FronteggStoreProvider } from "@frontegg/react-hooks";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
@@ -70,8 +63,13 @@ function App() {
         });
       });
   }, []);
+  // console.log("fronteggApp", fronteggApp.getEntitlementsFromStore());
   return (
-    <FronteggStoreProvider app={fronteggApp} contextOptions={contextOptions}>
+    <FronteggStoreProvider
+      app={fronteggApp}
+      contextOptions={contextOptions}
+      // entitlementsOptions={{ enabled: true }}
+    >
       <Provider store={store}>
         <Router>
           <Routes>

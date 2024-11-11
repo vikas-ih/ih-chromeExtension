@@ -9,6 +9,7 @@ export const CopiesIcon = ({
   color = '#fff',
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [showTick, setShowTick] = useState(false);
 
   const handleCopyClick = () => {
     setIsHovered(false);
