@@ -6,17 +6,21 @@
 //   // Navigate,
 //   // useLocation,
 // } from "react-router-dom";
-import './App.css'
+import "./App.css";
 import { FronteggStoreProvider } from "@frontegg/react-hooks";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+
 import { FronteggApp } from "@frontegg/js";
 import {
   ContextHolder,
   ContextOptions,
   createApiClient,
 } from "@frontegg/rest-api";
-import Home from './Home';
+import Home from "./Home";
 import { useEffect } from "react";
-
+import { Provider } from "react-redux";
+import store from "./store/store";
+import EncounterDetails from "./EncounterDetails";
 
 // const contextOptions = {
 //   baseUrl: "https://auth.lumi.build",
@@ -68,9 +72,20 @@ function App() {
   }, []);
   return (
     <FronteggStoreProvider app={fronteggApp} contextOptions={contextOptions}>
-      <Home />
+      <Provider store={store}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/mobileEncounterDetails/:id"
+              element={<EncounterDetails />}
+            />
+          </Routes>
+        </Router>
+        {/* <Home/> */}
+      </Provider>
     </FronteggStoreProvider>
   );
 }
 
-export default App
+export default App;

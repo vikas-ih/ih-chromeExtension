@@ -1,8 +1,7 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App'
-import { ConfigProvider } from 'antd';
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { ConfigProvider } from "antd";
 
 const antTheme = {
   token: {
@@ -16,8 +15,6 @@ const antTheme = {
 
 createRoot(document.getElementById("root")!).render(
   <ConfigProvider theme={antTheme}>
-    <StrictMode>
-      <App />
-    </StrictMode>
+    <App />
   </ConfigProvider>
 );

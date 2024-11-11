@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-// import moment from 'moment';
+import moment from 'moment';
 // import { AURA_ONLY_APPOINTMENT_TYPE } from './constants';
 
 export const classNames = (...classes: string[]) => {
@@ -31,21 +31,21 @@ export const profileName = (name:any) => {
 //       : moment().add(10, 'years').format('YYYY-MM-DD');
 // };
 
-// export const isAuraOnlyAppointmentType = (
-//   appointmentTypeId,
-//   appointmentTypes = []
-// ) => {
-//   let isAuraOnlyAppointment = false;
+export const isAuraOnlyAppointmentType = (
+  appointmentTypeId:any,
+  appointmentTypes :any
+) => {
+  let isAuraOnlyAppointment = false;
 
-//   for (let index = 0; index < appointmentTypes.length; index++) {
-//     if (
-//       appointmentTypes[index].label === AURA_ONLY_APPOINTMENT_TYPE &&
-//       appointmentTypes[index].value === appointmentTypeId
-//     ) {
-//       isAuraOnlyAppointment = true;
-//       break;
-//     }
-//   }
+  for (let index = 0; index < appointmentTypes.length; index++) {
+    if (
+      appointmentTypes[index].label === "Aura encounter" &&
+      appointmentTypes[index].value === appointmentTypeId
+    ) {
+      isAuraOnlyAppointment = true;
+      break;
+    }
+  }
 
-//   return isAuraOnlyAppointment;
-// };
+  return isAuraOnlyAppointment;
+};

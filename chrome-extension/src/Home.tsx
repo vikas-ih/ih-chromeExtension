@@ -15,7 +15,7 @@ const Home = () => {
     return <button onClick={login}>Click me to login</button>;
   } else {
     return (
-      <TopNavBar
+      <TopNavBar list={true}
       />
     );
   }

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&amp;display=swap');
+    </style>
+  </defs>
+  <rect width="600" height="400" fill="#ffffff"/>
+  <text x="20" y="40" font-family="Poppins, sans-serif" font-size="24" font-weight="bold">HPI:</text>
+  <text x="40" y="80" font-family="Poppins, sans-serif" font-size="16">
+    <tspan x="40" dy="0">- Routine follow-up visit</tspan>
+    <tspan x="40" dy="30">- Chronic conditions: hypertension, hyperlipidemia, obesity, anxiety disorder</tspan>
+    <tspan x="40" dy="30">- Ongoing management with treatment plans for chronic conditions</tspan>
+    <tspan x="40" dy="30">- Medical history includes vitamin D deficiency</tspan>
+    <tspan x="40" dy="30">- Regular monitoring and adjustments to treatment plans as needed</tspan>
+    <tspan x="40" dy="30">- Assessment of overall health status and new concerns during this visit</tspan>
+  </text>
+</svg>

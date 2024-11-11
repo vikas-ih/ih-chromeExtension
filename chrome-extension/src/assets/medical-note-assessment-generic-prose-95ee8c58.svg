@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&amp;display=swap');
+    </style>
+  </defs>
+  <rect width="600" height="400" fill="#ffffff"/>
+  <text x="20" y="40" font-family="Poppins, sans-serif" font-size="24" font-weight="bold">Assessment:</text>
+  <text x="20" y="80" font-family="Poppins, sans-serif" font-size="16">
+    <tspan x="20" dy="0">The patient presents with acute bronchitis, likely of viral</tspan>
+    <tspan x="20" dy="20">origin, as the primary acute concern. Hypertension is noted to</tspan>
+    <tspan x="20" dy="20">be well-controlled on the current medication regimen. Obesity</tspan>
+    <tspan x="20" dy="20">is present with a BMI of 32.5, which may be contributing to</tspan>
+    <tspan x="20" dy="20">overall health issues. Hyperlipidemia remains stable on current</tspan>
+    <tspan x="20" dy="20">statin therapy. The patient's anxiety disorder shows a mild</tspan>
+    <tspan x="20" dy="20">exacerbation. Vitamin D deficiency has been identified, and</tspan>
+    <tspan x="20" dy="20">supplementation will be initiated. Sleep disturbance is noted,</tspan>
+    <tspan x="20" dy="20">likely due to the combination of cough from bronchitis and</tspan>
+    <tspan x="20" dy="20">increased anxiety symptoms.</tspan>
+  </text>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&amp;display=swap');
+    </style>
+  </defs>
+  <rect width="600" height="400" fill="#ffffff"/>
+  <text x="20" y="40" font-family="Poppins, sans-serif" font-size="24" font-weight="bold">Subjective:</text>
+  <text x="20" y="80" font-family="Poppins, sans-serif" font-size="16">
+    <tspan x="20" dy="0">The patient presents with a chief complaint of persistent cough</tspan>
+    <tspan x="20" dy="20">and fatigue, ongoing for the past 5 days. The cough is described</tspan>
+    <tspan x="20" dy="20">as dry and non-productive, worsening at night. Fatigue is reported</tspan>
+    <tspan x="20" dy="20">as moderate and interfering with daily activities. The patient</tspan>
+    <tspan x="20" dy="20">denies fever, chills, or shortness of breath. Sleep has been</tspan>
+    <tspan x="20" dy="20">disrupted due to coughing fits. The patient notes increased stress</tspan>
+    <tspan x="20" dy="20">levels due to an upcoming work deadline. There are no reported</tspan>
+    <tspan x="20" dy="20">changes in chronic conditions or medications. Overall, the patient</tspan>
+    <tspan x="20" dy="20">appears fatigued but is able to provide a clear history of the</tspan>
+    <tspan x="20" dy="20">present illness.</tspan>
+  </text>
+</svg>
