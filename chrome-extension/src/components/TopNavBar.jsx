@@ -65,10 +65,10 @@ const TopNavBar = ({list}) => {
   const logout = () => {
     setDropdownVisible(false);
     const baseUrl = ContextHolder.getContext().baseUrl;
-    analytics.track("Signed Out", {
-      email: user?.email,
-      orgId: org_id,
-    });
+    // analytics.track("Signed Out", {
+    //   email: user?.email,
+    //   orgId: org_id,
+    // });
     clearLoggedInUser();
     localStorage.removeItem("user_name");
     localStorage.removeItem("user_email");

@@ -19,6 +19,7 @@
     "webRequest",
     "webRequestBlocking",
     "*://*.frontegg.com/*",
-    "identity"
+    "identity",
+    "audioCapture"
   ]
 }

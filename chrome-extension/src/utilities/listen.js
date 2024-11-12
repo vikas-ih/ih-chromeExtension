@@ -5,7 +5,7 @@ import { getAuthHeaders } from "../store/apiConfig";
 
 let audioContext, socket, input, micStream, scriptNode;
 
-let url = "https://ambient.api.lumi.build" + "/listen";  //env
+let url = "https://ambient.api.lumi.build" + "/listen"; //env
 
 // export function FronteggAccessToken(){
 //   const userData = useAuthUserOrNull();
@@ -27,11 +27,11 @@ export function doStream(
   accessToken
 ) {
   let connectionEstablished = false;
-  const headers = getAuthHeaders(accessToken);
+  // const headers = getAuthHeaders(accessToken);
   audioContext = new (window.AudioContext || window.webkitAudioContext)();
   audioContext.onstatechange = () => {
     if (audioContext.state === "suspended") {
-      analytics.track(`User's Microphone Context Is Suspended`);
+      // analytics.track(`User's Microphone Context Is Suspended`);
       failureCallback("AUDIO_CONTEXT_SUSPENDED");
     }
   };
@@ -54,6 +54,8 @@ export function doStream(
     reconnectionDelayMax: 5000, // Maximum delay between reconnections (ms)
     forceNew: true,
   });
+
+  console.log("socket", socket);
 
   socket.on("connected", () => {
     connectionEstablished = true;
@@ -82,9 +84,7 @@ export function doStream(
   });
 
   socket.on("disconnect", (reason) => {
-    console.error(
-      `Socket is not connected; not sending audio until reconnected. ${reason}`
-    );
+    console.error(`Socket disconnected: ${reason}`);
   });
 
   socket.on("connect_error", (error) => {

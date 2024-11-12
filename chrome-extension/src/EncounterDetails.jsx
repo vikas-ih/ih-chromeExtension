@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import TopNavBar from "./components/TopNavBar";
 import { useDispatch, useSelector } from "react-redux";
 import { formatEncounterStatus, getEncounterStatus } from "./utilities/columns";
@@ -10,26 +10,46 @@ import { Dropdown, Menu, Divider, Tooltip, Button } from "antd";
 import { CopiesIcon, ExpandIcon, PdfIcon } from "./icons";
 import { showToastInfo, showToastSuccess } from "./utilities/toast";
 import { showToastError } from "./utilities/errortoast";
-import MedicalConversationBox from "./components/baseComponents/MedicalConversationBox";
+import MedicalConversationBox, { SummaryLoading } from "./components/baseComponents/MedicalConversationBox";
 import { MobileLiveTranscription } from "./components/baseComponents/MobileLiveTranscription";
 import { SummaryUpdatedStatus } from "./components/baseComponents/SummaryUpdatedStatus";
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
-import { getEncounter } from "./store/slice/encounter.slice";
+import {
+  getEncounter,
+  getTranscription,
+  resetEncounterState,
+  selectedEncounterSlice,
+} from "./store/slice/encounter.slice";
 import { listSummaries } from "./store/actions/summary";
+import { resetSummaryState } from "./store/slice/summary.slice";
+import { storeInLocal } from "./lib/storage";
+import { useParams } from "react-router-dom";
+import MicrophoneBar from "./components/baseComponents/MicrophoneBar";
+import CurrentTranscript from "./components/baseComponents/CurrentTranscript";
+import { isEmpty } from "lodash";
 
-const EncounterDetails = () => {
-  const { encounterDetails, transcriptionbyIdValue } = useSelector((state) => ({
-    encounterDetails: state.encounters.encounterDetails,
-    transcriptionbyIdValue: state.encounters.transcriptionbyIdValue,
-  }));
+const EncounterDetails = ({
+  topBarInputs,
+  restrictTemplates = false,
+  storedParams,
+}) => {
+  const { encounterDetails, transcriptionbyIdValue } =
+    useSelector((state) => ({
+      encounterDetails: state.encounters.encounterDetails,
+      transcriptionbyIdValue: state.encounters.transcriptionbyIdValue,
+    }));
   console.log("encounterDetails", encounterDetails);
+  // console.log("transcriptionbyIdValue", transcriptionbyIdValue);
   const userData = useAuthUserOrNull();
   const accessToken = userData?.user?.accessToken;
   const [encounter_id, setEncounterId] = useState(
     encounterDetails?.encounter_id
   );
+  const [isLoading,setIsLoading] = useState(false);
   const refreshInterval = 5_000;
   const dispatch = useDispatch();
+  const initActiveTab = useRef(false);
+
   const { color, displayStatus } = formatEncounterStatus(encounterDetails);
   const isMobile = window.innerWidth < 1260;
   const schedulepage = undefined; //check
@@ -40,13 +60,52 @@ const EncounterDetails = () => {
   const [activeButton, setActiveButton] = useState("");
   const [encounterPhase, setEncounterPhase] = useState("in-visit");
 
+  const [liveTranscript, setLiveTranscript] = useState([]);
+  const [selectedRecord, setSelectedRecord] = useState();
+  const [record, setRecord] = useState("");
+
+  const [isRecording, setIsRecording] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [isChartStreaming, setIsChartStreaming] = useState(false);
+  const [isVisitStreaming, setIsVisitStreaming] = useState(false);
+  const [isChartRecording, setIsChartRecording] = useState(false);
+  const [isVisitRecording, setIsVisitRecording] = useState(false);
+  const [livePartialTranscript, setLivePartialTranscript] = useState("");
+  const [fullTranscript, setFullTranscript] = useState([]);
+  const initTranscript = useRef(false);
+
   const [isSummaryOutdated, setIsSummaryOutdated] = useState(false);
   const [editedSummary, setEditedSummary] = useState("");
   const editableSummaryRef = useRef(null);
   const medicalConversationBoxRef = useRef(null);
   const ambient_version = 2; //check currentPractitionerSettings?.ambient_version ??
 
-  //   let encounterPhase = ;
+  // useEffect(() => {
+  //   if (!encounter_id) {
+  //     const id = useParams().encounter_id;
+  //     setEncounterId(id);
+  //   }
+  // }, [encounter_id]);
+
+  useEffect(()=>{
+    if(isEmpty(encounterDetails)) setIsLoading(true);
+    else setIsLoading(false);
+  },[encounterDetails])
+
+  // storeInLocal(
+  //   `${currentPractitioner?.org_uuid}_topbar_encounter_id`,
+  //   encounter_id
+  // );
+  // let encounterPhase = ;
+  const resetStates = () => {
+    dispatch(resetEncounterState());
+    dispatch(resetSummaryState());
+  };
+
+  useEffect(() => {
+    resetStates();
+  }, []);
+
   const configureRecordingTabs = () => {
     let tabs;
     const { displayStatus } = formatEncounterStatus(encounterDetails);
@@ -66,6 +125,23 @@ const EncounterDetails = () => {
 
     setRecordingTabs(tabs);
   };
+
+  const selectInitialRecordingTab = (record) => {
+    //  const { displayStatus } = formatEncounterStatus(record);
+    //  console.log("displayStatus", displayStatus);
+    //  if (displayStatus.startsWith("Pre-chart")) {
+    //    setActiveButton("Pre-chart");
+    //  } else {
+    setActiveButton("In visit");
+    //  }
+  };
+
+  //   useEffect(() => {
+  //     if (activeTab) {
+  //       setActiveButton(activeTab);
+  //     }
+  //   }, [activeTab]);
+
   useEffect(() => {
     switch (activeButton) {
       case "After visit summary":
@@ -81,6 +157,21 @@ const EncounterDetails = () => {
         setEncounterPhase("in-visit");
     }
   }, [activeButton]);
+
+  useEffect(() => {
+    if (encounterDetails) {
+      dispatch(selectedEncounterSlice(encounterDetails));
+    }
+    if (
+      !initActiveTab.current &&
+      encounterDetails?.encounter_id &&
+      !schedulepage
+    ) {
+      selectInitialRecordingTab(encounterDetails);
+      initActiveTab.current = true;
+    }
+  }, [encounterDetails]);
+
   const handleMedicalNotesCopy = () => {
     // if (schedulepage) {
     //   analytics.track(
@@ -183,57 +274,85 @@ const EncounterDetails = () => {
     }
   }, [encounterDetails]);
 
+  const showMicrophoneBar = useMemo(() => {
+    if (!(isChartStreaming || isVisitStreaming)) return false;
+
+    if (isVisitStreaming) return activeButton != "In visit";
+
+    if (isChartStreaming) return activeButton != "Pre-chart";
+
+    return true;
+  }, [isChartStreaming, isVisitStreaming, activeButton]);
+
+  //   useEffect(() => {
+  //     if (
+  //       !initTranscript.current &&
+  //       transcriptionbyIdValue?.length > 0 &&
+  //       transcriptionbyIdValue[0]?.type == "live"
+  //     ) {
+  //       let transcript = transcriptionbyIdValue[0]?.transcription_json;
+  //       if (transcript?.length > 0) {
+  //         setLiveTranscript(transcript);
+  //       }
+
+  //       initTranscript.current = true;
+  //     }
+  //   }, [transcriptionbyIdValue]);
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       dispatch(getEncounter({ encounter_id, accessToken }));
       dispatch(
         listSummaries(encounter_id, encounterPhase, "ambient", accessToken)
       );
-      // dispatch(getTranscription(encounter_id, encounterPhase, accessToken)); //check
+      // dispatch(getTranscription({ encounter_id, encounterPhase, accessToken })); //check
     }, refreshInterval);
 
     return () => clearInterval(intervalId);
   }, [encounter_id, encounterStatus]);
 
-  useEffect(() => {
-    if (encounterDetails?.in_visit_status === "completed") {
-    }
-  }, []);
   return (
     <>
       <TopNavBar />
-      <div className="flex flex-col gap-8">
-        <div className={`bg-white rounded-xl shadow-md px-4 py-3`}>
-          <div className="flex justify-between items-center">
-            <div>
-              <div className="text-[#000] text-lg font-semibold mx-2 mr-4 items-center flex">
-                {encounterDetails?.description}
-              </div>
+      {isLoading ? (
+        <SummaryLoading />
+      ) : (
+        <div className="flex flex-col gap-8">
+          <div className={`bg-white rounded-xl shadow-md px-4 py-3`}>
+            <div className="flex justify-between items-center">
               <div>
-                <div className="ml-2 flex" style={{ color }} id={displayStatus}>
-                  <img className="mr-1" src={AmbientMicIcon} alt="mic logo" />
-                  <span className="ml-2">{displayStatus}</span>
+                <div className="text-[#000] text-lg font-semibold mx-2 mr-4 items-center flex">
+                  {encounterDetails?.description}
                 </div>
+                <div>
+                  <div
+                    className="ml-2 flex"
+                    style={{ color }}
+                    id={displayStatus}
+                  >
+                    <img className="mr-1" src={AmbientMicIcon} alt="mic logo" />
+                    <span className="ml-2">{displayStatus}</span>
+                  </div>
 
-                <div
-                  className={
-                    isMobile
-                      ? "flex gap-1 ml-2"
-                      : "flex gap-1 items-center text-[#7F7F7F] "
-                  }
-                >
-                  <CalanderAiIcon />
-                  <span className="ml-2">
-                    {moment(encounterDetails?.created_at).format(
-                      "MMM Do, YYYY"
-                    )}{" "}
-                    {moment(encounterDetails?.created_at).format("h:mm A")}
-                  </span>
+                  <div
+                    className={
+                      isMobile
+                        ? "flex gap-1 ml-2"
+                        : "flex gap-1 items-center text-[#7F7F7F] "
+                    }
+                  >
+                    <CalanderAiIcon />
+                    <span className="ml-2">
+                      {moment(encounterDetails?.created_at).format(
+                        "MMM Do, YYYY"
+                      )}{" "}
+                      {moment(encounterDetails?.created_at).format("h:mm A")}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* <> */}
-            {/* {encounterDetails?.in_visit_status === "completed" && (
+              {/* <> */}
+              {/* {encounterDetails?.in_visit_status === "completed" && (
               <TriggerPrintEncounter
                 key={record?.encounter_id}
                 record={encounterDetails}
@@ -241,150 +360,153 @@ const EncounterDetails = () => {
                 setSelectedRecord={setSelectedRecord}
                 editedSummary={editedSummary}
               /> */}
-            {/* )} */}
-            {/* </> */}
+              {/* )} */}
+              {/* </> */}
+            </div>
           </div>
-        </div>
-        <div
-          className={`past flex flex-col relative ${
-            !schedulepage ? "page-wrapper" : ""
-          }`}
-        >
-          <div className="relative">
-            <div
-              className="flex-1  grid current bg-white shadow-xl rounded-xl"
-              style={{ minHeight: "80vh" }}
-            >
-              {encounterStatus === "summary_inprogress" ? (
-                <SummaryProgressBar
-                  verbosity={encounterDetails?.summary_verbosity}
-                />
-              ) : (
-                <></>
-              )}
+          <div
+            className={`past flex flex-col relative ${
+              !schedulepage ? "page-wrapper" : ""
+            }`}
+          >
+            <div className="relative">
               <div
-                className={`p-3 flex justify-between ${
-                  !schedulepage ? "border-b border-gray-200" : ""
-                }`}
+                className="flex-1  grid current bg-white shadow-xl rounded-xl"
+                style={{ minHeight: "80vh" }}
               >
-                {!schedulepage && (
-                  <SegmentedTabs
-                    options={recordingTabs}
-                    activeTab={activeButton}
-                    setActiveTab={setActiveButton}
+                {encounterStatus === "summary_inprogress" ? (
+                  <SummaryProgressBar
+                    verbosity={encounterDetails?.summary_verbosity}
                   />
+                ) : (
+                  <></>
+                )}
+                <div
+                  className={`p-3 flex justify-between ${
+                    !schedulepage ? "border-b border-gray-200" : ""
+                  }`}
+                >
+                  {!schedulepage && (
+                    <SegmentedTabs
+                      options={recordingTabs}
+                      activeTab={activeButton}
+                      setActiveTab={setActiveButton}
+                    />
+                  )}
+                </div>
+
+                {encounterStatus === "completed" ||
+                encounterStatus === "summary_inprogress" ? (
+                  <div className=" ">
+                    <div className="mt-3 flex justify-center">
+                      <SummaryUpdatedStatus
+                        isSaving={isSaving}
+                        isSummaryOutdated={isSummaryOutdated}
+                        updatedTime={editableSummaryRef.current?.updated_at}
+                        encounterStatus={encounterStatus}
+                      />
+                    </div>
+                    <MedicalConversationBox
+                      ref={medicalConversationBoxRef}
+                      //   handleDictation={isDictationEntitled ? handleDictation : null} // check
+                      encounterStatus={encounterStatus}
+                      selectedRecord={encounterDetails}
+                      selectedEncounterId={encounter_id}
+                      medicalConversation={
+                        editableSummaryRef.current?.summary_json
+                      }
+                      handleMedicalConversationChange={handleSummaryEdits}
+                      encounterId={encounter_id}
+                      summaryId={editableSummaryRef.current?.summary_id}
+                      activeButton={activeButton}
+                    />
+                  </div>
+                ) : (
+                  // View when an encounter is new or inprogress
+                  (encounterStatus !== "completed" ||
+                    encounterStatus !== "summary_inprogress" ||
+                    encounterStatus === "inprogress") && (
+                    <div style={{ minHeight: "86vh" }}>
+                      <div
+                        className="flex flex-col items-center justify-center"
+                        style={{ minHeight: "60vh" }}
+                      >
+                        <CurrentTranscript
+                          encounterStatus={encounterStatus}
+                          encounterPhase={encounterPhase}
+                          storedParams={storedParams}
+                          selectedRecord={encounterDetails}
+                          topBarInputs={topBarInputs}
+                          setEncounterStatus={setEncounterStatus}
+                          isStreaming={isStreaming}
+                          setIsStreaming={setIsStreaming}
+                          isRecording={isRecording}
+                          setRecord={setRecord}
+                          setIsRecording={setIsRecording}
+                          isChartStreaming={isChartStreaming}
+                          isVisitStreaming={isVisitStreaming}
+                          setIsChartStreaming={setIsChartStreaming}
+                          setIsVisitStreaming={setIsVisitStreaming}
+                          isChartRecording={isChartRecording}
+                          isVisitRecording={isVisitRecording}
+                          setIsChartRecording={setIsChartRecording}
+                          setIsVisitRecording={setIsVisitRecording}
+                          setLiveTranscript={setLiveTranscript}
+                          setLivePartialTranscript={setLivePartialTranscript}
+                          restrictTemplates={restrictTemplates}
+                        />
+                        {showMicrophoneBar ? (
+                          <div className="fixed bottom-0 bg-[#F5F5F5] w-full">
+                            <MicrophoneBar
+                              encounterPhase={encounterPhase}
+                              isStreaming={isChartStreaming || isVisitStreaming}
+                              currentActive={currentActive}
+                              isRecording={isChartRecording || isVisitRecording}
+                              setIsRecording={
+                                isChartRecording
+                                  ? setIsChartRecording
+                                  : setIsVisitRecording
+                              }
+                              setIsStreaming={
+                                isChartStreaming
+                                  ? setIsChartStreaming
+                                  : setIsVisitStreaming
+                              }
+                            />
+                          </div>
+                        ) : null}
+                      </div>
+
+                      {ambient_version == 2 &&
+                        (encounterStatus === "inprogress" ||
+                          encounterStatus === "new") && (
+                          <div
+                            style={{
+                              minHeight: "20vh",
+                              maxHeight: "20vh",
+                              overflowY: "scroll",
+                            }}
+                          >
+                            <Divider className="m-0 mt-4" />
+                            <MobileLiveTranscription
+                              fullTranscript={fullTranscript}
+                              setFullTranscript={setFullTranscript}
+                              liveTranscript={liveTranscript}
+                              livePartialTranscript={livePartialTranscript}
+                              setLivePartialTranscript={
+                                setLivePartialTranscript
+                              }
+                            />
+                          </div>
+                        )}
+                    </div>
+                  )
                 )}
               </div>
-
-              {encounterStatus === "completed" ||
-              encounterStatus === "summary_inprogress" ? (
-                <div className=" ">
-                  <div className="mt-3 flex justify-center">
-                    <SummaryUpdatedStatus
-                      isSaving={isSaving}
-                      isSummaryOutdated={isSummaryOutdated}
-                      updatedTime={editableSummaryRef.current?.updated_at}
-                      encounterStatus={encounterStatus}
-                    />
-                  </div>
-                  <MedicalConversationBox
-                    ref={medicalConversationBoxRef}
-                    //   handleDictation={isDictationEntitled ? handleDictation : null} // check
-                    encounterStatus={encounterStatus}
-                    selectedRecord={encounterDetails}
-                    selectedEncounterId={encounter_id}
-                    medicalConversation={
-                      editableSummaryRef.current?.summary_json
-                    }
-                    handleMedicalConversationChange={handleSummaryEdits}
-                    encounterId={encounter_id}
-                    summaryId={editableSummaryRef.current?.summary_id}
-                    activeButton={activeButton}
-                  />
-                </div>
-              ) : (
-                // View when an encounter is new or inprogress
-                (encounterStatus !== "completed" ||
-                  encounterStatus !== "summary_inprogress" ||
-                  encounterStatus === "inprogress") && (
-                  <div style={{ minHeight: "86vh" }}>
-                    <div
-                      className="flex flex-col items-center justify-center"
-                      style={{ minHeight: "60vh" }}
-                    >
-                      {/* <CurrentTranscript
-                      encounterStatus={encounterStatus}
-                      encounterPhase={encounterPhase}
-                      storedParams={storedParams}
-                      selectedRecord={encounterDetails}
-                      topBarInputs={topBarInputs}
-                      setEncounterStatus={setEncounterStatus}
-                      isStreaming={isStreaming}
-                      setIsStreaming={setIsStreaming}
-                      isRecording={isRecording}
-                      setRecord={setRecord}
-                      setIsRecording={setIsRecording}
-                      isChartStreaming={isChartStreaming}
-                      isVisitStreaming={isVisitStreaming}
-                      setIsChartStreaming={setIsChartStreaming}
-                      setIsVisitStreaming={setIsVisitStreaming}
-                      isChartRecording={isChartRecording}
-                      isVisitRecording={isVisitRecording}
-                      setIsChartRecording={setIsChartRecording}
-                      setIsVisitRecording={setIsVisitRecording}
-                      setLiveTranscript={setLiveTranscript}
-                      setLivePartialTranscript={setLivePartialTranscript}
-                      restrictTemplates={restrictTemplates}
-                    />
-                    {showMicrophoneBar ? (
-                      <div className="fixed bottom-0 bg-[#F5F5F5] w-full">
-                        <MicrophoneBar
-                          encounterPhase={encounterPhase}
-                          isStreaming={isChartStreaming || isVisitStreaming}
-                          currentActive={currentActive}
-                          isRecording={isChartRecording || isVisitRecording}
-                          setIsRecording={
-                            isChartRecording
-                              ? setIsChartRecording
-                              : setIsVisitRecording
-                          }
-                          setIsStreaming={
-                            isChartStreaming
-                              ? setIsChartStreaming
-                              : setIsVisitStreaming
-                          }
-                        />
-                      </div>
-                    ) : null} */}
-                    </div>
-
-                    {ambient_version == 2 &&
-                      (encounterStatus === "inprogress" ||
-                        encounterStatus === "new") && (
-                        <div
-                          style={{
-                            minHeight: "20vh",
-                            maxHeight: "20vh",
-                            overflowY: "scroll",
-                          }}
-                        >
-                          <Divider className="m-0 mt-4" />
-                          <MobileLiveTranscription
-                            fullTranscript={fullTranscript}
-                            setFullTranscript={setFullTranscript}
-                            liveTranscript={liveTranscript}
-                            livePartialTranscript={livePartialTranscript}
-                            setLivePartialTranscript={setLivePartialTranscript}
-                          />
-                        </div>
-                      )}
-                  </div>
-                )
-              )}
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

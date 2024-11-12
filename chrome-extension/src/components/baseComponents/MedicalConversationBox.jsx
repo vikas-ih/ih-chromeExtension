@@ -30,7 +30,7 @@ import EditorMobile from "./EditorMobile";
 
 const NO_MEDICALNOTES_MESSAGE = "<p>No medical notes for this encounter</p>";
 
-const SummaryLoading = () => {
+export const SummaryLoading = () => {
   return (
     <div className="min-h-screen p-9">
       <Skeleton active className="mb-9" />
@@ -100,22 +100,22 @@ const SummaryCommentsModal = ({
     dispatch(
       summaryFeedbackAction(summaryId, summaryRating, comment, accessToken)
     );
-    if (schedulepage) {
-      analytics.track("Submitted Medical Notes Ratings and Comments From VCA", {
-        summary_id: summaryId,
-        score: summaryRating,
-        comments: comment,
-      });
-    } else {
-      analytics.track(
-        "Submitted Medical Notes Ratings and Comments From Aura",
-        {
-          summary_id: summaryId,
-          score: summaryRating,
-          comments: comment,
-        }
-      );
-    }
+    // if (schedulepage) {
+    //   analytics.track("Submitted Medical Notes Ratings and Comments From VCA", {
+    //     summary_id: summaryId,
+    //     score: summaryRating,
+    //     comments: comment,
+    //   });
+    // } else {
+    //   analytics.track(
+    //     "Submitted Medical Notes Ratings and Comments From Aura",
+    //     {
+    //       summary_id: summaryId,
+    //       score: summaryRating,
+    //       comments: comment,
+    //     }
+    //   );
+    // }
     setIsOpen(false);
   };
   return (
@@ -263,6 +263,7 @@ const MedicalConversationBox = forwardRef(
         }
       }
     }, [summaryList, encounterStatus]);
+
     useEffect(() => {
       if (encounterId && encounterStatus === "completed") {
         setIsLoading(true);
@@ -285,17 +286,17 @@ const MedicalConversationBox = forwardRef(
     }, [encounterStatus, medicalConversation]);
 
     const handleMicrophoneChange = async (deviceId) => {
-      if (schedulepage) {
-        analytics.track(
-          "Clicked Microphone Option In Microphone Setting From VCA",
-          {}
-        );
-      } else {
-        analytics.track(
-          "Clicked Microphone Option In Microphone Setting From Aura",
-          {}
-        );
-      }
+      // if (schedulepage) {
+      //   analytics.track(
+      //     "Clicked Microphone Option In Microphone Setting From VCA",
+      //     {}
+      //   );
+      // } else {
+      //   analytics.track(
+      //     "Clicked Microphone Option In Microphone Setting From Aura",
+      //     {}
+      //   );
+      // }
       setSelectedMicrophone(deviceId);
       if (!open) {
         setSelectedMicrophone(deviceId);
@@ -303,11 +304,11 @@ const MedicalConversationBox = forwardRef(
     };
 
     const handleMicTestReset = (newOpen) => {
-      if (schedulepage) {
-        !open && analytics.track("Clicked Microphone Setting From VCA", {});
-      } else {
-        !open && analytics.track("Clicked Microphone Setting From Aura", {});
-      }
+      // if (schedulepage) {
+      //   !open && analytics.track("Clicked Microphone Setting From VCA", {});
+      // } else {
+      //   !open && analytics.track("Clicked Microphone Setting From Aura", {});
+      // }
 
       if (!open) {
         handlePopoverOpen();

@@ -187,7 +187,7 @@ const Editor = forwardRef(
         e.preventDefault();
       }
 
-      analytics.track('Clicked On Show Source', {});
+      // analytics.track('Clicked On Show Source', {});
       setShowEvidenceSummaryLoading(true);
       // Add API call code here
       const result = await getSummaryEvidenceForSelectedText(encounterId, text);

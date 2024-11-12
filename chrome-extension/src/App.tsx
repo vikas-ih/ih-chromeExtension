@@ -76,7 +76,13 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route
               path="/mobileEncounterDetails/:id"
-              element={<EncounterDetails />}
+              element={
+                <EncounterDetails
+                  topBarInputs={{}} 
+                  storedParams={{}} 
+                  restrictTemplates={false}
+                />
+              }
             />
           </Routes>
         </Router>

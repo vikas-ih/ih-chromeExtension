@@ -40,7 +40,6 @@ const Encounter = () => {
   // );
   const { encounterList, isEncounterListLoading, error, encounterListCount } =
     useSelector((state) => state.encounters);
-
   const { isMobileRecord, newEncounterfromMic } = {
     isMobileRecord: false,
     newEncounterfromMic: false,
@@ -107,8 +106,8 @@ const Encounter = () => {
       per_page: 5,
       sort_by: "created_at",
       sort_direction: "desc",
-      created_at_gt: "2024-11-08T00:00:00+05:30",
-      created_at_lt: "2024-11-08T23:59:59+05:30",
+      // created_at_gt: "2024-11-08T00:00:00+05:30",
+      // created_at_lt: "2024-11-08T23:59:59+05:30",
     };
     // const headers = getAuthHeaders(accessToken);
     setStoredParams(searchFilters);
