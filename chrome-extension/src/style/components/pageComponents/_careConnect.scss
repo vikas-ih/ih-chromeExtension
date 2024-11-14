@@ -97,7 +97,7 @@
           height: unset !important;
 
           .ant-select-selector {
-            font-family: 'Poppins', sans-serif;
+            font-family: "Poppins", sans-serif;
             // width: 75%;
             height: 35px !important;
             background: $white;
@@ -116,7 +116,7 @@
 
             .ant-select-selection-placeholder {
               font-weight: 400;
-              font-size: 13px;
+              font-size: 12px !important;
             }
           }
 
@@ -139,7 +139,7 @@
           border: 1px solid rgba(0, 0, 0, 0.2) !important;
           border-radius: 5px;
           outline: none !important;
-          font-family: 'Poppins';
+          font-family: "Poppins";
         }
       }
     }
@@ -185,13 +185,13 @@
     background-color: #fff;
     border-radius: 8px;
     outline: none !important;
-    font-family: 'Poppins' !important;
+    font-family: "Poppins" !important;
     resize: none;
     white-space: pre-wrap;
   }
 
   .ql-editor {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-size: 14px;
     // min-height: 48rem;
     height: 63dvh;
@@ -454,12 +454,12 @@
 }
 
 .ant-input {
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 
 .segmented_schedule {
   .ant-segmented {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     color: #000;
 
     @media only screen and (max-width: 1260px) {
@@ -494,7 +494,7 @@
 
 .segmented_appointment_settings {
   .ant-segmented {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     color: #000;
   }
 
@@ -521,7 +521,7 @@
 
 .segmented_super_admin {
   .ant-segmented {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     color: #000;
 
     @media only screen and (max-width: 1260px) {
@@ -556,12 +556,12 @@
 
 .tabs-schedule {
   .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     color: #fff;
   }
 
   .ant-tabs .ant-tabs-tab-btn {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     color: #fff;
     background-color: #00d091;
     padding: 7px 15px;

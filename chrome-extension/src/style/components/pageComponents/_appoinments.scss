@@ -183,7 +183,7 @@
   list-style: none;
   overflow-x: hidden;
   transform: none;
-  font-family: 'Poppins' !important;
+  font-family: "Poppins" !important;
   background: #ffffff;
   overflow-x: auto;
   border-radius: 5px;
@@ -216,9 +216,7 @@
   transform: none;
   overflow-x: hidden;
   cursor: pointer;
-  transition:
-    transform 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .ant-picker-range {
@@ -230,7 +228,7 @@
     background: #ffffff;
     border: 1px solid #00d090 !important;
     border-radius: 5px;
-    font-family: 'Poppins';
+    font-family: "Poppins";
 
     .ant-picker-focused {
       border-color: #00d090 !important;
@@ -268,12 +266,13 @@
 
       .ant-select-selection-search-input {
         height: 47px;
+        font-size: 12px;
       }
     }
 
     .ant-select-selection-placeholder {
       color: #000000;
-      font-size: 13px;
+      font-size: 12px !important;
 
       @include media-min-2xl {
         font-size: 13px !important;
@@ -375,7 +374,7 @@
 }
 
 .dropdown-text {
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 
 .expired-appointment-color {
@@ -407,12 +406,12 @@
 .field-placeholder-name {
   color: #000000 !important;
   font-size: 14px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 
 .tooltip-text {
   font-size: 14px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   color: #6f7f94;
   white-space: nowrap;
 }
@@ -420,14 +419,12 @@
 .ant-tooltip {
   .ant-tooltip-inner {
     color: #000000;
-    font-family: 'Poppins';
+    font-family: "Poppins";
     width: fit-content;
     background-color: #fff;
     border-radius: 6px;
-    box-shadow:
-      0 6px 16px rgba(101, 101, 101, 0.08),
-      0 3px 6px -4px rgba(0, 0, 0, 0.9),
-      0 9px 28px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 6px 16px rgba(101, 101, 101, 0.08),
+      0 3px 6px -4px rgba(0, 0, 0, 0.9), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
     box-sizing: border-box;
     white-space: nowrap;
   }
@@ -495,9 +492,9 @@
 }
 
 .ant-select-selection-placeholder {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   color: #000;
-  font-size: 13px;
+  font-size: 12px !important;
 
   @include media-min-2xl {
     font-size: 13px !important;
@@ -513,7 +510,8 @@
 }
 
 .ant-select .ant-select-selection-item {
-  font-family: 'Poppins';
+  font-size: 12px;
+  font-family: "Poppins";
 }
 
 .ant-select-single .ant-select-selector .ant-select-selection-search {
@@ -538,9 +536,7 @@
   .ant-select-selection-item {
   padding: 0;
   line-height: 37px;
-  transition:
-    all 0.3s,
-    visibility 0s;
+  transition: all 0.3s, visibility 0s;
   align-self: normal;
   margin-top: 2px;
   font-size: 12px;
@@ -564,9 +560,7 @@
   .ant-select-selection-item {
   padding: 0;
   line-height: 40px;
-  transition:
-    all 0.3s,
-    visibility 0s;
+  transition: all 0.3s, visibility 0s;
   align-self: center;
   margin-top: 2px;
   font-size: 12px !important;
@@ -623,12 +617,12 @@
     .css-dev-only-do-not-override-190m0jy
   ).ant-select:not(.ant-select-customize-input)
   .ant-select-selector {
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 
 .ant-select-multiple .ant-select-selection-placeholder {
   color: black;
-  font-size: 13px;
+  font-size: 12px !important;
 
   @include media-min-2xl {
     font-size: 13px !important;
@@ -672,7 +666,7 @@
 
 .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
   color: #000;
-  font-size: 13px;
+  font-size: 12px !important;
 }
 
 .App {

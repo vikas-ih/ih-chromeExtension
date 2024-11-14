@@ -10,7 +10,7 @@
     position: relative;
 
     .modal__header {
-      font-family: 'Poppins';
+      font-family: "Poppins";
       font-weight: 500;
       font-size: 20px;
       color: #000;
@@ -175,13 +175,14 @@
     .ant-select-selector
     .ant-select-selection-search-input {
     height: 47px;
+    font-size: 12px !important;
   }
 
   .single-select {
     // width: 150px !important;
     .ant-select-selector {
       .ant-select-selection-placeholder {
-        font-family: 'Poppins', sans-serif !important;
+        font-family: "Poppins", sans-serif !important;
         font-weight: 400;
         font-size: 14px;
         color: #abaaaa;
@@ -194,7 +195,7 @@
 
     .ant-select-selector {
       .ant-select-selection-placeholder {
-        font-family: 'Poppins', sans-serif !important;
+        font-family: "Poppins", sans-serif !important;
         font-weight: 400;
         font-size: 14px;
         color: #abaaaa;
@@ -212,9 +213,7 @@
   height: auto;
   min-height: 317px !important;
   vertical-align: bottom;
-  transition:
-    all 0.3s,
-    height 0s;
+  transition: all 0.3s, height 0s;
   resize: vertical;
   border-color: 1px #00d090;
   font-weight: 400;
@@ -225,9 +224,7 @@
   height: auto;
   min-height: 150px !important;
   vertical-align: bottom;
-  transition:
-    all 0.3s,
-    height 0s;
+  transition: all 0.3s, height 0s;
   resize: vertical;
   border-color: 1px #00d090;
   font-weight: 400 !important;
@@ -238,9 +235,7 @@
   // height: auto;
   min-height: 20px !important;
   vertical-align: bottom;
-  transition:
-    all 0.3s,
-    height 0s;
+  transition: all 0.3s, height 0s;
   resize: vertical;
   border-color: 1px #00d090;
 }
@@ -349,7 +344,7 @@
 }
 
 .intake-radio-outlook {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
   background: #00d090;
   color: #ffffff;
@@ -358,7 +353,7 @@
 }
 
 .followup-radio-outlook {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
   background: #04ceff;
   color: #ffffff;
@@ -367,7 +362,7 @@
 }
 
 .auraonly-radio-outlook {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
   background: #caffca;
   color: #018749;
@@ -376,7 +371,7 @@
 }
 
 .edit-intake-radio-outlook {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
   background: #00d090;
   color: #ffffff;
@@ -385,7 +380,7 @@
 }
 
 .edit-followup-radio-outlook {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
   background: #04ceff;
   color: #ffffff;
@@ -394,7 +389,7 @@
 }
 
 .edit-auraonly-radio-outlook {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
   background: #29ab87;
   color: #018749;
@@ -466,7 +461,7 @@
 
 .AddNotificationBtn {
   height: 45px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
   background-color: #00d090 !important;
   color: #fff !important;
@@ -565,7 +560,7 @@
   color: #fff;
   font-weight: 400;
   font-size: 14px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   height: 48px;
   letter-spacing: 0.4px;
   background-color: $app-color;

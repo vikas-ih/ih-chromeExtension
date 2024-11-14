@@ -7,7 +7,7 @@ import { ExpandIcon } from "../../icons";
 import { selectedEncounterSlice } from "../../store/slice/encounter.slice";
 import { useDispatch } from "react-redux";
 import { SelectHover } from "./SelectHover";
-import {  PractitionerJson } from "../../mocks/pracitioners";
+import { PractitionerJson } from "../../mocks/pracitioners";
 
 const EncounterTopNavBar = ({
   searchFilters,
@@ -64,25 +64,25 @@ const EncounterTopNavBar = ({
       title: "All",
       value: "",
       className:
-        "flex justify-center bg-[#ffffff] items-center h-8 rounded-full hover:bg-[#f7f7f7]",
+        "flex justify-center text-xs  bg-[#ffffff] items-center h-8 rounded-full hover:bg-[#f7f7f7]",
     },
     {
       title: "Completed",
       value: "completed",
       className:
-        "text-[#1ec990] bg-[#eefaf4] h-8 flex items-center justify-center rounded-full hover:bg-[#A2EFC9]",
+        "text-[#1ec990] bg-[#eefaf4] h-8 text-xs flex items-center justify-center rounded-full hover:bg-[#A2EFC9]",
     },
     {
       title: "In Progress",
       value: "inprogress",
       className:
-        "text-[#ff6f00] bg-[#ffe1ca] h-8 flex items-center justify-center rounded-full hover:bg-[#F7CFB1]",
+        "text-[#ff6f00] bg-[#ffe1ca] h-8 text-xs flex items-center justify-center rounded-full hover:bg-[#F7CFB1]",
     },
     {
       title: "Not Started",
       value: "new",
       className:
-        "text-[#5a8dda] bg-[#e7f1ff] h-8 flex items-center justify-center rounded-full hover:bg-[#BCD4F7]",
+        "text-[#5a8dda] bg-[#e7f1ff] text-xs h-8 flex items-center justify-center rounded-full hover:bg-[#BCD4F7]",
     },
   ];
 
@@ -148,7 +148,7 @@ const EncounterTopNavBar = ({
   useEffect(() => {
     setloggedInSelectedPractitioner(loggedInUserName);
   }, [loggedInUserName]);
-console.log("isEncounterListLoading", isEncounterListLoading);
+  console.log("isEncounterListLoading", isEncounterListLoading);
   return (
     <div className="px-4 py-1">
       <div className="flex justify-center items-center past p-1 mb-3 mt-1">
@@ -163,8 +163,9 @@ console.log("isEncounterListLoading", isEncounterListLoading);
       <div className=" justify-start mb-2 past h-10 items-center bg-white shadow-sm rounded-xl flex">
         <SelectHover
           bordered={false}
-          popupClassName={`font-sans`}
-          className="font-normal text-sm text-black flex items-center"
+          popupClassName={`font-sans text-xs`}
+          inputClassName={"font-normal text-xs text-black flex items-center"}
+          className="font-normal text-xs text-black flex items-center"
           options={options}
           filterOption={(inputValue, option) =>
             option && option.name
@@ -193,7 +194,7 @@ console.log("isEncounterListLoading", isEncounterListLoading);
         <div className="bg-white w-48 p-1 mb-2 rounded-xl drop-shadow-sm flex items-center tree-dropdown">
           <label
             htmlFor="status"
-            className="mr-1 ml-2 text-sm text-black whitespace-nowrap"
+            className="mr-1 ml-2 text-xs text-black whitespace-nowrap"
           >
             Status
           </label>
@@ -224,7 +225,7 @@ console.log("isEncounterListLoading", isEncounterListLoading);
           </div>
         </div>
         <button
-          className=" hover:bg-gray-100 rounded-xl h-10 px-4 font-normal text-sm text-black drop-shadow-sm  hover:underline underline-offset-2 decoration-black"
+          className=" hover:bg-gray-100 rounded-xl h-10 px-4 font-normal text-xs text-black drop-shadow-sm  hover:underline underline-offset-2 decoration-black"
           onClick={resetFilters}
         >
           Clear filters

@@ -6,7 +6,7 @@
     height: auto !important;
     background: $white;
     border: 1px solid #e5e8eb !important;
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-size: 14px;
     font-weight: 400 !important;
     border-radius: 12px;
@@ -21,9 +21,9 @@
     }
 
     .ant-select-selection-placeholder {
-      font-family: 'Poppins';
+      font-family: "Poppins";
       font-weight: 400;
-      font-size: 14px;
+      font-size: 12px !important;
     }
   }
 
@@ -58,7 +58,7 @@
 }
 
 .single-select__dropdown {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
@@ -109,7 +109,8 @@
 }
 
 .ant-select-dropdown .ant-select-item-option-content {
-  font-family: 'Poppins' !important;
+  font-family: "Poppins" !important;
+  font-size: 12px;
 }
 
 .ant-tree-select-dropdown

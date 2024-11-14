@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Select } from 'antd';
-import { classNames } from '../../utilities';
+import React, { useState } from "react";
+import { Select } from "antd";
+import { classNames } from "../../utilities";
 // import { classNames } from 'src/utilities';
 
 export const SelectHover = ({
@@ -20,6 +20,8 @@ export const SelectHover = ({
 }) => {
   const [visible, setVisible] = useState(false);
   let hideTimeout = null;
+  console.log("inputClassName", inputClassName);
+  console.log("popupClassName", popupClassName);
 
   const handleMouseEnter = () => {
     if (hideTimeout) {
@@ -45,14 +47,11 @@ export const SelectHover = ({
         id={id}
         name={name}
         disabled={disabled}
-        style={{ WebkitTextFillColor: '#000' }}
+        style={{ WebkitTextFillColor: "#000" }}
         bordered={false}
         placeholder={placeholder}
-        className={classNames(
-          'border-none bg-white rounded-xl py-1  outline-none w-full',
-          inputClassName ? inputClassName : ''
-        )}
-        options={options.map(option => ({
+        className={"border-none bg-white rounded-xl py-1 text-xs outline-none w-full"}
+        options={options.map((option) => ({
           ...option,
           id: "optionsIds",
         }))}
@@ -62,11 +61,7 @@ export const SelectHover = ({
         showSearch
         filterOption={filterOption}
         mode={mode}
-        dropdownRender={(menu) => (
-          <div id={dropdownId}>
-            {menu}
-          </div>
-        )}
+        dropdownRender={(menu) => <div id={dropdownId}>{menu}</div>}
       />
     </div>
   );
