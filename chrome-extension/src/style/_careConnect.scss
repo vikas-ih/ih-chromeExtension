@@ -1,7 +1,7 @@
 .copy-all {
   border-radius: 0.7rem;
 
-  > button {
+  >button {
     border: 0;
     height: 35px;
   }
@@ -30,6 +30,7 @@
 }
 
 .copy-all {
+
   :where(.css-dev-only-do-not-override-1xax4ku).ant-btn-variant-outlined,
   :where(.css-dev-only-do-not-override-1xax4ku).ant-btn-variant-dashed {
     border-color: #d9d9d9;
@@ -41,4 +42,12 @@
     }
   }
 
+}
+
+.page-wrapper {
+  .ant-space-compact {
+    .ant-btn-variant-outlined {
+      background: none !important;
+    }
+  }
 }
