@@ -589,6 +589,7 @@ const MedicalConversationBox = forwardRef(
                 style={{ border: "none", height: "100%" }}
                 enableDotPhrases={true}
                 readOnly={encounterStatus !== "completed"}
+                h
                 handleDictation={handleDictation}
                 triggerShowSummaryEvidence={triggerShowSummaryEvidence}
               />

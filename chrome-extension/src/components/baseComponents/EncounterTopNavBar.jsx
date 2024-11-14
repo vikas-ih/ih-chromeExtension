@@ -151,7 +151,7 @@ const EncounterTopNavBar = ({
   console.log("isEncounterListLoading", isEncounterListLoading);
   return (
     <div className="px-4 py-1">
-      <div className="flex justify-center items-center past p-1 mb-3 mt-1">
+      <div className="flex justify-center items-center past p-1 mb-1 mt-1">
         <Segmented
           size="small"
           options={["Today", "Yesterday", "Last week", "All time"]}
@@ -160,7 +160,7 @@ const EncounterTopNavBar = ({
           value={storeSavedTabMobile ? storeSavedTabMobile : selectedTab}
         />
       </div>
-      <div className=" justify-start mb-2 past h-10 items-center bg-white shadow-sm rounded-xl flex">
+      <div className=" justify-start mb-2 past h-8 items-center bg-white shadow-sm rounded-xl flex">
         <SelectHover
           bordered={false}
           popupClassName={`font-sans text-xs`}
@@ -207,7 +207,7 @@ const EncounterTopNavBar = ({
                 bordered={false}
                 showSearch={false}
                 popupClassName="!w-36"
-                className="h-8 !w-28 bg-transparent border-none focus:border-none rounded-xl caret-transparent flex items-center hover:bg-transparent -mb-0"
+                className="h-6 !w-28 bg-transparent border-none focus:border-none rounded-xl caret-transparent flex items-center hover:bg-transparent -mb-0"
                 options={statusOptions}
                 filterOption={(inputValue, option) =>
                   option && option.title

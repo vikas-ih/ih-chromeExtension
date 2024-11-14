@@ -106,7 +106,7 @@ const EncounterDetails = ({
   const ambient_version = 2; //check currentPractitionerSettings?.ambient_version ??
   // const id = useParams().encounter_id;
   // console.log("id", id);
-  
+
   // useEffect(() => {
   //   if (isEmpty(encounter_id)) {
   //     console.log("id",id);
@@ -118,7 +118,6 @@ const EncounterDetails = ({
     if (isEmpty(encounterDetails)) setIsLoading(true);
     else setIsLoading(false);
   }, [encounterDetails]);
-
 
   const resetStates = () => {
     dispatch(resetEncounterState());
@@ -413,7 +412,6 @@ const EncounterDetails = ({
     return () => clearInterval(intervalId);
   }, [encounter_id, encounterStatus]);
 
-
   const handleMedicalNotesCopy = () => {
     console.log(
       "editableSummaryRef.current?.summary_json ",
@@ -481,7 +479,7 @@ const EncounterDetails = ({
           <div className={`bg-white rounded-xl shadow-md px-4 py-3`}>
             <div className="flex justify-between items-center">
               <div>
-                <div className="text-[#000] text-lg font-semibold mx-2 mr-4 items-center flex">
+                <div className="text-[#000] text-base font-medium mx-2 mr-4 items-center flex">
                   {encounterDetails?.description}
                 </div>
                 <div>
@@ -554,7 +552,7 @@ const EncounterDetails = ({
                     />
                   )}
                 </div>
-                <div className="mt-2 flex justify-evenly items-center ">
+                <div className="mt-2 flex justify-center items-center ">
                   {(encounterStatus === "completed" ||
                     encounterStatus === "summary_inprogress") && (
                     <>
@@ -574,7 +572,7 @@ const EncounterDetails = ({
                         style={{ width: "fit-content", background: "#00D090" }}
                         rootClassName="copy-all rounded-xl drop-shadow-sm text-white bg-[#00D090] hover:bg-[#059669] "
                         overlay={MedicalCopyOptions()}
-                        className=" bg-[#00D090] hover:bg-[#059669] rounded-xl drop-shadow-sm"
+                        className=" bg-[#00D090] hover:bg-[#059669] rounded-xl drop-shadow-sm mx-4"
                       >
                         <div className="flex cursor-pointer">
                           <span className="ml-2 justify-center ">
@@ -607,15 +605,15 @@ const EncounterDetails = ({
                         >
                           <div className="flex items-center cursor-pointer text-xs">
                             {/* <Tooltip title="Regenerate" placement="bottom"> */}
-                              <div className="flex items-center gap-2">
-                                {isSummaryRegenerationLoading ? (
-                                  <RegenIcon height="15" width="15" />
-                                ) : (
-                                  <AmbientloadIcon />
-                                )}
+                            <div className="flex items-center gap-2">
+                              {isSummaryRegenerationLoading ? (
+                                <RegenIcon height="15" width="15" />
+                              ) : (
+                                <AmbientloadIcon />
+                              )}
 
-                                <div className="flex items-center cursor-pointer text-xs"></div>
-                              </div>
+                              <div className="flex items-center cursor-pointer text-xs"></div>
+                            </div>
                             {/* </Tooltip> */}
                           </div>
                         </Dropdown.Button>
@@ -627,7 +625,7 @@ const EncounterDetails = ({
                 {encounterStatus === "completed" ||
                 encounterStatus === "summary_inprogress" ? (
                   <div className=" ">
-                    <div className="mt-3 flex justify-center">
+                    <div className="-mt-2 flex justify-center relative top-8">
                       <SummaryUpdatedStatus
                         isSaving={isSaving}
                         isSummaryOutdated={isSummaryOutdated}
