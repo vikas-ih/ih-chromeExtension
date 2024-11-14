@@ -1,0 +1,177 @@
+.page-wrapper {
+  .flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .selector {
+      margin: 10px;
+      width: 20%;
+
+      .single-select {
+        width: 100%;
+      }
+
+      .Template {
+        height: 52px;
+        width: 200px;
+        background-color: #00d090;
+        border-radius: 5px;
+        color: black;
+        font-size: 17px;
+      }
+
+      .Template:hover {
+        border-color: #00d090;
+      }
+
+      .reset-button {
+        height: 52px;
+        width: 200px;
+        background: #d3d3dd;
+        border-radius: 5px;
+        color: black;
+      }
+    }
+  }
+}
+
+.sort-icon-Category {
+  background-color: transparent !important;
+  margin-left: 5rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-condition {
+  background-color: transparent !important;
+  margin-left: 5rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-Template {
+  background-color: transparent !important;
+  margin-left: 8rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-Display {
+  background-color: transparent !important;
+  margin-left: 7rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-Enable {
+  background-color: transparent !important;
+  margin-left: 4rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-Action {
+  background-color: transparent !important;
+  margin-left: 4rem;
+  margin-top: -1rem;
+}
+
+.edit-icon {
+  background-color: transparent !important;
+  margin-left: 0rem;
+  margin-top: 0rem;
+}
+
+.custom-category-text {
+  display: flex;
+  align-items: center;
+}
+
+.custom-category-text .edit-icon {
+  margin-right: 8px;
+}
+
+.menu-item-content {
+  display: flex;
+  align-items: center;
+}
+
+.menu-item-content .icon {
+  margin-right: 8px;
+}
+
+.rs-toggle-checked .rs-toggle-presentation {
+  background: #00d090 !important;
+}
+
+.rs-toggle-presentation {
+  background: #abaaaa !important;
+}
+
+// status-options  starts here
+
+.ant-tree-select-dropdown
+  .ant-select-tree
+  .ant-select-tree-list-holder-inner
+  .ant-select-tree-treenode
+  .ant-select-tree-node-content-wrapper {
+  font-family: 'Poppins';
+  margin-left: 5px !important;
+}
+
+:where(.css-dev-only-do-not-override-1wklvgd).ant-tree-select-dropdown
+  .ant-select-tree
+  .ant-select-tree-node-content-wrapper,
+:where(.css-dev-only-do-not-override-1wklvgd).ant-tree-select-dropdown
+  .ant-select-tree
+  .ant-select-tree-checkbox
+  + span {
+  background-color: transparent;
+  padding: 0px !important;
+  border-radius: 100px !important;
+}
+
+.ant-tree-select-dropdown
+  .ant-select-tree
+  .ant-select-tree-node-content-wrapper:hover,
+.ant-tree-select-dropdown
+  .ant-select-tree
+  .ant-select-tree-checkbox
+  + span:hover {
+  background-color: transparent !important;
+}
+
+.ant-tree-select-dropdown
+  .ant-select-tree
+  .ant-select-tree-node-content-wrapper.ant-select-tree-node-selected,
+.ant-tree-select-dropdown
+  .ant-select-tree
+  .ant-select-tree-checkbox
+  + span.ant-select-tree-node-selected {
+  background-color: transparent;
+  border-radius: 30px;
+}
+
+.ant-tree-select-dropdown .ant-select-tree .ant-select-tree-list-holder-inner {
+  gap: 5px !important;
+}
+
+.ant-tree-select-dropdown .ant-select-tree .ant-select-tree-switcher-noop {
+  display: none !important;
+}
+
+.ant-tree-select-dropdown
+  .ant-select-tree
+  .ant-select-tree-list-holder-inner:hover {
+  background-color: transparent !important;
+}
+
+.ant-tree-select-dropdown .ant-select-tree .ant-select-tree-treenode {
+  background-color: transparent !important;
+}
+
+.ant-select-tree-node-content-wrapper
+  .ant-select-tree-node-content-wrapper-normal {
+  background-color: transparent !important;
+}
+
+// .ant-select .ant-select-arrow .anticon {
+// display: none !important;
+// }
+// status option ends herez

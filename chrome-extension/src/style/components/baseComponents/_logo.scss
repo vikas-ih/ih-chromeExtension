@@ -1,0 +1,27 @@
+.logo {
+  .logo-icon {
+    width: 30px;
+    @include media-min-sm {
+      width: 50px;
+    }
+  }
+  .text {
+    width: fit-content;
+    font-family: 'Inter', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: normal;
+    letter-spacing: 2px;
+    color: #000000;
+    @include media-min-sm {
+      font-size: 28px;
+    }
+    @include media-min-lg {
+      font-size: 20px;
+    }
+  }
+  .insight-text {
+    font-weight: 600;
+  }
+}

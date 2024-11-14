@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import EncounterDetails from "./EncounterDetails";
+import "./style/app.scss";
 
 // const contextOptions = {
 //   baseUrl: "https://auth.lumi.build",
@@ -78,9 +79,10 @@ function App() {
               path="/mobileEncounterDetails/:id"
               element={
                 <EncounterDetails
-                  topBarInputs={{}} 
-                  storedParams={{}} 
+                  topBarInputs={{}}
+                  storedParams={{}}
                   restrictTemplates={false}
+                  searchFilters={{}}
                 />
               }
             />

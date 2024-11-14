@@ -136,14 +136,12 @@ export const completeEncounter = createAsyncThunk(
 export const updateEncounter = createAsyncThunk(
   "encounters/updateEncounter",
   async (
-    {
-      encounter_id,
-      encounterPhase,
-      data,
-      params,
-      showToastMessage = true,
-      accessToken,
-    },
+    encounter_id,
+    encounterPhase,
+    data,
+    params,
+    showToastMessage = true,
+    accessToken,
     { dispatch, rejectWithValue }
   ) => {
     try {
@@ -157,7 +155,11 @@ export const updateEncounter = createAsyncThunk(
       );
 
       if (result?.status === 200) {
-        showToastSuccess("Updated encounter");
+        if (showToastMessage) {
+          showToastSuccess("Updated encounter");
+        }
+        // showToastSuccess("Updated encounter");
+        dispatch(getEncounter({encounter_id,accessToken}));
         dispatch(listEncounters({ searchFilters: params, accessToken }));
         return result.data;
       } else {
@@ -219,8 +221,8 @@ export const startEncounter = (
       );
 
       if (result?.status === 200) {
-        dispatch(getEncounter({encounter_id, callback,accessToken}));
-        dispatch(listEncounters({params,accessToken}));
+        dispatch(getEncounter({ encounter_id, callback, accessToken }));
+        dispatch(listEncounters({ params, accessToken }));
       } else {
         showToastError("Failed to start encounter");
       }
@@ -231,7 +233,6 @@ export const startEncounter = (
     }
   };
 };
-
 
 export const getTranscription = createAsyncThunk(
   "encounters/getTranscription",
@@ -263,7 +264,7 @@ export const getTranscription = createAsyncThunk(
       showToastError("Failed to load transcriptions");
       return rejectWithValue(error.message);
     } finally {
-      dispatch(transcriptionLoading(false)); 
+      dispatch(transcriptionLoading(false));
     }
   }
 );
@@ -302,7 +303,6 @@ export const updateTranscription = createAsyncThunk(
     }
   }
 );
-
 
 export const AuraDemoEncounter = createAsyncThunk(
   "encounters/AuraDemoEncounter",
@@ -497,8 +497,7 @@ const encounterSlice = createSlice({
       .addCase(getTranscription.rejected, (state, action) => {
         state.istranscriptionLoading = false;
         state.error = action.payload || "Failed to load transcriptions";
-      })
-     
+      });
   },
 });
 

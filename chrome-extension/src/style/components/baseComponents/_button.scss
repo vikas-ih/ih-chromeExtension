@@ -1,0 +1,98 @@
+.ih-button {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-weight: 400;
+  font-size: 14px;
+  font-family: 'Poppins';
+  line-height: 23px;
+  letter-spacing: 0.4px;
+}
+
+.ih-button-primary {
+  @extend .ih-button;
+
+  border: 1px solid $app-color !important;
+  background-color: $app-color !important;
+  color: #fff !important;
+
+  &:hover {
+    background-color: rgba(5, 150, 105, 1) !important;
+    color: #fff !important;
+    border-color: rgba(5, 150, 105, 1) !important;
+  }
+}
+
+.ih-button-secondary {
+  @extend .ih-button;
+
+  border: 1px solid #a9a9a9 !important;
+  background-color: #a9a9a9 !important;
+  color: #fff !important;
+
+  &:hover {
+    background-color: #696969 !important;
+    border: 1px solid #696969 !important;
+    color: #fff !important;
+  }
+}
+
+.ih-button-outlined {
+  @extend .ih-button;
+
+  border: 1px solid $app-color !important;
+  background-color: transparent !important;
+  color: $app-color !important;
+
+  &:hover {
+    background-color: $app-color !important;
+    border: 1px solid $app-color !important;
+    color: #fff !important;
+  }
+}
+
+.ih-button-negative {
+  @extend .ih-button;
+
+  border: 1px solid #d63232 !important;
+  background-color: #d63232 !important;
+  color: #fff !important;
+
+  &:hover {
+    background-color: #a30000 !important;
+    border: 1px solid #a30000 !important;
+    color: #fff !important;
+  }
+}
+
+.ih-button-ghost {
+  @extend .ih-button;
+
+  &:hover {
+    background-color: #e5e8eb !important;
+    border: 1px solid #e5e8eb !important;
+  }
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  button {
+    @extend .ih-button;
+    justify-content: center;
+    flex: 1;
+    background-color: #f5f5f5 !important;
+    border: 1px solid #f5f5f5 !important;
+    color: #000 !important;
+    &.selected {
+      @extend .ih-button-primary;
+    }
+    border-radius: 4px !important;
+    padding: 6px 12px !important;
+    height: 32px !important;
+  }
+}

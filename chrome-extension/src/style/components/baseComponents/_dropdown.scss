@@ -1,0 +1,39 @@
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  background-color: transparent;
+  background-image: none;
+  border: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  height: 40px;
+}
+
+.dropdown-icon {
+  margin-left: 3rem;
+}
+
+.dropdown-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.dropdown-wrapper {
+  display: inline-block;
+}
+
+:where(.css-dev-only-do-not-override-17a39f8).ant-btn:not(.ant-btn-icon-only)
+  > .ant-btn-icon:not(:last-child) {
+  margin-inline-end: 12px;
+  color: #c9c6c6;
+}
+
+.anticon svg {
+  display: flex;
+}
+
+.search-text {
+  color: #c9c6c6;
+}

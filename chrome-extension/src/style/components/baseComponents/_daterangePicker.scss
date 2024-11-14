@@ -1,0 +1,85 @@
+.ant-picker-panel-layout {
+  .ant-picker-date-panel {
+    display: flex;
+    flex-direction: column;
+    /* width: 288px; */
+  }
+
+  .ant-picker-header {
+    display: contents;
+    padding: 0 8px;
+    color: rgba(0, 0, 0, 0.88);
+    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+  }
+
+  .button,
+  [type='button'],
+  [type='reset'],
+  [type='submit'] {
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    border: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100px;
+    height: 0px;
+  }
+
+  .ant-picker-header > button {
+    min-width: 1.6em;
+    font-size: 14px;
+    visibility: visible;
+  }
+
+  .ant-picker-dropdown {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.88);
+    font-size: 14px;
+    line-height: 1.5714285714285714;
+    list-style: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    position: fixed;
+    top: -9999px;
+    left: -9999px;
+    z-index: 1050;
+  }
+}
+
+.ant-picker-now-btn {
+  color: red;
+}
+
+.ant-picker-dropdown .ant-picker-ranges .ant-picker-now-btn {
+  color: blue;
+}
+
+.ant-picker-dropdown .ant-picker-date-panel .ant-picker-body {
+  font-family: 'Poppins';
+}
+
+.ant-picker-dropdown .ant-picker-content td {
+  font-family: 'Poppins';
+}
+
+.ant-picker-dropdown .ant-picker-prev-icon::before {
+  color: #000000e0;
+}
+
+.ant-picker-dropdown .ant-picker-header > button {
+  color: #000000e0;
+}
+
+.ant-picker-dropdown .ant-picker-prev-icon::after {
+  color: #000000e0;
+}
+
+svg:not(:root) {
+  color: inherit;
+}
+
+.ant-picker-dropdown .ant-picker-header-view {
+  font-family: 'Poppins';
+}

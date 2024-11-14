@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import TopNavBar from "./components/TopNavBar";
 import { useDispatch, useSelector } from "react-redux";
 import { formatEncounterStatus, getEncounterStatus } from "./utilities/columns";
@@ -7,37 +13,55 @@ import { CalanderAiIcon } from "./icons/CalendarAi.icon";
 import moment from "moment";
 import { SegmentedTabs } from "./components/baseComponents/SegmentedTabs";
 import { Dropdown, Menu, Divider, Tooltip, Button } from "antd";
-import { CopiesIcon, ExpandIcon, PdfIcon } from "./icons";
+import {
+  AmbientloadIcon,
+  CopiesIcon,
+  ExpandIcon,
+  PdfIcon,
+  RegenIcon,
+  ResumeIcon,
+} from "./icons";
 import { showToastInfo, showToastSuccess } from "./utilities/toast";
 import { showToastError } from "./utilities/errortoast";
-import MedicalConversationBox, { SummaryLoading } from "./components/baseComponents/MedicalConversationBox";
+import MedicalConversationBox, {
+  SummaryLoading,
+} from "./components/baseComponents/MedicalConversationBox";
 import { MobileLiveTranscription } from "./components/baseComponents/MobileLiveTranscription";
 import { SummaryUpdatedStatus } from "./components/baseComponents/SummaryUpdatedStatus";
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
+import "./style/_careConnect.scss";
 import {
   getEncounter,
   getTranscription,
   resetEncounterState,
   selectedEncounterSlice,
+  updateEncounter,
 } from "./store/slice/encounter.slice";
-import { listSummaries } from "./store/actions/summary";
+import { listSummaries, regenerateSummary } from "./store/actions/summary";
 import { resetSummaryState } from "./store/slice/summary.slice";
 import { storeInLocal } from "./lib/storage";
 import { useParams } from "react-router-dom";
 import MicrophoneBar from "./components/baseComponents/MicrophoneBar";
 import CurrentTranscript from "./components/baseComponents/CurrentTranscript";
 import { isEmpty } from "lodash";
+import SummaryProgressBar from "./components/baseComponents/SummaryProgressBar";
 
 const EncounterDetails = ({
   topBarInputs,
   restrictTemplates = false,
   storedParams,
+  searchFilters,
 }) => {
-  const { encounterDetails, transcriptionbyIdValue } =
-    useSelector((state) => ({
-      encounterDetails: state.encounters.encounterDetails,
-      transcriptionbyIdValue: state.encounters.transcriptionbyIdValue,
-    }));
+  const { encounterDetails, transcriptionbyIdValue } = useSelector(
+    (state) => state.encounters
+  );
+
+  const { summaryList } = useSelector((state) => ({
+    summaryList: state?.summarySlice?.summaryList,
+  }));
+  const { isSummaryRegenerationLoading, summaryExportLoading } = useSelector(
+    (state) => state?.summarySlice
+  );
   console.log("encounterDetails", encounterDetails);
   // console.log("transcriptionbyIdValue", transcriptionbyIdValue);
   const userData = useAuthUserOrNull();
@@ -45,10 +69,11 @@ const EncounterDetails = ({
   const [encounter_id, setEncounterId] = useState(
     encounterDetails?.encounter_id
   );
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const refreshInterval = 5_000;
   const dispatch = useDispatch();
   const initActiveTab = useRef(false);
+  const inVisitRef = useRef(null);
 
   const { color, displayStatus } = formatEncounterStatus(encounterDetails);
   const isMobile = window.innerWidth < 1260;
@@ -62,7 +87,7 @@ const EncounterDetails = ({
 
   const [liveTranscript, setLiveTranscript] = useState([]);
   const [selectedRecord, setSelectedRecord] = useState();
-  const [record, setRecord] = useState("");
+  const [record, setRecord] = useState(encounterDetails);
 
   const [isRecording, setIsRecording] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -79,24 +104,22 @@ const EncounterDetails = ({
   const editableSummaryRef = useRef(null);
   const medicalConversationBoxRef = useRef(null);
   const ambient_version = 2; //check currentPractitionerSettings?.ambient_version ??
-
+  // const id = useParams().encounter_id;
+  // console.log("id", id);
+  
   // useEffect(() => {
-  //   if (!encounter_id) {
-  //     const id = useParams().encounter_id;
+  //   if (isEmpty(encounter_id)) {
+  //     console.log("id",id);
   //     setEncounterId(id);
   //   }
   // }, [encounter_id]);
 
-  useEffect(()=>{
-    if(isEmpty(encounterDetails)) setIsLoading(true);
+  useEffect(() => {
+    if (isEmpty(encounterDetails)) setIsLoading(true);
     else setIsLoading(false);
-  },[encounterDetails])
+  }, [encounterDetails]);
 
-  // storeInLocal(
-  //   `${currentPractitioner?.org_uuid}_topbar_encounter_id`,
-  //   encounter_id
-  // );
-  // let encounterPhase = ;
+
   const resetStates = () => {
     dispatch(resetEncounterState());
     dispatch(resetSummaryState());
@@ -171,24 +194,231 @@ const EncounterDetails = ({
       initActiveTab.current = true;
     }
   }, [encounterDetails]);
+  useEffect(() => {
+    setIsSummaryOutdated(false);
+
+    // when the summary is generating or re-generation clear ref to summary
+    // to ensured the updated summary is loaded when it's ready
+    if (encounterStatus != "completed") {
+      editableSummaryRef.current = null;
+      setEditedSummary("");
+      setIsSummaryOutdated(false);
+    } else if (summaryList?.length > 0) {
+      const cleaned_summary_json = summaryList[0].summary_json?.replaceAll(
+        "\n",
+        "<br>"
+      );
+      const cleaned_summary = {
+        ...summaryList[0],
+        summary_json: cleaned_summary_json,
+      };
+      if (
+        editableSummaryRef.current?.encounter_id !=
+          cleaned_summary.encounter_id ||
+        editableSummaryRef.current?.encounter_phase !=
+          cleaned_summary.encounter_phase
+      ) {
+        editableSummaryRef.current = cleaned_summary;
+        setEditedSummary({ ...cleaned_summary });
+        // lastUpdatedSummaryRef.current = { ...cleaned_summary };
+      } else {
+        if (editableSummaryRef.current.version != cleaned_summary.version) {
+          setIsSummaryOutdated(true);
+        }
+      }
+    }
+  }, [summaryList, encounterStatus]);
+
+  const handleCopy = () => {
+    //  if (schedulepage) {
+    //    analytics.track(
+    //      "Clicked Copy As Rich Text In Ambient Medical Notes From VCA",
+    //      {
+    //        transcription: transcriptionbyIdValue[0]?.transcription_id,
+    //      }
+    //    );
+    //  } else {
+    //    analytics.track(
+    //      "Clicked Copy As Rich Text In Ambient Medical Notes From Aura",
+    //      {
+    //        transcription: transcriptionbyIdValue[0]?.transcription_id,
+    //      }
+    //    );
+    //  }
+
+    if (
+      !editableSummaryRef.current?.summary_json ||
+      editableSummaryRef.current?.summary_json?.trim() === ""
+    ) {
+      showToastInfo("No data available to copy");
+      return;
+    }
+
+    try {
+      const medicalConversation =
+        typeof editableSummaryRef.current?.summary_json === "string"
+          ? editableSummaryRef.current?.summary_json.replaceAll("\n", "<br>")
+          : editableSummaryRef.current?.summary_json;
+
+      const tempElement = document.createElement("div");
+      const additionalInfo = `<strong>Encounter Name:</strong> ${
+        encounterDetails.description
+      }<br><strong>Date:</strong> ${moment(encounterDetails.created_at).format(
+        "MMM Do, YYYY"
+      )}<br><br>`;
+      tempElement.innerHTML = additionalInfo + medicalConversation;
+      document.body.appendChild(tempElement);
+      const range = document.createRange();
+      range.selectNode(tempElement);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand("copy");
+      document.body.removeChild(tempElement);
+      showToastSuccess("Copied to clipboard");
+    } catch (error) {
+      console.error("Error copying medical notes:", error);
+      showToastError("Failed to copy medical notes");
+    }
+  };
+
+  const MedicalCopyOptions = () => {
+    return (
+      <Menu
+        onClick={({ key }) => {
+          if (key === "copy-editor") {
+            handleCopy();
+          }
+        }}
+      >
+        <Menu.Item key="copy-editor">
+          <span className="dropdown-text">Copy as rich text</span>
+        </Menu.Item>
+      </Menu>
+    );
+  };
+
+  const handlePauseResumeToggle = useCallback(() => {
+    const updateEncounterFunc = updateEncounter(encounter_id, encounterPhase, {
+      in_visit_status: "inprogress",
+    });
+    updateEncounterFunc(dispatch);
+    // analytics.track("Clicked Resume after complete button for Aura", {
+    //   encounter_id: encounter_id,
+    // });
+    inVisitRef.current?.handlePauseResumeToggle();
+  }, [inVisitRef, inVisitRef.current]);
+
+  const handleSummaryEdits = (value) => {
+    if (editableSummaryRef.current) {
+      editableSummaryRef.current.summary_json = value;
+      setEditedSummary({
+        ...editableSummaryRef.current,
+        summary_json: value,
+      });
+    }
+  };
+
+  const getCurrentTemplate = () => {
+    if (encounterPhase === "pre-chart") {
+      return {
+        template_id: record?.pre_chart_template_id,
+        template_overrides_id: record?.pre_chart_template_overrides_id,
+      };
+    } else if (encounterPhase === "in-visit") {
+      return {
+        template_id: record?.in_visit_template_id,
+        template_overrides_id: record?.in_visit_template_overrides_id,
+      };
+    } else if (encounterPhase === "after-visit") {
+      return {
+        template_id: record?.after_visit_template_id,
+        template_overrides_id: record?.after_visit_template_overrides_id,
+      };
+    }
+  };
+  const handleRegenerate = (mode = "update") => {
+    //  if (schedulepage) {
+    //    analytics.track(
+    //      "Clicked Regenerate Summary In Ambient Medical Conversation From VCA ",
+    //      {
+    //        encounter: record?.encounter_id,
+    //        mode: mode,
+    //      }
+    //    );
+    //  } else {
+    //    analytics.track(
+    //      "Clicked Regenerate Summary In Ambient Medical Conversation From Aura",
+    //      {
+    //        encounter: record?.encounter_id,
+    //        mode: mode,
+    //      }
+    //    );
+    //  }
+    dispatch(
+      regenerateSummary(
+        record?.encounter_id,
+        encounterPhase,
+        searchFilters,
+        "",
+        getCurrentTemplate(),
+        record?.summary_verbosity,
+        record?.summary_format,
+        null,
+        mode,
+        accessToken
+      )
+    );
+  };
+  useEffect(() => {
+    setEncounterStatus(getEncounterStatus(encounterDetails, encounterPhase));
+    if (encounterDetails?.encounter_id) {
+      configureRecordingTabs();
+    }
+  }, [encounterDetails]);
+
+  const showMicrophoneBar = useMemo(() => {
+    if (!(isChartStreaming || isVisitStreaming)) return false;
+
+    if (isVisitStreaming) return activeButton != "In visit";
+
+    if (isChartStreaming) return activeButton != "Pre-chart";
+
+    return true;
+  }, [isChartStreaming, isVisitStreaming, activeButton]);
+
+  //   useEffect(() => {
+  //     if (
+  //       !initTranscript.current &&
+  //       transcriptionbyIdValue?.length > 0 &&
+  //       transcriptionbyIdValue[0]?.type == "live"
+  //     ) {
+  //       let transcript = transcriptionbyIdValue[0]?.transcription_json;
+  //       if (transcript?.length > 0) {
+  //         setLiveTranscript(transcript);
+  //       }
+
+  //       initTranscript.current = true;
+  //     }
+  //   }, [transcriptionbyIdValue]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      dispatch(getEncounter({ encounter_id, accessToken }));
+      dispatch(
+        listSummaries(encounter_id, encounterPhase, "ambient", accessToken)
+      );
+      // dispatch(getTranscription({ encounter_id, encounterPhase, accessToken })); //check
+    }, refreshInterval);
+
+    return () => clearInterval(intervalId);
+  }, [encounter_id, encounterStatus]);
+
 
   const handleMedicalNotesCopy = () => {
-    // if (schedulepage) {
-    //   analytics.track(
-    //     "Clicked Copy All To Clipboard In Ambient Medical Notes From VCA",
-    //     {
-    //       transcription: transcriptionbyIdValue[0]?.transcription_id,
-    //     }
-    //   );
-    // } else {
-    //   analytics.track(
-    //     "Clicked Copy All To Clipboard In Ambient Medical Notes From Aura",
-    //     {
-    //       transcription: transcriptionbyIdValue[0]?.transcription_id,
-    //     }
-    //   );
-    // }
-
+    console.log(
+      "editableSummaryRef.current?.summary_json ",
+      editableSummaryRef.current?.summary_json
+    );
     if (
       !editableSummaryRef.current?.summary_json ||
       editableSummaryRef.current?.summary_json?.trim() === ""
@@ -240,76 +470,6 @@ const EncounterDetails = ({
       showToastError("Failed to copy medical notes");
     }
   };
-
-  const MedicalCopyOptions = () => {
-    return (
-      <Menu
-        onClick={({ key }) => {
-          if (key === "copy-editor") {
-            // handleCopy(); check
-          }
-        }}
-      >
-        <Menu.Item key="copy-editor">
-          <span className="dropdown-text">Copy as rich text</span>
-        </Menu.Item>
-      </Menu>
-    );
-  };
-
-  const handleSummaryEdits = (value) => {
-    if (editableSummaryRef.current) {
-      editableSummaryRef.current.summary_json = value;
-      setEditedSummary({
-        ...editableSummaryRef.current,
-        summary_json: value,
-      });
-    }
-  };
-
-  useEffect(() => {
-    setEncounterStatus(getEncounterStatus(encounterDetails, encounterPhase));
-    if (encounterDetails?.encounter_id) {
-      configureRecordingTabs();
-    }
-  }, [encounterDetails]);
-
-  const showMicrophoneBar = useMemo(() => {
-    if (!(isChartStreaming || isVisitStreaming)) return false;
-
-    if (isVisitStreaming) return activeButton != "In visit";
-
-    if (isChartStreaming) return activeButton != "Pre-chart";
-
-    return true;
-  }, [isChartStreaming, isVisitStreaming, activeButton]);
-
-  //   useEffect(() => {
-  //     if (
-  //       !initTranscript.current &&
-  //       transcriptionbyIdValue?.length > 0 &&
-  //       transcriptionbyIdValue[0]?.type == "live"
-  //     ) {
-  //       let transcript = transcriptionbyIdValue[0]?.transcription_json;
-  //       if (transcript?.length > 0) {
-  //         setLiveTranscript(transcript);
-  //       }
-
-  //       initTranscript.current = true;
-  //     }
-  //   }, [transcriptionbyIdValue]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      dispatch(getEncounter({ encounter_id, accessToken }));
-      dispatch(
-        listSummaries(encounter_id, encounterPhase, "ambient", accessToken)
-      );
-      // dispatch(getTranscription({ encounter_id, encounterPhase, accessToken })); //check
-    }, refreshInterval);
-
-    return () => clearInterval(intervalId);
-  }, [encounter_id, encounterStatus]);
 
   return (
     <>
@@ -394,6 +554,75 @@ const EncounterDetails = ({
                     />
                   )}
                 </div>
+                <div className="mt-2 flex justify-evenly items-center ">
+                  {(encounterStatus === "completed" ||
+                    encounterStatus === "summary_inprogress") && (
+                    <>
+                      <Button
+                        type={"button"}
+                        className="bg-[#00D090] hover:bg-[#059669] flex items-center justify-center text-white font-normal p-2 py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
+                        onClick={handlePauseResumeToggle}
+                      >
+                        <span className="mr-2 mt-0">
+                          <ResumeIcon />
+                        </span>
+                      </Button>
+                      <Dropdown.Button
+                        onClick={handleMedicalNotesCopy}
+                        icon={<ExpandIcon />}
+                        trigger={["click"]}
+                        style={{ width: "fit-content", background: "#00D090" }}
+                        rootClassName="copy-all rounded-xl drop-shadow-sm text-white bg-[#00D090] hover:bg-[#059669] "
+                        overlay={MedicalCopyOptions()}
+                        className=" bg-[#00D090] hover:bg-[#059669] rounded-xl drop-shadow-sm"
+                      >
+                        <div className="flex cursor-pointer">
+                          <span className="ml-2 justify-center ">
+                            <CopiesIcon className="" />
+                          </span>
+                        </div>
+                      </Dropdown.Button>
+                      <div>
+                        <Dropdown.Button
+                          onClick={() => handleRegenerate("update")}
+                          trigger={["hover"]}
+                          icon={<ExpandIcon fill={"#ffffff"} />}
+                          style={{ width: "50%" }}
+                          rootClassName="copy-all rounded-xl drop-shadow-sm flex bg-[#00D090] hover:bg-[#059669] text-xs"
+                          overlay={
+                            <Menu>
+                              <Menu.Item
+                                key="1"
+                                onClick={() => handleRegenerate("overwrite")}
+                              >
+                                <div className="flex items-center cursor-pointer gap-1 text-black font-normal">
+                                  <AmbientloadIcon height="15" width="15" />
+                                  Regenerate from scratch
+                                </div>
+                              </Menu.Item>
+                            </Menu>
+                          }
+                          className={"h-[35px]"}
+                          id="regenicon"
+                        >
+                          <div className="flex items-center cursor-pointer text-xs">
+                            {/* <Tooltip title="Regenerate" placement="bottom"> */}
+                              <div className="flex items-center gap-2">
+                                {isSummaryRegenerationLoading ? (
+                                  <RegenIcon height="15" width="15" />
+                                ) : (
+                                  <AmbientloadIcon />
+                                )}
+
+                                <div className="flex items-center cursor-pointer text-xs"></div>
+                              </div>
+                            {/* </Tooltip> */}
+                          </div>
+                        </Dropdown.Button>
+                      </div>
+                    </>
+                  )}
+                </div>
 
                 {encounterStatus === "completed" ||
                 encounterStatus === "summary_inprogress" ? (
@@ -419,6 +648,31 @@ const EncounterDetails = ({
                       encounterId={encounter_id}
                       summaryId={editableSummaryRef.current?.summary_id}
                       activeButton={activeButton}
+                    />
+                    <CurrentTranscript
+                      encounterStatus={encounterStatus}
+                      encounterPhase={encounterPhase}
+                      storedParams={storedParams}
+                      selectedRecord={encounterDetails}
+                      topBarInputs={topBarInputs}
+                      setEncounterStatus={setEncounterStatus}
+                      isStreaming={isStreaming}
+                      setIsStreaming={setIsStreaming}
+                      isRecording={isRecording}
+                      setRecord={setRecord}
+                      setIsRecording={setIsRecording}
+                      isChartStreaming={isChartStreaming}
+                      isVisitStreaming={isVisitStreaming}
+                      setIsChartStreaming={setIsChartStreaming}
+                      setIsVisitStreaming={setIsVisitStreaming}
+                      isChartRecording={isChartRecording}
+                      isVisitRecording={isVisitRecording}
+                      setIsChartRecording={setIsChartRecording}
+                      setIsVisitRecording={setIsVisitRecording}
+                      setLiveTranscript={setLiveTranscript}
+                      setLivePartialTranscript={setLivePartialTranscript}
+                      restrictTemplates={restrictTemplates}
+                      ref={inVisitRef}
                     />
                   </div>
                 ) : (
@@ -454,6 +708,7 @@ const EncounterDetails = ({
                           setLiveTranscript={setLiveTranscript}
                           setLivePartialTranscript={setLivePartialTranscript}
                           restrictTemplates={restrictTemplates}
+                          ref={inVisitRef}
                         />
                         {showMicrophoneBar ? (
                           <div className="fixed bottom-0 bg-[#F5F5F5] w-full">

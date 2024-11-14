@@ -1,6 +1,9 @@
 import React, { forwardRef, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import "../../style/encounter.scss";
+
+
 const EditorMobile = forwardRef(
   (
     {

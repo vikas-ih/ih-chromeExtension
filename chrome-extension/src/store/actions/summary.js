@@ -140,59 +140,59 @@ export const updateSummary = (
 };
 
 // regenerate summary for an encounter
-// export const regenerateSummary = (
-//   encounter_id,
-//   encounter_phase,
-//   searchFilters,
-//   custom_instruction,
-//   currentTemplate,
-//   summaryVerbosity,
-//   summaryFormat,
-//   from,
-//   mode = "update",
-//   accessToken
-// ) => {
-//   return async (dispatch) => {
-//     dispatch(summaryRegenerationLoading(true));
-//    const headers = getAuthHeaders(accessToken);
-//     const data = {
-//       custom_instructions: custom_instruction,
-//       template_id: currentTemplate?.template_id,
-//       template_overrides_id: currentTemplate?.template_overrides_id,
-//       summary_verbosity: summaryVerbosity,
-//       summary_format: summaryFormat,
-//       mode: mode,
-//     };
-//     const params = {
-//       encounter_phase: encounter_phase,
-//     };
-//     try {
-//       const result = await AxiosAmbient.post(
-//         `/encounters/${encounter_id}/regenerate_summary`,
-//         data,
-//         { headers, params }
-//       );
-//       const response = result.data;
-//       if (result?.status === 200) {
-//         showToastSuccess("The updated summary will be available shortly.");
-//         from === "non-magic-edit"
-//           ? null
-//           : await dispatch(listEncounters(searchFilters, accessToken));
-//         await dispatch(getEncounter(encounter_id, accessToken));
-//         dispatch(getCurrentPractitionerSettings());
-//         dispatch(summaryRegenerationLoading(false));
-//         return true;
-//       } else {
-//         showToastError("Failed to regenerate note");
-//       }
-//     } catch (error) {
-//       console.error("Error regenerating summary:", error);
-//       showToastError("An error occurred while regenerating the summary.");
-//     }
-//     dispatch(summaryRegenerationLoading(false));
-//     return false;
-//   };
-// };
+export const regenerateSummary = (
+  encounter_id,
+  encounter_phase,
+  searchFilters,
+  custom_instruction,
+  currentTemplate,
+  summaryVerbosity,
+  summaryFormat,
+  from,
+  mode = "update",
+  accessToken
+) => {
+  return async (dispatch) => {
+    dispatch(summaryRegenerationLoading(true));
+   const headers = getAuthHeaders(accessToken);
+    const data = {
+      custom_instructions: custom_instruction,
+      template_id: currentTemplate?.template_id,
+      template_overrides_id: currentTemplate?.template_overrides_id,
+      summary_verbosity: summaryVerbosity,
+      summary_format: summaryFormat,
+      mode: mode,
+    };
+    const params = {
+      encounter_phase: encounter_phase,
+    };
+    try {
+      const result = await AxiosAmbient.post(
+        `/encounters/${encounter_id}/regenerate_summary`,
+        data,
+        { headers, params }
+      );
+      const response = result.data;
+      if (result?.status === 200) {
+        showToastSuccess("The updated summary will be available shortly.");
+        from === "non-magic-edit"
+          ? null
+          : await dispatch(listEncounters({searchFilters, accessToken}));
+        await dispatch(getEncounter({encounter_id, accessToken}));
+        // dispatch(getCurrentPractitionerSettings());
+        dispatch(summaryRegenerationLoading(false));
+        return true;
+      } else {
+        showToastError("Failed to regenerate note");
+      }
+    } catch (error) {
+      console.error("Error regenerating summary:", error);
+      showToastError("An error occurred while regenerating the summary.");
+    }
+    dispatch(summaryRegenerationLoading(false));
+    return false;
+  };
+};
 
 // regenerate summary for an encounter
 export const exportSummaryPDF = (

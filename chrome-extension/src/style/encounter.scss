@@ -1,0 +1,64 @@
+.encounter-detail {
+  margin-bottom: 10px;
+  /* Space between icon and text */
+  display: block;
+  /* To make it center */
+
+  &.title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #00d091;
+  }
+
+  &.justify-left {
+    justify-content: left;
+  }
+}
+
+.encounter-list-table-row {
+  background-color: #fff;
+}
+
+.tab-content {
+  background: #fff;
+  // border: 1px solid #ccc;
+}
+
+.ant-select-customize-input .ant-select-selector {
+  border: none;
+}
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  border: none;
+}
+
+.ant-float-btn-default.linked-evidence-float-button
+  .ant-float-btn-body
+  .ant-float-btn-content
+  .ant-float-btn-description {
+  color: white;
+  font-size: 14px;
+}
+
+.ant-float-btn-default.linked-evidence-float-button .ant-float-btn-body,
+.ant-float-btn-default.linked-evidence-float-button .ant-float-btn-body:hover {
+  background-color: transparent !important;
+}
+
+.ql-editor {
+  ::selection {
+    background: yellow;
+    /* Change this to any color you prefer */
+    color: black;
+    /* Change the text color if needed */
+  }
+
+  /* For Mozilla Firefox */
+  ::-moz-selection {
+    background: yellow;
+    color: black;
+  }
+}
+
+/*# sourceMappingURL=encounter.css.map */

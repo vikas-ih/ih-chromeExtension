@@ -1,0 +1,44 @@
+.copy-all {
+  border-radius: 0.7rem;
+
+  > button {
+    border: 0;
+    height: 35px;
+  }
+
+  .ant-dropdown-trigger {
+    border-left: 1px solid #fff;
+  }
+
+  .ant-btn {
+    .ant-btn-icon {
+      background-color: #00d090;
+
+      svg {
+        fill: #fff;
+      }
+    }
+  }
+
+  .ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+    border-color: #fff !important; // Adjust the selector as needed
+  }
+
+  .add-appointment-div {
+    align-items: center;
+  }
+}
+
+.copy-all {
+  :where(.css-dev-only-do-not-override-1xax4ku).ant-btn-variant-outlined,
+  :where(.css-dev-only-do-not-override-1xax4ku).ant-btn-variant-dashed {
+    border-color: #d9d9d9;
+    background: #00d090;
+    border-radius: 0.7rem;
+
+    &:hover {
+      background: #059669;
+    }
+  }
+
+}

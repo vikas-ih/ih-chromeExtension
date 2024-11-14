@@ -40,32 +40,6 @@ export const SummaryLoading = () => {
   );
 };
 
-const RatingComponent = ({ setCommentsModelOpen, summaryRating }) => {
-  const dispatch = useDispatch();
-
-  const handleSummaryRating = (value) => {
-    dispatch(summaryRatingSlice(value));
-    setCommentsModelOpen(true);
-  };
-  const isMobile = window.innerWidth < 1260;
-  return (
-    <div className="flex justify-center items-center ">
-      <div
-        className={`${
-          isMobile ? "" : "my-1.5"
-        } bg-gray-100 p-2.5 rounded-lg h-12`}
-      >
-        <span className="mr-2">Rate this note </span>
-        <Rating
-          onChange={handleSummaryRating}
-          value={summaryRating}
-          allowClear={false}
-        />
-      </div>
-    </div>
-  );
-};
-
 const SummaryCommentsModal = ({
   isOpen,
   setIsOpen,
@@ -224,45 +198,47 @@ const MedicalConversationBox = forwardRef(
       return state?.summarySlice?.summaryState || {};
     });
 
-    const { summaryList } = useSelector((state) => ({
-      summaryList: state?.summarySlice?.summaryList,
-    }));
+    // const { summaryList } = useSelector((state) => ({
+    //   summaryList: state?.summarySlice?.summaryList,
+    // }));
     const dispatch = useDispatch();
 
-    useEffect(() => {
-      setIsSummaryOutdated(false);
+    // useEffect(() => {
+    //   setIsSummaryOutdated(false);
 
-      // when the summary is generating or re-generation clear ref to summary
-      // to ensured the updated summary is loaded when it's ready
-      if (encounterStatus != "completed") {
-        editableSummaryRef.current = null;
-        setEditedSummary("");
-        setIsSummaryOutdated(false);
-      } else if (summaryList?.length > 0) {
-        const cleaned_summary_json = summaryList[0].summary_json?.replaceAll(
-          "\n",
-          "<br>"
-        );
-        const cleaned_summary = {
-          ...summaryList[0],
-          summary_json: cleaned_summary_json,
-        };
-        if (
-          editableSummaryRef.current?.encounter_id !=
-            cleaned_summary.encounter_id ||
-          editableSummaryRef.current?.encounter_phase !=
-            cleaned_summary.encounter_phase
-        ) {
-          editableSummaryRef.current = cleaned_summary;
-          setEditedSummary({ ...cleaned_summary });
-          // lastUpdatedSummaryRef.current = { ...cleaned_summary };
-        } else {
-          if (editableSummaryRef.current.version != cleaned_summary.version) {
-            setIsSummaryOutdated(true);
-          }
-        }
-      }
-    }, [summaryList, encounterStatus]);
+    //   // when the summary is generating or re-generation clear ref to summary
+    //   // to ensured the updated summary is loaded when it's ready
+    //   if (encounterStatus != "completed") {
+    //     editableSummaryRef.current = null;
+    //     setEditedSummary("");
+    //     setIsSummaryOutdated(false);
+    //   } else if (summaryList?.length > 0) {
+    //     const cleaned_summary_json = summaryList[0].summary_json?.replaceAll(
+    //       "\n",
+    //       "<br>"
+    //     );
+    //     const cleaned_summary = {
+    //       ...summaryList[0],
+    //       summary_json: cleaned_summary_json,
+    //     };
+    //     if (
+    //       editableSummaryRef.current?.encounter_id !=
+    //         cleaned_summary.encounter_id ||
+    //       editableSummaryRef.current?.encounter_phase !=
+    //         cleaned_summary.encounter_phase
+    //     ) {
+    //       editableSummaryRef.current = cleaned_summary;
+    //       setEditedSummary({ ...cleaned_summary });
+    //       medicalConversation = cleaned_summary;
+    //       console.log("medicalConversation", medicalConversation);
+    //       // lastUpdatedSummaryRef.current = { ...cleaned_summary };
+    //     } else {
+    //       if (editableSummaryRef.current.version != cleaned_summary.version) {
+    //         setIsSummaryOutdated(true);
+    //       }
+    //     }
+    //   }
+    // }, [summaryList, encounterStatus]);
 
     useEffect(() => {
       if (encounterId && encounterStatus === "completed") {
@@ -602,9 +578,9 @@ const MedicalConversationBox = forwardRef(
               <EditorMobile
                 ref={editorRef}
                 value={
-                  editableSummaryRef?.current?.summary_json === ""
+                  medicalConversation === ""
                     ? NO_MEDICALNOTES_MESSAGE
-                    : editableSummaryRef?.current?.summary_json
+                    : medicalConversation
                 }
                 onChange={handleMedicalConversationChange}
                 encounterId={encounterId}
@@ -621,22 +597,13 @@ const MedicalConversationBox = forwardRef(
               medicalConversation &&
               medicalConversation !== NO_MEDICALNOTES_MESSAGE &&
               activeButton === "In visit" && (
-                <>
-                  <RatingComponent
-                    summaryId={summaryId}
-                    encounterId={encounterId}
-                    schedulepage={schedulepage}
-                    setCommentsModelOpen={setCommentsModelOpen}
-                    summaryRating={summaryRating}
-                  />
-                  <SummaryCommentsModal
-                    isOpen={ratingFeedbackOpen}
-                    setIsOpen={setCommentsModelOpen}
-                    summaryId={summaryId}
-                    summaryRating={summaryRating}
-                    schedulepage={schedulepage}
-                  />
-                </>
+                <SummaryCommentsModal
+                  isOpen={ratingFeedbackOpen}
+                  setIsOpen={setCommentsModelOpen}
+                  summaryId={summaryId}
+                  summaryRating={summaryRating}
+                  schedulepage={schedulepage}
+                />
               )}
           </div>
         )}

@@ -3217,7 +3217,7 @@ div.selected-evidence-wrapper strong {
   border-width: 1px;
   box-shadow: none;
   outline: 0;
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
 }
 .onboarding .ant-select-focused:where(.css-dev-only-do-not-override-1wklvgd).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector {
   border-color: #e5e8eb;

@@ -1,0 +1,790 @@
+/* Base Styles */
+
+.Appointment-page {
+  width: 100%;
+}
+
+.completed-response {
+  color: #16a878;
+  display: flex;
+  justify-content: center;
+  padding: 5px 10px;
+  width: fit-content;
+  background-color: #eefaf4;
+  border-radius: 25px;
+
+  @media only screen and (max-width: 1260px) {
+    background-color: transparent;
+    padding: 0;
+  }
+}
+
+.inprogress-response {
+  color: #ff6f00;
+  display: flex;
+  justify-content: center;
+  padding: 5px 10px;
+  width: fit-content;
+  background-color: #ffe1ca;
+  border-radius: 25px;
+
+  @media only screen and (max-width: 1260px) {
+    background-color: transparent;
+    padding: 0;
+  }
+}
+
+.partial-response {
+  color: #ff6f00;
+  display: flex;
+  justify-content: center;
+  padding: 5px 10px;
+  width: fit-content;
+  background-color: #ffe1ca;
+  border-radius: 25px;
+
+  @media only screen and (max-width: 1260px) {
+    background-color: transparent;
+    padding: 0;
+  }
+}
+
+.new-response {
+  color: #5a8dda;
+  display: flex;
+  justify-content: center;
+  padding: 5px 7px;
+  width: fit-content;
+  background-color: #e7f1ff;
+  border-radius: 25px;
+
+  @media only screen and (max-width: 1260px) {
+    background-color: transparent;
+    padding: 0;
+  }
+}
+
+.summary-inprogress-response {
+  color: #562e00;
+  display: flex;
+  justify-content: center;
+  padding: 5px 10px;
+  width: fit-content;
+  background-color: #ffffa5;
+  font-size: 14px;
+  border-radius: 25px;
+
+  @media only screen and (max-width: 1260px) {
+    background-color: transparent;
+    padding: 0;
+  }
+}
+
+.unavailable-response {
+  color: #018749;
+  display: flex;
+  justify-content: center;
+  padding: 5px 14px;
+  width: fit-content;
+  background-color: #caffca;
+  border-radius: 25px;
+  font-size: 14px;
+
+  @media only screen and (max-width: 1260px) {
+    background-color: transparent;
+    padding: 0;
+  }
+}
+
+/* Icons and Display */
+
+.justify-right {
+  justify-content: right;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  max-width: 150px;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.start-time {
+  margin-top: 3px;
+  font-size: 13px;
+  color: #777777;
+}
+
+.dob {
+  margin-top: 2px;
+  font-size: 13px;
+  color: #777777;
+}
+
+.notification-icons {
+  display: flex;
+  align-items: center;
+
+  .email_text {
+    font-size: 10px;
+  }
+
+  .smsicon {
+    margin-left: 28px;
+
+    .sms_text {
+      font-size: 10px;
+    }
+  }
+}
+
+.chat-icon {
+  transition: transform 0.3s;
+}
+
+.chat-icon:hover {
+  transform: scale(1.2);
+}
+
+/* Flex Container */
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: -9px;
+}
+
+/* Responsive Flex Container */
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include media-max-md {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+}
+
+.ant-table {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  list-style: none;
+  overflow-x: hidden;
+  transform: none;
+  font-family: 'Poppins' !important;
+  background: #ffffff;
+  overflow-x: auto;
+  border-radius: 5px;
+}
+
+.ant-table-row {
+  @media only screen and (max-width: 1260px) {
+    box-shadow: 1px 2px 2px 0px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.super-admin-table {
+  .ant-table-cell {
+    @media only screen and (max-width: 1260px) {
+      width: auto !important;
+    }
+  }
+}
+
+.ant-table-cell {
+  @media only screen and (max-width: 1260px) {
+    width: 100% !important;
+    padding: 16px 10px !important;
+  }
+}
+
+.ant-table tbody tr.hoverable-row:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transform: none;
+  overflow-x: hidden;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+}
+
+.ant-picker-range {
+  width: 100%;
+  height: 50px;
+
+  .ant-picker {
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #00d090 !important;
+    border-radius: 5px;
+    font-family: 'Poppins';
+
+    .ant-picker-focused {
+      border-color: #00d090 !important;
+      border-inline-end-width: 1px;
+    }
+
+    .ant-picker-active-bar {
+      bottom: -1px;
+      height: 2px;
+      margin-inline-start: 11px;
+      background: #00d090 !important;
+      opacity: 0;
+      transition: all 0.3s ease-out;
+      pointer-events: none;
+    }
+  }
+}
+
+/* Selectors */
+
+.selector {
+  .ant-select,
+  .ant-picker {
+    width: 100%;
+
+    .ant-select-selector,
+    .ant-picker-input {
+      height: 50px;
+      padding: 10px 10px;
+      border-radius: 5px;
+      position: relative;
+      background-color: #ffffff;
+      width: 100%;
+      transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+      .ant-select-selection-search-input {
+        height: 47px;
+      }
+    }
+
+    .ant-select-selection-placeholder {
+      color: #000000;
+      font-size: 13px;
+
+      @include media-min-2xl {
+        font-size: 13px !important;
+      }
+    }
+
+    .ant-select-selection-item {
+      color: #000;
+    }
+  }
+
+  .selector {
+    .ant-select,
+    .ant-picker,
+    .ant-select-selector,
+    .ant-picker-input {
+      width: 100%;
+    }
+  }
+
+  @include media-max-sm {
+    margin-top: 10px;
+    width: 100%;
+  }
+}
+
+.reset-button {
+  width: 100px;
+  height: 52px;
+  background: #d3d3dd;
+  border-radius: 5px;
+  color: black;
+}
+
+.sort-icon-condition {
+  background-color: transparent !important;
+  margin-left: 5rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-doctor {
+  background-color: transparent !important;
+  margin-left: 9rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-provider-mapping {
+  background-color: transparent !important;
+  margin-left: 13.2rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-lookback-period {
+  background-color: transparent !important;
+  margin-left: 8rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-column-mapping {
+  background-color: transparent !important;
+  margin-left: 12rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-appointment-status-mapping {
+  background-color: transparent !important;
+  margin-left: 15rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-condition-mapping {
+  background-color: transparent !important;
+  margin-left: 10rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-patient {
+  background-color: transparent !important;
+  margin-left: 7rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-status {
+  background-color: transparent !important;
+  margin-left: 7rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-appointment {
+  background-color: transparent !important;
+  margin-left: 12rem;
+  margin-top: -1rem;
+}
+
+.sort-icon-dateofbirth {
+  background-color: transparent !important;
+  margin-left: 6rem;
+  margin-top: -1rem;
+}
+
+.dropdown-text {
+  font-family: 'Poppins';
+}
+
+.expired-appointment-color {
+  color: red;
+}
+
+.expired-row {
+  background-color: #efefef;
+}
+
+.appointment-page-table {
+  width: 100%;
+
+  .appointment-page-table.ant-table-wrapper .ant-table-tbody > tr > td {
+    border-bottom: 1px solid #f0f0f0;
+
+    @media only screen and (max-width: 1260px) {
+      border-bottom: 0px;
+    }
+  }
+}
+
+.practitioner_emails {
+  color: #a9a9a9;
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.field-placeholder-name {
+  color: #000000 !important;
+  font-size: 14px;
+  font-family: 'Poppins';
+}
+
+.tooltip-text {
+  font-size: 14px;
+  font-family: 'Poppins';
+  color: #6f7f94;
+  white-space: nowrap;
+}
+
+.ant-tooltip {
+  .ant-tooltip-inner {
+    color: #000000;
+    font-family: 'Poppins';
+    width: fit-content;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow:
+      0 6px 16px rgba(101, 101, 101, 0.08),
+      0 3px 6px -4px rgba(0, 0, 0, 0.9),
+      0 9px 28px 8px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    white-space: nowrap;
+  }
+}
+
+.ant-tooltip {
+  --antd-arrow-background-color: #fff !important;
+}
+
+.add-appointment-dropdown {
+  border-radius: 5px;
+
+  > button {
+    border: 0;
+    height: 38px;
+  }
+
+  .ant-dropdown-trigger {
+    border-left: 1px solid #fff;
+  }
+
+  .ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+    border-color: #fff !important; // Adjust the selector as needed
+    font-size: 12px;
+
+    @include media-min-2xl {
+      font-size: 13px !important;
+    }
+
+    @include media-max-sm {
+      font-size: 14px !important;
+    }
+
+    @include media-max-md {
+      font-size: 14px !important;
+    }
+  }
+
+  .add-appointment-div {
+    align-items: center;
+    font-size: 12px;
+
+    @include media-min-2xl {
+      font-size: 13px !important;
+    }
+
+    @include media-max-sm {
+      font-size: 14px !important;
+    }
+
+    @include media-max-md {
+      font-size: 14px !important;
+    }
+  }
+
+  .ant-btn {
+    @include media-min-2xl {
+      padding: 4px 4px !important;
+    }
+
+    @include media-min-xl {
+      padding: 4px 4px !important;
+    }
+  }
+}
+
+.ant-select-selection-placeholder {
+  font-family: 'Poppins';
+  color: #000;
+  font-size: 13px;
+
+  @include media-min-2xl {
+    font-size: 13px !important;
+  }
+
+  @include media-max-sm {
+    font-size: 14px !important;
+  }
+
+  @include media-max-md {
+    font-size: 14px !important;
+  }
+}
+
+.ant-select .ant-select-selection-item {
+  font-family: 'Poppins';
+}
+
+.ant-select-single .ant-select-selector .ant-select-selection-search {
+  font-size: 12px !important;
+
+  @include media-min-2xl {
+    font-size: 13px !important;
+  }
+
+  @include media-max-sm {
+    font-size: 14px !important;
+  }
+
+  @include media-max-md {
+    font-size: 14px !important;
+  }
+}
+
+.practitioner-dropdown
+  .ant-select-single
+  .ant-select-selector
+  .ant-select-selection-item {
+  padding: 0;
+  line-height: 37px;
+  transition:
+    all 0.3s,
+    visibility 0s;
+  align-self: normal;
+  margin-top: 2px;
+  font-size: 12px;
+
+  @include media-min-2xl {
+    font-size: 13px !important;
+  }
+
+  @include media-max-sm {
+    font-size: 14px !important;
+  }
+
+  @include media-max-md {
+    font-size: 14px !important;
+  }
+}
+
+.tree-dropdown
+  .ant-select-single
+  .ant-select-selector
+  .ant-select-selection-item {
+  padding: 0;
+  line-height: 40px;
+  transition:
+    all 0.3s,
+    visibility 0s;
+  align-self: center;
+  margin-top: 2px;
+  font-size: 12px !important;
+
+  @include media-min-xl {
+    font-size: 13px !important;
+  }
+
+  @include media-min-2xl {
+    font-size: 13px !important;
+  }
+
+  @include media-min-2xl {
+    font-size: 13px !important;
+  }
+
+  @include media-max-sm {
+    font-size: 14px !important;
+    margin-top: 0px !important;
+  }
+
+  @include media-max-md {
+    font-size: 14px !important;
+    margin-top: 0px !important;
+  }
+}
+
+.btn-text {
+  color: #000;
+  font-size: 12px !important;
+
+  @include media-min-xl {
+    font-size: 12px !important;
+  }
+
+  @include media-min-2xl {
+    font-size: 13px !important;
+  }
+
+  @include media-max-sm {
+    font-size: 14px !important;
+  }
+
+  @include media-max-md {
+    font-size: 14px !important;
+  }
+}
+
+.add-appointment-button {
+  border-radius: 5px;
+}
+
+.ant-select-show-search:where(
+    .css-dev-only-do-not-override-190m0jy
+  ).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  font-family: 'Poppins';
+}
+
+.ant-select-multiple .ant-select-selection-placeholder {
+  color: black;
+  font-size: 13px;
+
+  @include media-min-2xl {
+    font-size: 13px !important;
+  }
+}
+
+.custom-label {
+  font-size: 12px !important;
+
+  @include media-min-sm {
+    font-size: 12px !important;
+  }
+
+  @include media-min-md {
+    font-size: 12px !important;
+  }
+
+  @include media-min-2xl {
+    font-size: 13px !important;
+  }
+}
+
+.tooltip-text {
+  font-size: 12px !important;
+
+  @include media-min-2xl {
+    font-size: 13px !important;
+  }
+}
+
+// Aura only help tooltip
+.custom-tooltip .ant-tooltip-arrow {
+  display: none;
+}
+
+//end aura only help tooltip
+
+.ant-select-multiple .ant-select-selection-item-content {
+  color: black !important;
+}
+
+.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+  color: #000;
+  font-size: 13px;
+}
+
+.App {
+  text-align: center;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.appointment-page {
+  .ant-collapse-item {
+    .ant-collapse-header {
+      background: white;
+    }
+  }
+
+  .ant-collapse > .ant-collapse-item:last-child > .ant-collapse-header {
+    border-radius: 8px;
+  }
+
+  .ant-collapse > .ant-collapse-item {
+    border-bottom: none;
+  }
+
+  .ant-collapse .ant-collapse-content > .ant-collapse-content-box {
+    padding: 16px 4px;
+  }
+
+  .ant-collapse-item:not(.ant-collapse-item-active) {
+    .ant-collapse-header {
+      .ant-collapse-expand-icon {
+        background: white;
+        position: absolute;
+        border-radius: 50% !important;
+        top: 7px;
+        width: 32px;
+        height: 32px;
+        right: -14px;
+        border: 1px solid #00d090;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+      }
+    }
+  }
+
+  .ant-collapse
+    > .ant-collapse-item:not(.ant-collapse-item-active)
+    > .ant-collapse-header {
+    padding: 12px 32px;
+  }
+
+  .ant-collapse-item.ant-collapse-item-active {
+    .ant-collapse-header {
+      background: white;
+      position: absolute;
+      border-radius: 50% !important;
+      top: 40%;
+      width: 43px;
+      height: 43px;
+      right: -16px;
+      border: 1px solid #00d090;
+    }
+  }
+
+  .ant-collapse {
+    background-color: transparent;
+  }
+
+  .ant-collapse-content {
+    background: transparent;
+  }
+
+  .ant-collapse-content-active {
+    border-top: none;
+  }
+}
+
+.appointment-page {
+  .fc {
+    .fc-toolbar-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .fc-col-header-cell-cushion {
+      font-weight: 500;
+    }
+
+    .fc-toolbar.fc-header-toolbar {
+      button {
+        background-color: #f5f5f5;
+        color: #000;
+        border-radius: 0.5rem;
+        border-width: 0px;
+        padding: 8px 12px;
+        border-color: transparent;
+        box-shadow: none;
+      }
+
+      .fc-button-primary:not(:disabled).fc-button-active {
+        background-color: rgb(0 208 144 / 1);
+        color: #ffffff;
+      }
+
+      .fc-button-primary:not(:disabled):focus {
+        box-shadow: none;
+      }
+    }
+  }
+}

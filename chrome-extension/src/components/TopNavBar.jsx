@@ -31,10 +31,9 @@ import { useAuthUserOrNull } from "@frontegg/react-hooks";
 import Encounter from "./Encounter";
 
 const TopNavBar = ({list}) => {
-  // let { tenants } = useTenantsState();
   const data = useAuthUserOrNull();
   const { user, tenants } = data;
-  console.log("tenants", data.tenants);
+  // console.log("tenants", data.tenants);
   console.log("user", data.user);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [searchText, setSearchText] = useState("");

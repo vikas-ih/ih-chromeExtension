@@ -1,0 +1,647 @@
+.defaultNotification {
+  margin-left: -3rem;
+}
+
+.custom-modal {
+  width: 900px !important;
+  top: 1px;
+
+  .modal_background {
+    position: relative;
+
+    .modal__header {
+      font-family: 'Poppins';
+      font-weight: 500;
+      font-size: 20px;
+      color: #000;
+      margin: 20px 0 5px 0;
+      padding-top: 0px 10px;
+
+      .logo_icon {
+        margin-right: 18px;
+        margin-left: 5px;
+      }
+
+      @include media-max-md {
+        .grid-cols-3,
+        .grid-cols-4 {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+
+  .defaultNotification {
+    margin-left: -4rem;
+  }
+
+  .numbers {
+    margin-left: -9rem;
+    width: 100%;
+  }
+
+  .duration {
+    margin-left: -8rem;
+    width: 100%;
+  }
+
+  .removenotfy {
+    margin-left: -7rem;
+  }
+
+  .modal____body {
+    .modal__form {
+      &-el {
+        // margin-bottom: 10px;
+
+        &:last-child {
+          margin-bottom: 0 !important;
+        }
+
+        &-label {
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 25px;
+          margin: 0;
+
+          &.error {
+            color: #c70039;
+          }
+        }
+
+        &-field {
+          padding: 8px 16px 8px 16px;
+          width: 100%;
+          height: 52px;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 16px;
+          background: $white;
+          display: flex;
+          align-items: center;
+          border: 1px solid #e0e8eb;
+          border-radius: 12px;
+          /* Use half of the desired height */
+          color: rgba(0, 0, 0, 1);
+
+          &:focus {
+            // outline: 2px solid #def2f0;
+            outline: #e5e8eb;
+          }
+
+          &::placeholder {
+            font-weight: 400;
+            font-size: 14px;
+            opacity: 1;
+          }
+
+          &.error {
+            border-color: #c70039;
+            outline: none;
+          }
+        }
+
+        &-select {
+          padding: 16px;
+          width: 150px;
+          height: 48px;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 16px;
+          background: $white;
+          border: 1px solid #e0e8eb;
+          border-radius: 12px;
+          /* Use half of the desired height */
+          color: rgba(0, 0, 0, 1);
+
+          &:focus {
+            // outline: 2px solid #def2f0;
+            border: #e5e8eb;
+          }
+
+          &::placeholder {
+            font-weight: 400;
+            font-size: 14px;
+            opacity: 1;
+          }
+
+          &.error {
+            border-color: #c70039;
+            outline: none;
+          }
+        }
+
+        &-radio {
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 25px;
+          color: rgba(0, 0, 0, 1);
+          padding: 0 20px 0 0;
+          // background-color: #00d090;
+        }
+      }
+
+      &-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 16px;
+        margin-top: 20px;
+      }
+    }
+  }
+
+  .modal__form-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 25px 0 0;
+
+    .button-container {
+      margin-left: 10px;
+    }
+
+    .submit-button {
+      @extend .ih-button-primary;
+      margin-right: 10px;
+    }
+
+    .cancel-button {
+      @extend .ih-button-secondary;
+    }
+  }
+
+  .ant-select-single:not(.ant-select-customize-input)
+    .ant-select-selector
+    .ant-select-selection-search-input {
+    height: 47px;
+  }
+
+  .single-select {
+    // width: 150px !important;
+    .ant-select-selector {
+      .ant-select-selection-placeholder {
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 400;
+        font-size: 14px;
+        color: #abaaaa;
+      }
+    }
+  }
+
+  .single-select-notification {
+    width: 150px !important;
+
+    .ant-select-selector {
+      .ant-select-selection-placeholder {
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 400;
+        font-size: 14px;
+        color: #abaaaa;
+      }
+    }
+  }
+
+  .single-select.error {
+    border-color: #c70039;
+  }
+}
+
+.modal__form-el-field-textarea {
+  max-width: 100%;
+  height: auto;
+  min-height: 317px !important;
+  vertical-align: bottom;
+  transition:
+    all 0.3s,
+    height 0s;
+  resize: vertical;
+  border-color: 1px #00d090;
+  font-weight: 400;
+}
+
+.modal__form-el-field-textarea_reduced {
+  max-width: 100%;
+  height: auto;
+  min-height: 150px !important;
+  vertical-align: bottom;
+  transition:
+    all 0.3s,
+    height 0s;
+  resize: vertical;
+  border-color: 1px #00d090;
+  font-weight: 400 !important;
+}
+
+.modal__form-el-field-Json-textarea {
+  max-width: 100%;
+  // height: auto;
+  min-height: 20px !important;
+  vertical-align: bottom;
+  transition:
+    all 0.3s,
+    height 0s;
+  resize: vertical;
+  border-color: 1px #00d090;
+}
+
+// .modal__form-el-field-textarea:hover {
+//     border-color: #00d090;
+// }
+
+// delete-modal
+
+.delete-modal {
+  width: 500px !important;
+  top: 225px !important;
+
+  .modal__form-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    .button-container {
+      margin-left: 10px;
+    }
+
+    .submit-button {
+      margin-right: 10px;
+      height: 44px;
+      border: 1px solid #d63232;
+      border-radius: 5px;
+      padding: 10px 30px;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 23px;
+      letter-spacing: 0.4px;
+      background-color: #d63232;
+      color: $white;
+
+      &:hover {
+        background-color: #a30000;
+        color: #fff;
+        border-color: #a30000;
+      }
+    }
+
+    .cancel-button {
+      height: 44px;
+      border: 1px solid gray;
+      border-radius: 5px;
+      padding: 8px 30px;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 23px;
+      letter-spacing: 0.4px;
+      background-color: gray;
+      color: $white;
+
+      &:hover {
+        background-color: darkgray;
+        border: 1px solid darkgray;
+      }
+    }
+  }
+}
+
+.arrow-icon-rotate.open {
+  transition: transform 0.3s ease;
+  transform: rotate(180deg);
+}
+
+// template-modal
+
+.template-modal {
+  top: 70px;
+
+  .modal____body {
+    .modal__form {
+      &-el {
+        .ant-checkbox {
+          .ant-checkbox-inner {
+            border: 1px solid black;
+          }
+        }
+
+        .ant-checkbox-checked {
+          .ant-checkbox-inner {
+            background-color: #00d090;
+          }
+        }
+
+        :hover
+          .ant-checkbox-checked:not(.ant-checkbox-disabled)
+          .ant-checkbox-inner {
+          background-color: #00d090;
+          border-color: transparent;
+        }
+      }
+    }
+  }
+}
+
+.rc-virtual-list-scrollbar-vertical {
+  position: absolute;
+  width: 8px;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  visibility: visible !important;
+}
+
+.intake-radio-outlook {
+  font-family: 'Poppins';
+  text-align: center;
+  background: #00d090;
+  color: #ffffff;
+  border-radius: 28px;
+  padding: 3px 10px 3px 10px;
+}
+
+.followup-radio-outlook {
+  font-family: 'Poppins';
+  text-align: center;
+  background: #04ceff;
+  color: #ffffff;
+  border-radius: 28px;
+  padding: 3px 10px 3px 10px;
+}
+
+.auraonly-radio-outlook {
+  font-family: 'Poppins';
+  text-align: center;
+  background: #caffca;
+  color: #018749;
+  border-radius: 28px;
+  padding: 3px 10px 3px 10px;
+}
+
+.edit-intake-radio-outlook {
+  font-family: 'Poppins';
+  text-align: center;
+  background: #00d090;
+  color: #ffffff;
+  border-radius: 28px;
+  padding: 3px 10px 3px 10px;
+}
+
+.edit-followup-radio-outlook {
+  font-family: 'Poppins';
+  text-align: center;
+  background: #04ceff;
+  color: #ffffff;
+  border-radius: 28px;
+  padding: 3px 10px 3px 10px;
+}
+
+.edit-auraonly-radio-outlook {
+  font-family: 'Poppins';
+  text-align: center;
+  background: #29ab87;
+  color: #018749;
+  border-radius: 28px;
+  padding: 3px 10px 3px 10px;
+}
+
+.edit-font-size {
+  font-size: 15px;
+}
+
+.ant-radio-wrapper {
+  border-color: red;
+}
+
+.font-change {
+  font-size: 16px;
+}
+
+.IntakeIcon {
+  .ant-radio-checked .ant-radio-inner {
+    border-color: #00d090 !important;
+    background-color: #00d090 !important;
+  }
+}
+
+.IntakeIcon .ant-radio .ant-radio-inner {
+  border-color: #00d090 !important;
+}
+
+.IntakeIcon .ant-radio:hover .ant-radio-inner {
+  border-color: #00d090 !important;
+}
+
+.FollowUpIcon {
+  .ant-radio-checked .ant-radio-inner {
+    border-color: #04ceff !important;
+    background-color: #04ceff !important;
+  }
+}
+
+.FollowUpIcon .ant-radio .ant-radio-inner {
+  border-color: #04ceff !important;
+}
+
+.FollowUpIcon .ant-radio:hover .ant-radio-inner {
+  border-color: #04ceff !important;
+}
+
+.AmbientAiIcon {
+  .ant-radio-checked .ant-radio-inner {
+    border-color: #018749 !important;
+    background-color: #018749 !important;
+  }
+}
+
+.AmbientAiIcon .ant-radio .ant-radio-inner {
+  border-color: #018749 !important;
+}
+
+.AmbientAiIcon .ant-radio:hover .ant-radio-inner {
+  border-color: #018749 !important;
+}
+
+.ant-radio-wrapper .ant-radio-checked::after {
+  border: none !important;
+  border-radius: 50px;
+}
+
+.AddNotificationBtn {
+  height: 45px;
+  font-family: 'Poppins';
+  text-align: center;
+  background-color: #00d090 !important;
+  color: #fff !important;
+  border-radius: 4px;
+  border: 1px solid #00d090;
+  margin-left: 34rem;
+  margin-bottom: -3rem !important;
+  bottom: 4.2rem;
+
+  &:hover {
+    background-color: rgba(5, 150, 105, 1) !important;
+    color: #fff;
+    border-color: rgba(5, 150, 105, 1) !important;
+  }
+}
+
+.PatientNotificationSchedule {
+  margin-bottom: 1rem;
+}
+
+.addemail {
+  cursor: pointer;
+}
+
+.display-none-show {
+  display: none;
+}
+
+.Notification {
+  margin-left: -4rem;
+}
+
+.bell-icon {
+  margin: 15px 5px;
+}
+
+.close-icon {
+  width: 15px;
+}
+
+.email-item {
+  padding-right: 16px;
+  display: flex;
+  border: 1px solid #fff;
+  background-color: #efeeee;
+  color: #000;
+  width: fit-content;
+  border-radius: 40px;
+  // height: 32px;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 16px;
+}
+
+.doctor-email-item {
+  padding-right: 16px;
+  display: flex;
+  border: 1px solid #fff;
+  background-color: #00d091;
+  color: #fff;
+  width: fit-content;
+  border-radius: 40px;
+  // height: 32px;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 16px;
+}
+
+.remove-email-button {
+  background-color: #ccc;
+  border-radius: 36px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-weight: 450;
+}
+
+.physician-Emails {
+  align-items: center;
+  color: #fff;
+  background-color: #00d091;
+  display: flex;
+  font-size: 14px;
+  width: fit-content;
+  border-radius: 20px;
+  padding: 8px;
+  height: 32px;
+  font-weight: 400;
+  border: 1px solid #00d091;
+}
+
+.add-notification-button {
+  border: 1px solid $app-color;
+  border-radius: 5px;
+  padding: 13px 10px 10px 25px;
+  color: #fff;
+  font-weight: 400;
+  font-size: 14px;
+  font-family: 'Poppins';
+  height: 48px;
+  letter-spacing: 0.4px;
+  background-color: $app-color;
+  width: 30%;
+
+  &:hover {
+    background-color: rgba(5, 150, 105, 1);
+    color: #fff;
+    border-color: rgba(5, 150, 105, 1);
+  }
+}
+
+.edit-modal-text {
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.placeholder {
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  color: #abaaaa !important;
+}
+
+.ant-switch.ant-switch-checked {
+  background: #00d090 !important;
+}
+
+.ant-switch.ant-switch-checked:hover::before {
+  background: rgba(5, 150, 105, 1) !important;
+}
+
+.verify-patient-modal {
+  top: 122px;
+
+  @include media-min-md {
+    width: 500px !important;
+  }
+}
+
+.ambient_qr-modal {
+  top: 200px;
+
+  @include media-min-md {
+    width: 500px !important;
+  }
+}
+
+:where(.css-dev-only-do-not-override-1wklvgd).ant-btn-default:not(
+    :disabled
+  ):not(.ant-btn-disabled):hover {
+  color: #fff;
+}
+
+.ant-modal .ant-modal-content,
+.custom-modal-content {
+  background: linear-gradient(
+    135deg,
+    rgb(228, 240, 243) 0%,
+    rgba(235, 246, 255, 1) 46%,
+    rgba(203, 227, 230, 1) 100%
+  );
+}
+
+.modal-background {
+  background: linear-gradient(
+    135deg,
+    rgb(228, 240, 243) 0%,
+    rgba(235, 246, 255, 1) 46%,
+    rgba(203, 227, 230, 1) 100%
+  );
+}
+
+.ant-modal .ant-modal-header {
+  background: transparent;
+}
+
+.ant-modal textarea {
+  background: #fff;
+}

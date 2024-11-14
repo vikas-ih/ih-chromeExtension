@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 
 import { EncounterTable } from "./baseComponents/EncounterTable";
-import { dataSource, formatEncounterStatus, getEncounterStatus } from "../utilities/columns";
+import {
+  dataSource,
+  formatEncounterStatus,
+  getEncounterStatus,
+} from "../utilities/columns";
 import { ProfileLogo } from "./baseComponents/ProfileLogo";
-import { Dropdown as AntDropdown, Input, Pagination, Tooltip } from "antd";
+import {
+  Dropdown as AntDropdown,
+  Input,
+  Pagination,
+  Tooltip,
+  Segmented,
+} from "antd";
 import { CloseAiIcon, EditableIcon, UpdateIcon } from "../icons";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,10 +29,11 @@ import { useAuthUserOrNull } from "@frontegg/react-hooks";
 import { LoadingBar } from "./baseComponents/LoadingBar";
 import { showToastError } from "../utilities/errortoast";
 import { ActionsDropdown } from "./baseComponents/ActionDropdown";
-import { storeInLocal } from "../lib/storage";
+import { getFromStorage, storeInLocal } from "../lib/storage";
 import { useNavigate } from "react-router-dom";
+import EncounterTopNavBar from "./baseComponents/EncounterTopNavBar";
 
-const Encounter = () => {
+const Encounter = ({ schedulepage = false }) => {
   // const encounterList = dataSource;
   const userData = useAuthUserOrNull();
   const accessToken = userData?.user?.accessToken;
@@ -33,7 +44,7 @@ const Encounter = () => {
   const [encounterStatus, setEncounterStatus] = useState("");
   const [record, setRecord] = useState("");
   const navigate = useNavigate();
-
+  const refreshInterval = 100000;
   const dispatch = useDispatch();
   // const { encounters, loading, error, count } = useSelector(
   //   (state) => state.encounters
@@ -44,28 +55,108 @@ const Encounter = () => {
     isMobileRecord: false,
     newEncounterfromMic: false,
   };
+  const isMobileView = window.innerWidth <= 1260;
+
   //useSelector(
   //   (state) => state?.encounterState
   // );  //env
+  const currentPractitioner = {};
+  const savedStartDate_Storage = localStorage.getItem(
+    `${currentPractitioner?.org_uuid}_startDate`
+  );
+  const savedEndDate_Storage = localStorage.getItem(
+    `${currentPractitioner?.org_uuid}_endDate`
+  );
+
+  const [savedStartDate, setSavedStartDate] = useState(
+    savedStartDate_Storage ? savedStartDate_Storage : null
+  );
+  const [savedEndDate, setSavedEndDate] = useState(
+    savedEndDate_Storage ? savedEndDate_Storage : null
+  );
+
   const [selectedEncounter, setSelectedEncounter] = useState("");
   const handleDescriptionChange = (e, record) => {
     const updatedEncounter = { ...record, description: e.target.value };
     setEditingRow(updatedEncounter);
   };
 
+  const practitioner_id = currentPractitioner?.practitioner_id;
+
+  const savedPractitioner_ID = getFromStorage(
+    `${currentPractitioner?.org_uuid}_storePractitioner`
+  );
+
+  const [selectedPractitioner, setSelectedPractitioner] = useState(
+    savedPractitioner_ID !== ""
+      ? parseInt(savedPractitioner_ID)
+      : practitioner_id
+  );
+
+  const [sortState, setSortState] = useState({
+    field: "created_at",
+    order: "desc",
+  });
+
+  const [browserTimezone, setBrowserTimezone] = useState("");
+  const [utcTime, setUtcTime] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [page, setCurrentPage] = useState(1);
+  const [pageSize, setCurrentPageSize] = useState(5);
+
+  const storeSavedTabMobile = getFromStorage(
+    `${currentPractitioner?.org_uuid}_selectedTab`
+  );
+
+  const today = moment().format("YYYY-MM-DD");
+  const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
+  const lastweek = moment().subtract(7, "days").format("YYYY-MM-DD");
+
+  const [selectedTabDate, setSelectedTabDate] = useState(today);
+  const [selectedLastWeek, setSelectedLastWeek] = useState(
+    storeSavedTabMobile === "Last week" ? "Last week" : null
+  );
+
+  const [selectedTab, setSelectedTab] = useState(
+    storeSavedTabMobile ? storeSavedTabMobile : "Today"
+  );
+
+  const [pageState, setPageState] = useState({
+    current: 1,
+    pageSize: 5,
+  });
+
+    const [resetDateFilter, setResetDateFilter] = useState(false);
+    const [isResetFiltersOn, setIsResetFiltersOn] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(
+    storeSavedTabMobile
+      ? storeSavedTabMobile
+      : localStorage.getItem(`${currentPractitioner?.org_uuid}_selectedFilter`)
+      ? localStorage.getItem(`${currentPractitioner?.org_uuid}_selectedFilter`)
+      : "Today"
+  );
+
+   const [selectedFilter, setSelectedFilter] = useState(() => {
+     const storedFilter = localStorage.getItem(
+       `${currentPractitioner?.org_uuid}_selectedFilter`
+     );
+     return storedFilter == null ? "Loading..." : storedFilter || "Today";
+   });
+
   const handleMobileRowClick = (record) => {
     dispatch(encounterDetailsSlice(record));
     storeInLocal("uuid", record?.appt_uuid);
     dispatch(setMobileRecord(true));
     dispatch(mobileViewStatusSlice(record));
-    // setSelectedTab("Today");
-    // setSelectedLastWeek(null);
+    setSelectedTab("Today");
+    setSelectedLastWeek(null);
     navigate(`/mobileEncounterDetails/${record?.encounter_id}`);
-    // setSelectedTabDate(today);/
-    // setPageState({
-    //   current: 1,
-    //   pageSize: 10,
-    // });
+    setSelectedTabDate(today);
+    setPageState({
+      current: 1,
+      pageSize: 10,
+    });
   };
 
   const handleSaveDescription = (record) => {
@@ -76,12 +167,6 @@ const Encounter = () => {
       showToastError("Description cannot be empty!");
       return;
     }
-
-    //  if (schedulepage) {
-    //    analytics.track("Edited Encounter's Description From VCA", {});
-    //  } else {
-    //    analytics.track("Edited Encounter's Description From Aura", {});
-    //  }
 
     dispatch(
       updateEncounter({
@@ -95,21 +180,36 @@ const Encounter = () => {
     );
     setEditingRow(null);
   };
-  const [page, setCurrentPage] = useState(1);
-  const pageHandler = (page, pageSize) => {
-    setCurrentPage(page);
+
+  const pageHandler = (current, pageSize) => {
+    setPageState({ current, pageSize });
   };
-  useEffect(() => {
-    const searchFilters = {
-      status: "",
-      page: page,
-      per_page: 5,
-      sort_by: "created_at",
-      sort_direction: "desc",
-      // created_at_gt: "2024-11-08T00:00:00+05:30",
-      // created_at_lt: "2024-11-08T23:59:59+05:30",
+
+    const changeEncounterStatus = (encounter_id) => {
+      const currentEncounter =
+        encounterList &&
+        encounterList?.find(
+          (encounter) => encounter?.encounter_id === encounter_id
+        );
+      if (currentEncounter) {
+        setEncounterStatus(
+          getEncounterStatus(currentEncounter, encounterPhase)
+        );
+      }
     };
-    // const headers = getAuthHeaders(accessToken);
+
+  const [searchFilters, setSearchFilters] = useState({
+    status: "",
+    page: page,
+    per_page: pageSize,
+    sort_by: "created_at",
+    sort_direction: "desc",
+    // created_at_gt: "2024-11-08T00:00:00+05:30",
+    // created_at_lt: "2024-11-08T23:59:59+05:30",
+  });
+  useEffect(() => {
+    // const searchFilters =
+    // // const headers = getAuthHeaders(accessToken);
     setStoredParams(searchFilters);
     dispatch(listEncounters({ searchFilters, accessToken }));
   }, [dispatch, page]);
@@ -236,8 +336,8 @@ const Encounter = () => {
                   <div className="">
                     <ActionsDropdown
                       encounterDetailsSlice={record}
-                      //  searchFilters={searchFilters}
-                      //  record={record}
+                       searchFilters={searchFilters}
+                       record={record}
                       storedParams={storedParams}
                       accessToken={accessToken}
                     />
@@ -250,19 +350,288 @@ const Encounter = () => {
       ),
     },
   ];
+
+  //Function to store and reset selected tab dates in mobile view
+  const handleTabChange = (key) => {
+    storeInLocal(`${currentPractitioner?.org_uuid}_selectedTab`, key);
+    setPageState({
+      current: 1,
+      pageSize: 10,
+    });
+    setSelectedTab(key);
+    if (key === "Yesterday") {
+      setSelectedTabDate(yesterday);
+      setSelectedLastWeek(null);
+    } else if (key === "Today") {
+      setSelectedTabDate(today);
+      setSelectedLastWeek(null);
+    } else if (key === "Last week") {
+      setSelectedTabDate(today);
+      setSelectedLastWeek(lastweek);
+    } else {
+      setSelectedTabDate("All time");
+      setSelectedLastWeek(null);
+    }
+  };
+  //Reset functionality
+  const resetFilters = () => {
+    localStorage.removeItem(`${currentPractitioner?.org_uuid}_startDateRange`);
+    localStorage.removeItem(`${currentPractitioner?.org_uuid}_endDateRange`);
+    localStorage.removeItem(
+      `${currentPractitioner?.org_uuid}_storePractitioner`
+    );
+    localStorage.removeItem(
+      `${currentPractitioner?.org_uuid}_selectedTitleEncounter`
+    );
+    localStorage.removeItem(`${currentPractitioner?.org_uuid}_selectedSearch`);
+    localStorage.removeItem(
+      `${currentPractitioner?.org_uuid}_selectedPractitioner`
+    );
+    localStorage.removeItem(`${currentPractitioner?.org_uuid}_selectedTab`);
+    localStorage.removeItem(`${currentPractitioner?.org_uuid}_selectedDate`);
+    localStorage.removeItem(`${currentPractitioner?.org_uuid}_savedStatus`);
+    localStorage.removeItem(`${currentPractitioner?.org_uuid}_selectedDates`);
+    // setSelectedTitleEncounter("");
+    // analytics.track("Clicked Clear Filters In Aura", {});
+    setSavedStartDate && setSavedStartDate(null);
+    setSavedEndDate && setSavedEndDate(null);
+    setSearchFilters({});
+    setSelectedDate("Today");
+    setSelectedPractitioner("All");
+    setStartDate(null);
+    setEndDate(null);
+    // setRenameTitleEncounter("");
+    setSelectedTab && setSelectedTab("Today");
+    setResetDateFilter(true);
+    setSelectedFilter("");
+    setIsResetFiltersOn(true);
+  };
+
+  //Triggers initial api call to list encounters
+  useEffect(() => {
+    let params = {
+      ...searchFilters,
+      practitioner_id:
+        selectedPractitioner && selectedPractitioner
+          ? selectedPractitioner
+          : practitioner_id,
+      page: pageState.current,
+      per_page: pageState.pageSize,
+    };
+
+    if (sortState.field) {
+      params.sort_by = sortState.field;
+      params.sort_direction = sortState.order;
+    }
+
+    if (
+      selectedDate === "Custom…🗓️" &&
+      startDate &&
+      endDate &&
+      !isMobileView &&
+      !schedulepage
+    ) {
+      params.created_at_gt = moment(startDate)
+        .startOf("day")
+        .tz(moment.tz.guess())
+        .format();
+      params.created_at_lt = moment(endDate)
+        .endOf("day")
+        .tz(moment.tz.guess())
+        .format();
+    } else if (selectedDate === "Today" && !isMobileView && !schedulepage) {
+      params.created_at_gt = moment()
+        .startOf("day")
+        .tz(moment.tz.guess())
+        .format();
+      params.created_at_lt = moment()
+        .endOf("day")
+        .tz(moment.tz.guess())
+        .format();
+    } else if (selectedDate === "Yesterday" && !isMobileView && !schedulepage) {
+      params.created_at_gt = moment()
+        .subtract(1, "days")
+        .startOf("day")
+        .tz(moment.tz.guess())
+        .format();
+      params.created_at_lt = moment()
+        .subtract(1, "days")
+        .endOf("day")
+        .tz(moment.tz.guess())
+        .format();
+    } else if (selectedDate === "Last week" && !isMobileView && !schedulepage) {
+      params.created_at_gt = moment()
+        .subtract(1, "weeks")
+        .startOf("isoWeek")
+        .tz(moment.tz.guess())
+        .format();
+      params.created_at_lt = moment()
+        .subtract(1, "weeks")
+        .endOf("isoWeek")
+        .tz(moment.tz.guess())
+        .format();
+    } else if (isMobileView && !schedulepage && selectedLastWeek === null) {
+      if (selectedTab === "Today") {
+        params.created_at_gt = moment()
+          .startOf("day")
+          .tz(moment.tz.guess())
+          .format();
+        params.created_at_lt = moment()
+          .endOf("day")
+          .tz(moment.tz.guess())
+          .format();
+      } else if (selectedTab === "Yesterday") {
+        params.created_at_gt = moment()
+          .subtract(1, "days")
+          .startOf("day")
+          .tz(moment.tz.guess())
+          .format();
+        params.created_at_lt = moment()
+          .subtract(1, "days")
+          .endOf("day")
+          .tz(moment.tz.guess())
+          .format();
+      }
+    } else if (isMobileView && selectedLastWeek && !schedulepage) {
+      params.created_at_gt = moment()
+        .subtract(1, "weeks")
+        .startOf("isoWeek")
+        .tz(moment.tz.guess())
+        .format();
+      params.created_at_lt = moment()
+        .subtract(1, "weeks")
+        .endOf("isoWeek")
+        .tz(moment.tz.guess())
+        .format();
+    } else if (savedStartDate && savedEndDate) {
+      params.created_at_gt = savedStartDate;
+      params.created_at_lt = savedEndDate;
+    } else if (isMobileView && !schedulepage) {
+      if (storeSavedTabMobile === "Today") {
+        params.created_at_gt = moment()
+          .startOf("day")
+          .tz(moment.tz.guess())
+          .format();
+        params.created_at_lt = moment()
+          .endOf("day")
+          .tz(moment.tz.guess())
+          .format();
+      } else if (storeSavedTabMobile === "Yesterday") {
+        params.created_at_gt = moment()
+          .subtract(1, "days")
+          .startOf("day")
+          .tz(moment.tz.guess())
+          .format();
+        params.created_at_lt = moment()
+          .subtract(1, "days")
+          .endOf("day")
+          .tz(moment.tz.guess())
+          .format();
+      } else if (storeSavedTabMobile === "Last week") {
+        params.created_at_gt = moment()
+          .subtract(1, "weeks")
+          .startOf("isoWeek")
+          .tz(moment.tz.guess())
+          .format();
+        params.created_at_lt = moment()
+          .subtract(1, "weeks")
+          .endOf("isoWeek")
+          .tz(moment.tz.guess())
+          .format();
+      } else if (storeSavedTabMobile === "All time") {
+        params.created_at_gt = "";
+        params.created_at_lt = "";
+      }
+    }
+
+    if (params.practitioner_id === "All") {
+      delete params.practitioner_id;
+    }
+
+    // If opening in combo view, we don't want to pass any other param apart from appointment_id
+    // if (schedulepage) {
+    //   params = {
+    //     appointment_id: appointmentId,
+    //   };
+    // }
+    dispatch(listEncounters({ searchFilters: params, accessToken }));
+    setStoredParams(params);
+
+    // const intervalId = setInterval(() => {
+    //   if (!isMagicEditingRef.current) {
+    //     dispatch(listEncounters(params, false));
+    //   }
+    // }, refreshInterval);
+
+    // return () => clearInterval(intervalId);
+  }, [
+    utcTime,
+    searchFilters,
+    sortState,
+    pageState,
+    startDate,
+    endDate,
+    selectedTabDate,
+    selectedLastWeek,
+    selectedTab,
+    selectedDate,
+    selectedPractitioner,
+    savedStartDate,
+    savedEndDate,
+  ]);
+
+  //Function to add timestamp to selected date in mobile view
+  useEffect(() => {
+    const convertToUTC = () => {
+      if (browserTimezone) {
+        const currentTime = moment().tz(browserTimezone);
+        const utcTime = currentTime.clone().utc();
+        const utcTimeString = utcTime.format("HH:mm");
+        const offset = currentTime.utcOffset();
+        const sign = offset >= 0 ? "+" : "-";
+        const hours = Math.floor(Math.abs(offset) / 60);
+        const minutes = Math.abs(offset) % 60;
+        const formattedOffset = `${sign}${hours
+          .toString()
+          .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+        const formattedUtcTime = `${utcTimeString}${formattedOffset}`;
+        setUtcTime(formattedUtcTime);
+      }
+    };
+
+    convertToUTC();
+  }, [browserTimezone]);
+
   return (
-    <>
+    <div className="page-wrapper past flex flex-col relative ">
+      <EncounterTopNavBar
+        searchFilters={searchFilters}
+        page={page}
+        setSearchFilters={setSearchFilters}
+        handleTabChange={handleTabChange}
+        selectedTab={selectedTab}
+        storeSavedTabMobile={storeSavedTabMobile}
+        isEncounterListLoading={isEncounterListLoading}
+        resetFilters={resetFilters}
+        setPageState={setPageState}
+        setIsResetFiltersOn={setIsResetFiltersOn}
+        currentPractitioner={currentPractitioner}
+        selectedPractitioner={selectedPractitioner}
+        setSelectedPractitioner={setSelectedPractitioner}
+        changeEncounterStatus={changeEncounterStatus}
+        record={record}
+      />
       <div className="mt-2 mb-24 p-4 relative ">
         <div
           className={`min-h-screen grid shadow-xl ant-table-wrappers rounded-xl bg-white relative`}
         >
           <EncounterTable
             columns={columns}
-            // setStartDate={setStartDate}
-            // setEndDate={setEndDate}
-            // setSearchFilters={setSearchFilters}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            setSearchFilters={setSearchFilters}
             // setTopBarInputs={setTopBarInputs}
-            // onCreateEncounter={() => handleCreateEncounter(storedParams)}
+            // onCreateEncounter={() => handleCreateEncounter(storedParams)} //check
             ClassName={"tableai"}
             rowClassName={(record, index) => {
               if (
@@ -285,13 +654,13 @@ const Encounter = () => {
             tableLayout="auto"
             // Sorting
             sortDirections={["asc", "desc", "asc"]}
-            // sortedInfo={sortState}
+            sortedInfo={sortState}
           />
           <div className="sticky bottom-0 bg-white  flex items-center justify-center ">
             {encounterList.length > 0 && (
               <Pagination
-                current={page}
-                pageSize={5}
+                current={pageState.current}
+                pageSize={pageState.pageSize}
                 total={encounterListCount}
                 onChange={(page, pageSize) => {
                   pageHandler(page, pageSize);
@@ -305,7 +674,7 @@ const Encounter = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

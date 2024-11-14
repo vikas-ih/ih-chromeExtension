@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from './Button';
 import { useWakeLock } from 'react-screen-wake-lock';
@@ -73,26 +73,31 @@ const GenerateSummaryButton = ({
   );
 };
 
-const InVisitButton = ({
-  topBarInputs,
-  setActiveTab,
-  storedParams,
-  selectedRecord,
-  encounterStatus,
-  encounterPhase,
-  setEncounterStatus,
-  setLiveTranscript,
-  setRecord,
-  setLivePartialTranscript,
-  setActiveRightPanelTab,
-  isStreaming,
-  setIsStreaming,
-  isRecording,
-  setIsRecording,
-  schedulepage,
-  restrictTemplates,
-  autoResumeVisit,
-}) => {
+const InVisitButton = forwardRef(
+  (
+    {
+      topBarInputs,
+      setActiveTab,
+      storedParams,
+      selectedRecord,
+      encounterStatus,
+      encounterPhase,
+      setEncounterStatus,
+      setLiveTranscript,
+      setRecord,
+      setLivePartialTranscript,
+      setActiveRightPanelTab,
+      isStreaming,
+      setIsStreaming,
+      isRecording,
+      setIsRecording,
+      schedulepage,
+      restrictTemplates,
+      autoResumeVisit,
+      noTemplate,
+    },
+    ref
+  ) => {
   const userData = useAuthUserOrNull();
   const accessToken = userData?.user?.accessToken;
   const [micLevel, setMicLevel] = useState(0);
@@ -465,6 +470,18 @@ const InVisitButton = ({
     }
   };
 
+   const handlePauseResumeToggle = () => {
+     if (isRecording) {
+       handlePauseRecording();
+     } else {
+       handleResumeRecording();
+     }
+   };
+
+    useImperativeHandle(ref, () => {
+      return { handlePauseResumeToggle };
+    });
+
   const ifShowRecordingControls = () => {
     return (
       encounterStatus === "new" ||
@@ -484,14 +501,7 @@ const InVisitButton = ({
     }
   }, [autoResumeVisit, record?.encounter_id]);
 
-  const handlePauseResumeToggle = () => {
-    if (isRecording) {
-      handlePauseRecording();
-    } else {
-      handleResumeRecording();
-    }
-  };
-
+ 
   useEffect(() => {
     const getMicrophones = async () => {
       try {
@@ -585,9 +595,10 @@ const InVisitButton = ({
       }
     };
   }, [open, selectedMicrophone, accessRequested]);
- console.log('isRecordinbg', isRecording);
- console.log("isStreaming", isStreaming);
 
+  if (noTemplate) {
+    return null;
+  }
   return isNotLoading ? (
     <>
       <div
@@ -816,6 +827,7 @@ const InVisitButton = ({
       />
     </>
   );
-};
+}
+);
 
 export default InVisitButton;
