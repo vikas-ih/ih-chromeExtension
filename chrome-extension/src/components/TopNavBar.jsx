@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
 import { Header, Text } from "./baseComponents";
-import {
-  Dropdown as AntDropdown,
-  Divider,
-  AutoComplete,
-  Menu
-} from "antd";
+import { Dropdown as AntDropdown, Divider, AutoComplete, Menu } from "antd";
 import moment from "moment";
 
 import {
+  BackIconMobile,
   DropdownIcon,
   EditIcon,
   SearchIcon,
@@ -29,11 +25,13 @@ import {
 import { getFromStorage } from "../lib/storage";
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
 import Encounter from "./Encounter";
+import { setMobileRecord } from "../store/slice/encounter.slice";
+import { useDispatch } from "react-redux";
 
-const TopNavBar = ({list}) => {
+const TopNavBar = ({ list }) => {
   const data = useAuthUserOrNull();
   const { user, tenants } = data;
-  // console.log("tenants", data.tenants);
+  const dispatch = useDispatch();
   console.log("user", data.user);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -55,6 +53,23 @@ const TopNavBar = ({list}) => {
     //    orgId: org_id,
     //  });
     AdminPortal.show();
+  };
+
+  const nullSelectedRecord = () => {
+    // if (location.pathname === `/schedule/${appointmentUUID}`) {
+    // } else if (location.pathname === `/appointmentsettings`) {
+    //   navigate(`/appointments`);
+    // } else {
+    //   navigate(`/encounters`);
+    // }
+    history.back();
+    dispatch(setMobileRecord(false));
+  };
+
+  const isEncountersPage = () => {
+    return (
+      location.pathname === `/mobileEncounterDetails/:id`
+    );
   };
 
   useEffect(() => {
@@ -187,11 +202,15 @@ const TopNavBar = ({list}) => {
           onClick: logout,
         },
       ];
-
   return (
     <>
       <nav className="sticky top-0 left-0 z-[98] bg-[#d9f6fd] flex justify-between items-center py-5 px-3">
         <div className="top-navbar-left flex items-center justify-start ">
+          {!list && (
+            <div className="">
+              <BackIconMobile onClick={nullSelectedRecord} />
+            </div>
+          )}{" "}
           <h1 className="text-black text-[18px] font-semibold mx-2">
             Encounters
           </h1>

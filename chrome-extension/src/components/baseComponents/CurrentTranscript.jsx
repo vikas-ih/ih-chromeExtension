@@ -388,7 +388,6 @@ const CurrentTranscript = forwardRef(
         />
       );
     }
-    console.log("encounterPhase", encounterPhase);
     return (
       <>
         {!isRecording && encounterPhase != "after-visit" && (
@@ -415,7 +414,7 @@ const CurrentTranscript = forwardRef(
             </Popover>
           </div>
         )}
-        {encounterPhase === "in-visit" ? (
+        {(encounterPhase === "in-visit" && encounterStatus!=="completed") ? (
           <InVisitButton
             encounterPhase={encounterPhase}
             autoResumeVisit={autoResumeVisit}

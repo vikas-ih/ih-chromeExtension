@@ -76,7 +76,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
-              path="/mobileEncounterDetails/:id"
+              path="/mobileEncounterDetails/:encounter_id_params"
               element={
                 <EncounterDetails
                   topBarInputs={{}}

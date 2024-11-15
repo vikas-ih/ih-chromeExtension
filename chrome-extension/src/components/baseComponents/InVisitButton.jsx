@@ -141,6 +141,10 @@ const InVisitButton = forwardRef(
   const record =
     selectedRecord !== undefined ? selectedRecord : mobileViewStatus;
   const isMobile = window.innerWidth <= 1260;
+
+    if (noTemplate) {
+      return null;
+    }
   useEffect(() => {
     if (!isSupported) {
       console.warn("Screen Wake Lock is not supported");
@@ -443,12 +447,12 @@ const InVisitButton = forwardRef(
         handleSocketErrors(error);
       }
     );
-    const noteType =
-      encounterPhase === "in-visit"
-        ? "Visit"
-        : encounterPhase === "pre-chart"
-        ? "Pre-charting"
-        : "";
+    // const noteType =
+    //   encounterPhase === "in-visit"
+    //     ? "Visit"
+    //     : encounterPhase === "pre-chart"
+    //     ? "Pre-charting"
+    //     : "";
     // if (schedulepage) {
     //   analytics.track(`Clicked Start ${noteType} In Ambient From VCA`, {});
     // } else {

@@ -51,6 +51,7 @@ const EncounterDetails = ({
   restrictTemplates = false,
   storedParams,
   searchFilters,
+  activeTab = "",
 }) => {
   const { encounterDetails, transcriptionbyIdValue } = useSelector(
     (state) => state.encounters
@@ -104,29 +105,12 @@ const EncounterDetails = ({
   const editableSummaryRef = useRef(null);
   const medicalConversationBoxRef = useRef(null);
   const ambient_version = 2; //check currentPractitionerSettings?.ambient_version ??
-  // const id = useParams().encounter_id;
-  // console.log("id", id);
-
-  // useEffect(() => {
-  //   if (isEmpty(encounter_id)) {
-  //     console.log("id",id);
-  //     setEncounterId(id);
-  //   }
-  // }, [encounter_id]);
-
-  useEffect(() => {
-    if (isEmpty(encounterDetails)) setIsLoading(true);
-    else setIsLoading(false);
-  }, [encounterDetails]);
+  const { encounter_id_params } = useParams();
 
   const resetStates = () => {
     dispatch(resetEncounterState());
     dispatch(resetSummaryState());
   };
-
-  useEffect(() => {
-    resetStates();
-  }, []);
 
   const configureRecordingTabs = () => {
     let tabs;
@@ -149,20 +133,20 @@ const EncounterDetails = ({
   };
 
   const selectInitialRecordingTab = (record) => {
-    //  const { displayStatus } = formatEncounterStatus(record);
+    const { displayStatus } = formatEncounterStatus(record);
     //  console.log("displayStatus", displayStatus);
-    //  if (displayStatus.startsWith("Pre-chart")) {
-    //    setActiveButton("Pre-chart");
-    //  } else {
+    // if (displayStatus.startsWith("Pre-chart")) {
+    //   setActiveButton("Pre-chart");
+    // } else {
     setActiveButton("In visit");
-    //  }
+    // }
   };
 
-  //   useEffect(() => {
-  //     if (activeTab) {
-  //       setActiveButton(activeTab);
-  //     }
-  //   }, [activeTab]);
+  useEffect(() => {
+    if (activeTab) {
+      setActiveButton(activeTab);
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     switch (activeButton) {
@@ -172,9 +156,9 @@ const EncounterDetails = ({
       case "In visit":
         setEncounterPhase("in-visit");
         break;
-      case "Pre-chart":
-        setEncounterPhase("pre-chart");
-        break;
+      // case "Pre-chart":
+      //   setEncounterPhase("pre-chart");
+      //   break;
       default:
         setEncounterPhase("in-visit");
     }
@@ -373,7 +357,7 @@ const EncounterDetails = ({
     if (encounterDetails?.encounter_id) {
       configureRecordingTabs();
     }
-  }, [encounterDetails]);
+  }, [encounterDetails, encounterPhase]);
 
   const showMicrophoneBar = useMemo(() => {
     if (!(isChartStreaming || isVisitStreaming)) return false;
@@ -469,6 +453,21 @@ const EncounterDetails = ({
     }
   };
 
+  useEffect(() => {
+    if (isEmpty(encounter_id)) {
+      setEncounterId(encounter_id_params);
+    }
+  }, [encounter_id, encounter_id_params]);
+
+  useEffect(() => {
+    if (isEmpty(encounterDetails)) setIsLoading(true);
+    else setIsLoading(false);
+  }, [encounterDetails]);
+
+  useEffect(() => {
+    resetStates();
+  }, []);
+
   return (
     <>
       <TopNavBar />
@@ -544,13 +543,11 @@ const EncounterDetails = ({
                     !schedulepage ? "border-b border-gray-200" : ""
                   }`}
                 >
-                  {!schedulepage && (
-                    <SegmentedTabs
-                      options={recordingTabs}
-                      activeTab={activeButton}
-                      setActiveTab={setActiveButton}
-                    />
-                  )}
+                  <SegmentedTabs
+                    options={recordingTabs}
+                    activeTab={activeButton}
+                    setActiveTab={setActiveButton}
+                  />
                 </div>
                 <div className="mt-2 flex justify-center items-center ">
                   {(encounterStatus === "completed" ||
@@ -647,7 +644,7 @@ const EncounterDetails = ({
                       summaryId={editableSummaryRef.current?.summary_id}
                       activeButton={activeButton}
                     />
-                    <CurrentTranscript
+                    {/* <CurrentTranscript
                       encounterStatus={encounterStatus}
                       encounterPhase={encounterPhase}
                       storedParams={storedParams}
@@ -671,7 +668,7 @@ const EncounterDetails = ({
                       setLivePartialTranscript={setLivePartialTranscript}
                       restrictTemplates={restrictTemplates}
                       ref={inVisitRef}
-                    />
+                    /> */}
                   </div>
                 ) : (
                   // View when an encounter is new or inprogress

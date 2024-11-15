@@ -20,8 +20,7 @@ export const SelectHover = ({
 }) => {
   const [visible, setVisible] = useState(false);
   let hideTimeout = null;
-  console.log("inputClassName", inputClassName);
-  console.log("popupClassName", popupClassName);
+
 
   const handleMouseEnter = () => {
     if (hideTimeout) {

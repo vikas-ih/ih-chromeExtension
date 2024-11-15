@@ -184,7 +184,7 @@ const MedicalConversationBox = forwardRef(
     const [ratingFeedbackOpen, setCommentsModelOpen] = useState(false);
     // const { isEntitled: isDictationEntitled } =
     //   useFeatureEntitlements('dictation'); //check
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [micTest, setMicTest] = useState(0);
     const [microphones, setMicrophones] = useState([]);
     const [selectedMicrophone, setSelectedMicrophone] = useState(null);
