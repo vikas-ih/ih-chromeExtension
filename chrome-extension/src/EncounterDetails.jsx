@@ -629,7 +629,7 @@ const EncounterDetails = ({
                 {encounterStatus === "completed" ||
                 encounterStatus === "summary_inprogress" ? (
                   <div className=" ">
-                    <div className="-mt-2 flex justify-center relative top-8">
+                    <div className="-mt-2 flex justify-center relative top-7">
                       <SummaryUpdatedStatus
                         isSaving={isSaving}
                         isSummaryOutdated={isSummaryOutdated}
