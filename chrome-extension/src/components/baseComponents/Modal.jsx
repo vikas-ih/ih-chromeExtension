@@ -22,6 +22,7 @@ import { Bars } from "react-loader-spinner";
 import { isEmpty } from "lodash";
 import { DownArrowIcon } from "../../icons/Downarrow.icon";
 import { AppointmentType } from "./AppointmentType";
+import { Text } from "./Text";
 
 const vSchema = object({});
 export const ModalComponent = ({

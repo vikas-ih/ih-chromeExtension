@@ -22,17 +22,20 @@ import {
   // useAuthActions,
   // useFeatureEntitlements,
 } from "@frontegg/react";
-import { getFromStorage } from "../lib/storage";
+import { getFromStorage, storeInLocal } from "../lib/storage";
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
 import Encounter from "./Encounter";
 import { setMobileRecord } from "../store/slice/encounter.slice";
 import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const TopNavBar = ({ list }) => {
   const data = useAuthUserOrNull();
   const { user, tenants } = data;
   const dispatch = useDispatch();
   console.log("user", data.user);
+  const location = useLocation();
+
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [filteredTenantsNames, setFilteredTenantsNames] = useState([]);
@@ -40,6 +43,9 @@ const TopNavBar = ({ list }) => {
   const cachedUserName = getFromStorage(`user_name`);
   const cachedUserEmail = getFromStorage(`user_email`);
   const cachedUserId = getFromStorage(`user_id`);
+  const [pageTitle, setPageTitle] = useState("");
+  const encounter_id_params = getFromStorage("encounter_id_params");
+  const uuid = getFromStorage("uuid");
   const resetDropdown = () => {
     setDropdownVisible(false);
     setSearchText("");
@@ -67,9 +73,7 @@ const TopNavBar = ({ list }) => {
   };
 
   const isEncountersPage = () => {
-    return (
-      location.pathname === `/mobileEncounterDetails/:id`
-    );
+    return location.pathname === `/mobileEncounterDetails/:id`;
   };
 
   useEffect(() => {
@@ -202,6 +206,18 @@ const TopNavBar = ({ list }) => {
           onClick: logout,
         },
       ];
+
+  useEffect(() => {
+    let titleObject = {
+      "/": "Encounters",
+      [`/mobileEncounterDetails/${encounter_id_params}`]: "Encounters",
+      "/encounter": "Aura AI",
+      "/mobileAppointments": "Appointments",
+      [`/schedule/${uuid}`]: "Patient history",
+    };
+    setPageTitle(`${titleObject[location?.pathname] || ""} `);
+  }, [location, encounter_id_params]);
+
   return (
     <>
       <nav className="sticky top-0 left-0 z-[98] bg-[#d9f6fd] flex justify-between items-center py-5 px-3">
@@ -212,7 +228,7 @@ const TopNavBar = ({ list }) => {
             </div>
           )}{" "}
           <h1 className="text-black text-[18px] font-semibold mx-2">
-            Encounters
+            {pageTitle}
           </h1>
         </div>
 

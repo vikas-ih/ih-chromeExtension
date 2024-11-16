@@ -15,6 +15,8 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import EncounterDetails from "./EncounterDetails";
 import "./style/app.scss";
+import { Appointments } from "./Appointments";
+import Schedule from "./components/Schedule";
 
 // const contextOptions = {
 //   baseUrl: "https://auth.lumi.build",
@@ -86,9 +88,17 @@ function App() {
                 />
               }
             />
+            <Route
+              path="/mobileAppointments"
+              element={
+                <Appointments/>
+              }
+            />
+            <Route path="/schedule/:id"
+            element={<Schedule/>}
+            />
           </Routes>
         </Router>
-        {/* <Home/> */}
       </Provider>
     </FronteggStoreProvider>
   );

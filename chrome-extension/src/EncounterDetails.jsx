@@ -106,6 +106,8 @@ const EncounterDetails = ({
   const medicalConversationBoxRef = useRef(null);
   const ambient_version = 2; //check currentPractitionerSettings?.ambient_version ??
   const { encounter_id_params } = useParams();
+  storeInLocal("encounter_id_params", encounter_id_params);
+  
 
   const resetStates = () => {
     dispatch(resetEncounterState());
@@ -397,10 +399,7 @@ const EncounterDetails = ({
   }, [encounter_id, encounterStatus]);
 
   const handleMedicalNotesCopy = () => {
-    console.log(
-      "editableSummaryRef.current?.summary_json ",
-      editableSummaryRef.current?.summary_json
-    );
+  
     if (
       !editableSummaryRef.current?.summary_json ||
       editableSummaryRef.current?.summary_json?.trim() === ""

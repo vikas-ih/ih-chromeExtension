@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+// import { Image } from 'src/components';
 import { classNames, profileName } from '../utilities';
-import { Image } from 'src/components';
+import { Image } from '../components/baseComponents';
 // import { Image } from "src/components";
 
 export const NameIcon = ({

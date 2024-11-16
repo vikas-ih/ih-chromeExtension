@@ -5,6 +5,7 @@ const APP_URL = "http://localhost:5174/account/login"; //PORT should be where th
 // import { useFeatureEntitlements } from "@frontegg/react";
 
 import { isEmpty } from "lodash";
+import BaseNavBar from "./components/baseComponents/BaseNavBar";
 
 const Home = () => {
   const user = useAuthUserOrNull() ;
@@ -16,8 +17,10 @@ const Home = () => {
     return <button onClick={login}>Click me to login</button>;
   } else {
     return (
-      <TopNavBar list={true}
-      />
+     <>
+      <TopNavBar list={true}/>
+      <BaseNavBar/>
+     </>
     );
   }
 };
