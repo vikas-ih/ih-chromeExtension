@@ -85,6 +85,7 @@ function App() {
                   storedParams={{}}
                   restrictTemplates={false}
                   searchFilters={{}}
+                  schedulepage={false}
                 />
               }
             />
