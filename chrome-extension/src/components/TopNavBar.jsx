@@ -285,11 +285,6 @@ const TopNavBar = ({ list }) => {
       </nav>
 
       {list && <Encounter />}
-      {list && (
-        <div className="bg-[#00D090] rounded-full w-16 h-16 fixed bottom-20 right-8 flex items-center justify-center">
-          <MicroPhone />
-        </div>
-      )}
     </>
   );
 };

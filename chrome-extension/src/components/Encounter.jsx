@@ -18,9 +18,12 @@ import { CloseAiIcon, EditableIcon, UpdateIcon } from "../icons";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  createEncounter,
   encounterDetailsSlice,
   listEncounters,
   mobileViewStatusSlice,
+  newEncounterfromMicSlice,
+  selectedEncounterSlice,
   setMobileRecord,
   updateEncounter,
 } from "../store/slice/encounter.slice";
@@ -32,6 +35,8 @@ import { ActionsDropdown } from "./baseComponents/ActionDropdown";
 import { getFromStorage, storeInLocal } from "../lib/storage";
 import { useNavigate } from "react-router-dom";
 import EncounterTopNavBar from "./baseComponents/EncounterTopNavBar";
+import { MicroPhone } from "../icons/Microphone.icon";
+import { currentPractitionerJson } from "../mocks/currentPractitoner";
 
 const Encounter = ({ schedulepage = false }) => {
   // const encounterList = dataSource;
@@ -60,10 +65,10 @@ const Encounter = ({ schedulepage = false }) => {
   //useSelector(
   //   (state) => state?.encounterState
   // );  //env
-  const currentPractitioner = {};
+  const currentPractitioner = currentPractitionerJson; //check
   const savedStartDate_Storage = localStorage.getItem(
     `${currentPractitioner?.org_uuid}_startDate`
-  );
+  ); 
   const savedEndDate_Storage = localStorage.getItem(
     `${currentPractitioner?.org_uuid}_endDate`
   );
@@ -407,6 +412,109 @@ const Encounter = ({ schedulepage = false }) => {
     setIsResetFiltersOn(true);
   };
 
+    const roundToNext15Minutes = (localTime) => {
+      console.log(
+        "Rounding to next 15 minutes, source time:",
+        localTime.toISOString()
+      );
+
+      const minutes = localTime.minutes();
+      const roundedMinutes = Math.ceil(minutes / 15) * 15;
+
+      // Set the rounded minutes and reset seconds/milliseconds
+      return localTime.minutes(roundedMinutes).seconds(0).milliseconds(0);
+    };
+   const handleCreateEncounter = async (practitionerId, customOptions = {}) => {
+    console.log("store",storedParams);
+     const { description, callback, demo } = {
+       description: null,
+       ...customOptions,
+     };
+     setSearchFilters("");
+     storeInLocal(
+       `${currentPractitioner?.org_uuid}_storePractitioner`,
+       practitionerId
+     );
+     dispatch(newEncounterfromMicSlice(true));
+     dispatch(encounterDetailsSlice(null));
+     setSelectedDate("Today");
+     setSelectedTab && setSelectedTab("Today");
+     setStartDate(null);
+     setEndDate(null);
+     // Create a new encounter
+     const current_date = moment().local();
+     const roundedDate = roundToNext15Minutes(current_date);
+     const formattedDate = `${current_date.month() + 1}/${current_date.date()}`;
+     const defaultDescription =
+       description ||
+       `Encounter - ${formattedDate} ${roundedDate.format("h:mm a")}`;
+     const data = {
+       description: defaultDescription,
+       practitioner_id:
+         !isMobileView && !schedulepage
+           ? practitionerId
+           : !isMobileView && schedulepage
+           ? currentPractitioner.practitioner_id
+           : currentPractitioner.practitioner_id,
+       start_time: moment().local().toISOString(),
+     };
+
+     if (schedulepage && appointmentId) {
+       data.appointment_id = appointmentId;
+     }
+
+     dispatch(selectedEncounterSlice(null));
+     setSelectedTab("Today");
+     setSelectedLastWeek(null);
+     setSelectedTabDate(today);
+
+    //  const trackEvents = () => {
+    //    if (demo) {
+    //      analytics.track("Created New Ambient Encounter From Retry Demo", {
+    //        mobile: isMobileView,
+    //      });
+    //      return;
+    //    }
+
+    //    if (schedulepage) {
+    //      analytics.track("Created New Ambient Encounter From VCA", {});
+    //    } else {
+    //      analytics.track("Created New Ambient Encounter From Aura", {});
+    //    }
+    //  };
+
+     const desktopCallback = (createdEncounter) => {
+       trackEvents();
+       setRecord(createdEncounter);
+       setEncounterStatus(createdEncounter.status);
+       setPageState({
+         current: 1,
+         pageSize: 10,
+       });
+       changeEncounterStatus(record?.encounter_id);
+       callback?.(createdEncounter);
+     };
+     const mobileCallback = (createdEncounter) => {
+      //  trackEvents();
+
+       // IMPORTANT: in mobile do not redirect when callback is provided to avoid unmounting the whole component
+       if (callback) {
+         callback(createdEncounter);
+       } else {
+         navigate(`/mobileEncounterDetails/${createdEncounter.encounter_id}`);
+       }
+     };
+
+     if (isMobileView) {
+       setEncounterStatus("");
+       dispatch(createEncounter({ data, callback:mobileCallback, accessToken }));
+     } else {
+       dispatch(
+         createEncounter({ data, callback: mobileCallback, accessToken })
+       );
+     }
+   };
+
   //Triggers initial api call to list encounters
   useEffect(() => {
     let params = {
@@ -631,7 +739,7 @@ const Encounter = ({ schedulepage = false }) => {
             setEndDate={setEndDate}
             setSearchFilters={setSearchFilters}
             // setTopBarInputs={setTopBarInputs}
-            // onCreateEncounter={() => handleCreateEncounter(storedParams)} //check
+            onCreateEncounter={() => handleCreateEncounter(storedParams)} //check
             ClassName={"tableai"}
             rowClassName={(record, index) => {
               if (
@@ -673,6 +781,11 @@ const Encounter = ({ schedulepage = false }) => {
             )}
           </div>
         </div>
+      </div>
+      <div className="bg-[#00D090] rounded-full w-16 h-16 fixed bottom-20 right-8 flex items-center justify-center">
+        <MicroPhone
+          onClick={(storedParams) => handleCreateEncounter(storedParams)}
+        />
       </div>
     </div>
   );

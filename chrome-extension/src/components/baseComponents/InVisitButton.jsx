@@ -445,6 +445,7 @@ const InVisitButton = forwardRef(
           (newRecord) => {
             setRecord(newRecord);
           },
+
           accessToken
         )
       );
@@ -462,19 +463,11 @@ const InVisitButton = forwardRef(
         },
         (error) => {
           handleSocketErrors(error);
-        }
+        },
+        undefined,
+        false,
+        accessToken
       );
-      // const noteType =
-      //   encounterPhase === "in-visit"
-      //     ? "Visit"
-      //     : encounterPhase === "pre-chart"
-      //     ? "Pre-charting"
-      //     : "";
-      // if (schedulepage) {
-      //   analytics.track(`Clicked Start ${noteType} In Ambient From VCA`, {});
-      // } else {
-      //   analytics.track(`Clicked Start ${noteType} In Ambient From Aura`, {});
-      // }
     };
 
     const handleStartOrResumeRecording = () => {

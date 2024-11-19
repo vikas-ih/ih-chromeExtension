@@ -106,7 +106,7 @@ const EncounterDetails = ({
   const [editedSummary, setEditedSummary] = useState("");
   const editableSummaryRef = useRef(null);
   const medicalConversationBoxRef = useRef(null);
-  const ambient_version = currentPractitionerSettings?.ambient_version; //check currentPractitionerSettings?.ambient_version ??
+  const ambient_version = currentPractitionerSettings?.ambient_version || 2; //check currentPractitionerSettings?.ambient_version ??
   // const currentPractitioner = currentPractitionerJson;
 
   const { encounter_id_params } = useParams();
@@ -472,6 +472,9 @@ const EncounterDetails = ({
   useEffect(() => {
     resetStates();
   }, []);
+
+  console.log("ambient_version: ", ambient_version);
+  console.log("encounterStatus: ", encounterStatus);
 
   return (
     <>
