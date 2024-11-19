@@ -7,7 +7,7 @@ import { showToastError } from "../../utilities/errortoast";
 // Thunks
 export const listEncounters = createAsyncThunk(
   "encounters/listEncounters",
-  async ({ searchFilters, accessToken }, { rejectWithValue }) => {
+  async ({ searchFilters, accessToken, showLoader }, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders(accessToken);
       const queryParams = new URLSearchParams(searchFilters).toString();
@@ -29,6 +29,30 @@ export const listEncounters = createAsyncThunk(
     }
   }
 );
+
+
+
+export const createNewEncounter = (
+  practitioner_id,
+  appointment_id = null,
+  callback,
+  accessToken
+) => {
+  return async (dispatch) => {
+    const current_date = new Date();
+    const formattedDate = `${
+      current_date.getMonth() + 1
+    }/${current_date.getDate()}`;
+    const defaultDescription = `Encounter Demo - ${formattedDate}`;
+    const data = {
+      description: defaultDescription,
+      appointment_id: appointment_id,
+      practitioner_id: practitioner_id,
+      start_time: new Date(),
+    };
+    return dispatch(createEncounter({ data, callback ,accessToken}));
+  };
+};
 
 // New async thunk for getting encounter details
 export const getEncounter = createAsyncThunk(

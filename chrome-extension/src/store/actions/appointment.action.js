@@ -90,7 +90,7 @@ import {
   showPractitionerEmailTagSlice,
 } from "../slice/appointment.slice";
 import { getAuthHeaders } from "../apiConfig";
-import { storeInLocal } from "../../lib/storage";
+import { getFromStorage, storeInLocal } from "../../lib/storage";
 import { currentPractitionerJson } from "../../mocks/currentPractitoner";
 import { showToastError } from "../../utilities/errortoast";
 import { showToastSuccess } from "../../utilities/toast";
@@ -188,7 +188,7 @@ export const getAppointmentsByStatus = (
       //   const token = FronteggContext.getAccessToken();
       const headers = getAuthHeaders(accessToken);
       const result = await Axios.get(url, { headers });
-        dispatch(appointmentLoading(false));
+      dispatch(appointmentLoading(false));
       const response = result?.data?.appointments;
       if (result?.status === 200 && response) {
         await dispatch(getAppointmentsByStatusSlice(response));
@@ -262,7 +262,7 @@ export const getAppointmentDetailsByUuidAction = (
           practitioner_id: response?.appointment_details?.practitioner_id,
           condition_id: response?.appointment_details?.condition_id,
         };
-        dispatch(getPractitionerPreferences(body));
+        dispatch(getPractitionerPreferences(body, accessToken));
       }
     } catch (e) {
       dispatch(appointmentLoading(false));
@@ -271,6 +271,64 @@ export const getAppointmentDetailsByUuidAction = (
   };
 };
 
+export const getPractitionerPreferences = (
+  body,
+  setFieldValue,
+  accessToken
+) => {
+  return async (dispatch) => {
+    try {
+      const { url } = practitionerPreferencesConfig();
+      const headers = getAuthHeaders(accessToken);
+
+      const result = await Axios.post(url, body, { headers });
+      let response = result?.data?.response?.preferences;
+      let notification_reponse = result?.data;
+      if (result?.status === 200) {
+        if (response?.length == 0) {
+          response = [{ notification: "", number_of: "", duration: "" }];
+        }
+        dispatch(
+          getPractitionerPreferencesSlice(
+            response.error
+              ? {
+                  notification_preference: [
+                    { notification: "", number_of: "", duration: "" },
+                  ],
+                  emails: [],
+                }
+              : response
+          )
+        );
+        // setFieldValue(
+        //   "notifications",
+        //   response?.notification_preference &&
+        //     response?.notification_preference.length
+        //     ? response?.notification_preference
+        //     : []
+        // );
+      }
+    } catch (e) {
+      showToastError("Unable to edit the appointment", e);
+      console.log("error", e);
+    }
+  };
+};
+
+export const patientNamesOrgAction = (accessToken) => {
+  return async (dispatch) => {
+    try {
+      const { url } = patientNamesOrgConfig();
+      const headers = getAuthHeaders(accessToken);
+
+      const result = await Axios.get(url, { headers });
+      const response = result?.data;
+      if (result?.status === 200) {
+        dispatch(patientNamesOrgSlice(response));
+      }
+    } catch (e) {}
+  };
+};
 export const patientAutoCompleteAction = (
   patientId,
   setFieldValue,
@@ -377,7 +435,9 @@ export const getAppointmentByFilter = (
     try {
       const tz = moment.tz.guess();
       const { url } = getAppointmentByFiltersConfig(itemsPerPage, tz);
-      let { currentPractitioner } = store.getState().practitionerState;
+      // let { currentPractitioner } = store
+      let currentPractitioner = currentPractitionerJson;
+
       type === "normal"
         ? storeInLocal(
             `${currentPractitioner?.org_uuid}_filter_practitioner_id`,
@@ -491,7 +551,8 @@ export const getAppointmentByFilter = (
       }
       dispatch(appointmentLoading(false));
     } catch (e) {
-      getErrorCode(500);
+      // getErrorCode(500);
+      console.log("e", e);
       dispatch(appointmentLoading(false));
     }
   };
@@ -542,20 +603,19 @@ export const removeAppointmentAction = (
   };
 };
 
-
 // Get Appointment by UUID
-export const getAppointmentByUuid = (uuid,accessToken) => {
+export const getAppointmentByUuid = (uuid, accessToken) => {
   return async (dispatch) => {
     dispatch(scheduleLoading(true));
     try {
       const { url } = getAppointmentByUuidConfig();
-    //   const token = FronteggContext.getAccessToken();
-    let currentPractitioner= currentPractitionerJson;
+      //   const token = FronteggContext.getAccessToken();
+      let currentPractitioner = currentPractitionerJson;
       // let { currentPractitioner } = store.getState().practitionerState;
       const body = {
         appt_uuid: encodeURI(uuid),
       };
-          const headers = getAuthHeaders(accessToken);
+      const headers = getAuthHeaders(accessToken);
 
       const result = await Axios.post(url, body, { headers });
       const response = result?.data;
@@ -597,7 +657,7 @@ export const getAllPractitionersNames = (body, accessToken) => {
   return async (dispatch) => {
     try {
       const { url } = getAllPractitionersNamesConfig();
-      const token = FronteggContext.getAccessToken();
+      // const token = FronteggContext.getAccessToken();
       const headers = getAuthHeaders(accessToken);
 
       const result = await Axios.post(url, body, { headers });
@@ -607,6 +667,154 @@ export const getAllPractitionersNames = (body, accessToken) => {
       }
     } catch (e) {
       getErrorCode(500);
+    }
+  };
+};
+
+export const sendAppointmentReminders = (
+  appt_uuid,
+  cachedUserEmail,
+  accessToken
+) => {
+  return async (dispatch) => {
+    try {
+      let { url } = getAppointmentReminderConfig();
+      url += `/${appt_uuid}`;
+
+      const headers = getAuthHeaders(accessToken);
+
+      const body = {
+        sent_by: cachedUserEmail,
+      };
+
+      const result = await Axios.post(url, body, { headers });
+      if (result?.status === 200) {
+        showToastSuccess("Reminder sent to patient");
+      }
+    } catch (e) {
+      showToastError("Could not send reminders", e);
+    }
+  };
+};
+
+export const appointmentTypesAction = (accessToken) => {
+  return async (dispatch) => {
+    try {
+      const { url } = appointmentTypeConfig();
+      const headers = getAuthHeaders(accessToken);
+
+      const result = await Axios.get(url, { headers });
+      const response = result?.data;
+      if (result?.status === 200) {
+        dispatch(appointmentTypesSlice(response?.appointment_types));
+      }
+    } catch (e) {}
+  };
+};
+
+export const getRecentSearchAction = (screen, accessToken) => {
+  return async (dispatch) => {
+    try {
+      const { url } = getRecentSearchConfig();
+      const headers = getAuthHeaders(accessToken);
+
+      const body = {
+        screen: screen,
+      };
+      const result = await Axios.post(url, body, { headers });
+      const response = result?.data;
+      if (result.status === 200 && response) {
+        dispatch(getRecentSearchSlice(response));
+      }
+    } catch (e) {
+      showToastError("Error occurred");
+    }
+  };
+};
+
+export const checkPatientDetailsAction = (
+  payload,
+  setPatientModalOpen,
+  setCheckExistingButtonFlag,
+  setCheckPatientId,
+  accessToken
+) => {
+  return async (dispatch) => {
+    const { url } = checkPatientDetailsConfig();
+    const headers = getAuthHeaders(accessToken);
+
+    const result = await Axios.post(url, payload, { headers });
+    const response = result?.data;
+    if (result?.status === 200) {
+      dispatch(existingPatientDetailsSlice(response));
+      setPatientModalOpen(true);
+      setCheckExistingButtonFlag(true);
+      setCheckPatientId(null);
+    }
+  };
+};
+
+// Create Appointment
+export const createAppointment = (
+  data,
+  setIsOpen,
+  setConditionByType,
+  setUpdatedEmailsArray,
+  setRadioButtonvalue,
+  startIndex,
+  setSendNow,
+  setCheckDOB,
+  setCheckPhone,
+  isfilterOn,
+  setSubmitLoading,
+  accessToken
+) => {
+  return async (dispatch) => {
+    try {
+      const { url } = createAppointmentConfig();
+      const headers = getAuthHeaders(accessToken);
+
+      const result = await Axios.post(url, data, { headers });
+      const response = result?.data;
+      if (result?.status === 201 && response) {
+        setSendNow(false);
+        setIsOpen(false);
+        setConditionByType([]);
+        showToastSuccess("Patient appointment created");
+        dispatch(getConditionByAppointmentTypeSlice({}));
+        dispatch(patientAutoCompleteSlice({}));
+        dispatch(getPractitionerPreferencesSlice([]));
+        dispatch(getSettingsNotificationsSlice(null));
+        setUpdatedEmailsArray([]);
+        setRadioButtonvalue(1);
+        dispatch(showPractitionerEmailTagSlice(false));
+        setCheckDOB("");
+        setCheckPhone("");
+        setSubmitLoading(false);
+        if (isfilterOn) {
+          dispatch(
+            getAppointmentByFilter(
+              null,
+              null,
+              null,
+              null,
+              null,
+              "reload",
+              startIndex
+            )
+          );
+
+          dispatch(appointmentLoading(true));
+        } else {
+          dispatch(getAppointmentsByStatus(startIndex, accessToken));
+        }
+        dispatch(getAppointmentPractitionerAndPatients(accessToken));
+      }
+    } catch (e) {
+      getErrorCode(500);
+      showToastError("Error creating appointment");
+      dispatch(appointmentLoading(true));
+      setSubmitLoading(false);
     }
   };
 };

@@ -49,3 +49,23 @@ export const isAuraOnlyAppointmentType = (
 
   return isAuraOnlyAppointment;
 };
+
+
+
+export const getAppointmentAllStartDateFilter = (startDate) => {
+  return startDate
+    ? startDate
+    : startDate === ""
+    ? ""
+    : moment().subtract(10, "years").format("YYYY-MM-DD");
+};
+
+
+
+export const getAppointmentAllEndDateFilter = (endDate) => {
+  return endDate
+    ? endDate
+    : endDate === ""
+    ? ""
+    : moment().add(10, "years").format("YYYY-MM-DD");
+};

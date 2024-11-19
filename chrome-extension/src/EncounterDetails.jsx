@@ -45,31 +45,34 @@ import MicrophoneBar from "./components/baseComponents/MicrophoneBar";
 import CurrentTranscript from "./components/baseComponents/CurrentTranscript";
 import { isEmpty } from "lodash";
 import SummaryProgressBar from "./components/baseComponents/SummaryProgressBar";
+import { currentPractitionerJson } from "./mocks/currentPractitoner";
 
 const EncounterDetails = ({
   topBarInputs,
+  schedulepage,
   restrictTemplates = false,
   storedParams,
   searchFilters,
+  encounter_id_schedule = null,
   activeTab = "",
 }) => {
   const { encounterDetails, transcriptionbyIdValue } = useSelector(
     (state) => state.encounters
   );
 
-  const { summaryList } = useSelector((state) => ({
-    summaryList: state?.summarySlice?.summaryList,
-  }));
-  const { isSummaryRegenerationLoading, summaryExportLoading } = useSelector(
-    (state) => state?.summarySlice
+  const { isSummaryRegenerationLoading, summaryExportLoading, summaryList } =
+    useSelector((state) => state?.summarySlice);
+
+  const { currentPractitioner, currentPractitionerSettings } = useSelector(
+    (state) => state?.practitionerState
   );
   console.log("encounterDetails", encounterDetails);
+  console.log("currentPractitioner", currentPractitioner);
   // console.log("transcriptionbyIdValue", transcriptionbyIdValue);
   const userData = useAuthUserOrNull();
   const accessToken = userData?.user?.accessToken;
-  const [encounter_id, setEncounterId] = useState(
-    encounterDetails?.encounter_id
-  );
+  const [encounter_id, setEncounterId] = useState(encounter_id_schedule);
+
   const [isLoading, setIsLoading] = useState(false);
   const refreshInterval = 5_000;
   const dispatch = useDispatch();
@@ -78,7 +81,6 @@ const EncounterDetails = ({
 
   const { color, displayStatus } = formatEncounterStatus(encounterDetails);
   const isMobile = window.innerWidth < 1260;
-  const schedulepage = undefined; //check
   const [encounterStatus, setEncounterStatus] = useState("");
   const [currentActive, setCurrentActive] = useState("");
   const [recordingTabs, setRecordingTabs] = useState([]);
@@ -104,10 +106,15 @@ const EncounterDetails = ({
   const [editedSummary, setEditedSummary] = useState("");
   const editableSummaryRef = useRef(null);
   const medicalConversationBoxRef = useRef(null);
-  const ambient_version = 2; //check currentPractitionerSettings?.ambient_version ??
+  const ambient_version = currentPractitionerSettings?.ambient_version; //check currentPractitionerSettings?.ambient_version ??
+  // const currentPractitioner = currentPractitionerJson;
+
   const { encounter_id_params } = useParams();
   storeInLocal("encounter_id_params", encounter_id_params);
-  
+  storeInLocal(
+    `${currentPractitioner?.org_uuid}_topbar_encounter_id`,
+    encounter_id
+  );
 
   const resetStates = () => {
     dispatch(resetEncounterState());
@@ -399,7 +406,6 @@ const EncounterDetails = ({
   }, [encounter_id, encounterStatus]);
 
   const handleMedicalNotesCopy = () => {
-  
     if (
       !editableSummaryRef.current?.summary_json ||
       editableSummaryRef.current?.summary_json?.trim() === ""
@@ -542,11 +548,13 @@ const EncounterDetails = ({
                     !schedulepage ? "border-b border-gray-200" : ""
                   }`}
                 >
-                  <SegmentedTabs
-                    options={recordingTabs}
-                    activeTab={activeButton}
-                    setActiveTab={setActiveButton}
-                  />
+                  {!schedulepage && (
+                    <SegmentedTabs
+                      options={recordingTabs}
+                      activeTab={activeButton}
+                      setActiveTab={setActiveButton}
+                    />
+                  )}
                 </div>
                 <div className="mt-2 flex justify-center items-center ">
                   {(encounterStatus === "completed" ||
