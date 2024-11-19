@@ -361,6 +361,8 @@ const InVisitButton = forwardRef(
         (error) => {
           handleSocketErrors(error);
         },
+        undefined,
+        false,
         accessToken
       );
       setIsRecording(true);
@@ -520,37 +522,9 @@ const InVisitButton = forwardRef(
       }
     }, [autoResumeVisit, record?.encounter_id]);
 
-    useEffect(() => {
-      const getMicrophones = async () => {
-        try {
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const audioInputDevices = devices.filter(
-            (device) => device.kind === "audioinput"
-          );
-          setMicrophones(audioInputDevices);
+    // useEffect(() => {
 
-          if (audioInputDevices.length > 0) {
-            const selectedMicStillAvailable = audioInputDevices.some(
-              (device) => device.deviceId === selectedMicrophone
-            );
-            if (!selectedMicStillAvailable) {
-              setSelectedMicrophone(audioInputDevices[0].deviceId);
-            }
-          }
-        } catch (error) {
-          console.error("Error enumerating devices:", error);
-        }
-      };
-      getMicrophones();
-      navigator.mediaDevices.addEventListener("devicechange", getMicrophones);
-
-      return () => {
-        navigator.mediaDevices.removeEventListener(
-          "devicechange",
-          getMicrophones
-        );
-      };
-    }, [selectedMicrophone, accessRequested]);
+    // }, [selectedMicrophone, accessRequested]);
 
     useEffect(() => {
       let micStream;
@@ -607,12 +581,39 @@ const InVisitButton = forwardRef(
 
       setupMicrophone();
 
+      const getMicrophones = async () => {
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const audioInputDevices = devices.filter(
+            (device) => device.kind === "audioinput"
+          );
+          setMicrophones(audioInputDevices);
+
+          if (audioInputDevices.length > 0) {
+            const selectedMicStillAvailable = audioInputDevices.some(
+              (device) => device.deviceId === selectedMicrophone
+            );
+            if (!selectedMicStillAvailable) {
+              setSelectedMicrophone(audioInputDevices[0].deviceId);
+            }
+          }
+        } catch (error) {
+          console.error("Error enumerating devices:", error);
+        }
+      };
+      getMicrophones();
+      navigator.mediaDevices.addEventListener("devicechange", getMicrophones);
+
       return () => {
         if (micStream) {
           micStream.getAudioTracks().forEach((track) => track.stop());
           clearInterval(microphoneTestInterval);
           localMediaStream.stop();
         }
+        navigator.mediaDevices.removeEventListener(
+          "devicechange",
+          getMicrophones
+        );
       };
     }, [open, selectedMicrophone, accessRequested]);
 
