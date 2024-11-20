@@ -395,7 +395,7 @@ const InVisitButton = forwardRef(
     //Function when complete recording is clicked
     const handleCompleteRecording = () => {
       setEncounterStatus("summary_inprogress");
-
+     console.log("completed");
       setShowSaveDeleteButtons(false);
       dispatch(
         completeEncounter({
@@ -666,7 +666,7 @@ const InVisitButton = forwardRef(
                       .filter(Boolean)
                       .join(" ")}
                   >
-                    <div className="text-[#667085] mb-1">Note template</div>
+                    {/* <div className="text-[#667085] mb-1">Note template</div> */}
                     {/* <TemplateSelectDropdown
                     allowInlineEdit={encounterPhase === 'in-visit'}
                     encounterPhase={encounterPhase}

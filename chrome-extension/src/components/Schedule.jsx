@@ -272,7 +272,7 @@ const Schedule = () => {
 
   return (
     <>
-      <TopNavBar></TopNavBar>
+      {/* <TopNavBar></TopNavBar> */}
       {appLoading ? (
         <AppLoaderPage />
       ) : (

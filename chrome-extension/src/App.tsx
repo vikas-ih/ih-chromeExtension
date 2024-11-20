@@ -17,6 +17,7 @@ import EncounterDetails from "./EncounterDetails";
 import "./style/app.scss";
 import { Appointments } from "./Appointments";
 import Schedule from "./components/Schedule";
+import Layout from "./Layout";
 
 // const contextOptions = {
 //   baseUrl: "https://auth.lumi.build",
@@ -75,30 +76,25 @@ function App() {
     >
       <Provider store={store}>
         <Router>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/mobileEncounterDetails/:encounter_id_params"
-              element={
-                <EncounterDetails
-                  topBarInputs={{}}
-                  storedParams={{}}
-                  restrictTemplates={false}
-                  searchFilters={{}}
-                  schedulepage={false}
-                />
-              }
-            />
-            <Route
-              path="/mobileAppointments"
-              element={
-                <Appointments/>
-              }
-            />
-            <Route path="/schedule/:id"
-            element={<Schedule/>}
-            />
-          </Routes>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/mobileEncounterDetails/:encounter_id_params"
+                element={
+                  <EncounterDetails
+                    topBarInputs={{}}
+                    storedParams={{}}
+                    restrictTemplates={false}
+                    searchFilters={{}}
+                    schedulepage={false}
+                  />
+                }
+              />
+              <Route path="/mobileAppointments" element={<Appointments />} />
+              <Route path="/schedule/:id" element={<Schedule />} />
+            </Routes>
+          </Layout>
         </Router>
       </Provider>
     </FronteggStoreProvider>

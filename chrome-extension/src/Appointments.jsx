@@ -243,43 +243,43 @@ export const Appointments = () => {
   }
 
    const statusOptions = [
-    {
-      title: 'All',
-      value: 'All',
-      className:
-        'flex justify-center items-center h-8 rounded-full hover:bg-[#f7f7f7]',
-    },
-    {
-      title: 'Completed',
-      value: 'Completed',
-      className:
-        'text-[#1ec990] bg-[#eefaf4] flex items-center justify-center rounded-full hover:bg-[#A2EFC9]  h-8',
-    },
-    {
-      title: 'In Progress',
-      value: 'InProgress',
-      className:
-        'text-[#ff6f00] bg-[#ffe1ca] flex items-center justify-center rounded-full hover:bg-[#F7CFB1]  h-8',
-    },
-    {
-      title: 'Not Started',
-      value: 'New',
-      className:
-        'text-[#5a8dda] bg-[#e7f1ff] flex items-center justify-center rounded-full hover:bg-[#BCD4F7] status-options h-8',
-    },
-    {
-      title: nonVCAIntakeStatus,
-      value: 'Unavailable',
-      className:
-        'text-[#018749] bg-[#caffca] flex items-center justify-center rounded-full hover:bg-[#a8ffa8] status-options h-8',
-    },
-    {
-      title: 'Partial Summary',
-      value: 'partial_completed',
-      className:
-        'text-[#ff6f00] bg-[#ffe1ca] flex items-center justify-center rounded-full hover:bg-[#F7CFB1]  h-8',
-    },
-  ];
+     {
+       title: "All",
+       value: "All",
+       className:
+         "flex justify-center items-center h-8 text-xs rounded-full hover:bg-[#f7f7f7]",
+     },
+     {
+       title: "Completed",
+       value: "Completed",
+       className:
+         "text-[#1ec990] bg-[#eefaf4] flex items-center justify-center text-xs rounded-full hover:bg-[#A2EFC9]  h-8",
+     },
+     {
+       title: "In Progress",
+       value: "InProgress",
+       className:
+         "text-[#ff6f00] bg-[#ffe1ca] flex items-center justify-center text-xs rounded-full hover:bg-[#F7CFB1]  h-8",
+     },
+     {
+       title: "Not Started",
+       value: "New",
+       className:
+         "text-[#5a8dda] bg-[#e7f1ff] flex items-center justify-center rounded-full text-xs hover:bg-[#BCD4F7] status-options h-8",
+     },
+     {
+       title: nonVCAIntakeStatus,
+       value: "Unavailable",
+       className:
+         "text-[#018749] bg-[#caffca] flex items-center justify-center text-xs rounded-full hover:bg-[#a8ffa8] status-options h-8",
+     },
+     {
+       title: "Partial Summary",
+       value: "partial_completed",
+       className:
+         "text-[#ff6f00] bg-[#ffe1ca] flex items-center text-xs justify-center rounded-full hover:bg-[#F7CFB1]  h-8",
+     },
+   ];
 
   const getReminderTime = (responseTime) => {
     if (!responseTime) {
@@ -1545,8 +1545,8 @@ export const Appointments = () => {
 
   return (
     <>
-      <TopNavBar />
-      <div className="page-wrapper appointment-page">
+      {/* <TopNavBar /> */}
+      <div className="page-wrapper appointment-page p-2">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className=" w-full xl:w-1/5 2xl:w-1/5 drop-shadow-sm bg-white rounded-xl practitioner-dropdown">
             <Select
@@ -1654,10 +1654,10 @@ export const Appointments = () => {
             </Select>
           </div>
 
-          <div className="bg-white p-1 rounded-xl drop-shadow-sm flex items-center tree-dropdown">
+          <div className="bg-white rounded-xl drop-shadow-sm flex items-center tree-dropdown">
             <label
               for="appointments"
-              className="mr-1 ml-2 text-sm text-black whitespace-nowrap"
+              className="mr-1 ml-2 text-xs text-black whitespace-nowrap"
             >
               Status
             </label>
@@ -1796,7 +1796,7 @@ export const Appointments = () => {
                 >
                   <div className="add-appointment-div flex">
                     <PlusIcon />
-                    <span className="text-white pl-3 font-normal font-sans">
+                    <span className="text-white pl-3 text-xs font-normal font-sans">
                       Add appointment
                     </span>
                   </div>

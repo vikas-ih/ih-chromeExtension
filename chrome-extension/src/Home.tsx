@@ -12,6 +12,7 @@ import {
 } from "./store/actions/practitioner.action";
 import { storeInLocal } from "./lib/storage";
 import { useDispatch } from "react-redux";
+import Encounter from "./components/Encounter";
 
 const Home = () => {
   const user = useAuthUserOrNull() as any;
@@ -46,7 +47,7 @@ const Home = () => {
   } else {
     return (
       <>
-        <TopNavBar list={true} />
+        <Encounter/>
         <BaseNavBar />
       </>
     );

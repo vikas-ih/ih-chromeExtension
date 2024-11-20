@@ -399,7 +399,7 @@ const EncounterDetails = ({
       dispatch(
         listSummaries(encounter_id, encounterPhase, "ambient", accessToken)
       );
-      // dispatch(getTranscription({ encounter_id, encounterPhase, accessToken })); //check
+      dispatch(getTranscription({ encounter_id, encounterPhase, accessToken })); //check
     }, refreshInterval);
 
     return () => clearInterval(intervalId);
@@ -473,16 +473,14 @@ const EncounterDetails = ({
     resetStates();
   }, []);
 
-  console.log("ambient_version: ", ambient_version);
-  console.log("encounterStatus: ", encounterStatus);
 
   return (
     <>
-      <TopNavBar />
+      {/* <TopNavBar /> */}
       {isLoading ? (
         <SummaryLoading />
       ) : (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
           <div className={`bg-white rounded-xl shadow-md px-4 py-3`}>
             <div className="flex justify-between items-center">
               <div>

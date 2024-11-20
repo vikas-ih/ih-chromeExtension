@@ -222,11 +222,14 @@ const TopNavBar = ({ list }) => {
     <>
       <nav className="sticky top-0 left-0 z-[98] bg-[#d9f6fd] flex justify-between items-center py-5 px-3">
         <div className="top-navbar-left flex items-center justify-start ">
-          {!list && (
+          {!(
+            location.pathname === "/" ||
+            location.pathname === "/mobileAppointments"
+          ) && (
             <div className="">
               <BackIconMobile onClick={nullSelectedRecord} />
             </div>
-          )}{" "}
+          )}
           <h1 className="text-black text-[18px] font-semibold mx-2">
             {pageTitle}
           </h1>
@@ -284,7 +287,7 @@ const TopNavBar = ({ list }) => {
         </div>
       </nav>
 
-      {list && <Encounter />}
+      {/* {list && <Encounter />} */}
     </>
   );
 };

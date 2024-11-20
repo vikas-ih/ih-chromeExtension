@@ -99,7 +99,7 @@ const AfterVisitControls = ({
 
   return (
     <div className="w-full">
-      <label className="text-[#667085] p-2">Note template</label>
+      {/* <label className="text-[#667085] p-2">Note template</label> */}
       {/* <TemplateSelectDropdown
         encounterPhase={encounterPhase}
         currentTemplate={currentTemplate}
