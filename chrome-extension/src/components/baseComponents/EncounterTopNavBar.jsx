@@ -5,7 +5,7 @@ import moment from "moment";
 import { TreeSelectDropdown } from "./TreeSelect";
 import { ExpandIcon } from "../../icons";
 import { selectedEncounterSlice } from "../../store/slice/encounter.slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SelectHover } from "./SelectHover";
 import { PractitionerJson } from "../../mocks/pracitioners";
 
@@ -27,8 +27,9 @@ const EncounterTopNavBar = ({
   record,
 }) => {
   const dispatch = useDispatch();
-
-  const practitionerList = PractitionerJson;
+  const { practitionerListLoading, practitionerList } = useSelector(
+    (state) => state?.practitionerState
+  );
   const options = practitionerList?.map((practitioner, index, array) => {
     const practitionersWithSameName = array.filter(
       (p) => p.full_name === practitioner.full_name && p !== practitioner
@@ -148,10 +149,10 @@ const EncounterTopNavBar = ({
   useEffect(() => {
     setloggedInSelectedPractitioner(loggedInUserName);
   }, [loggedInUserName]);
-  console.log("isEncounterListLoading", isEncounterListLoading);
+
   return (
     <div className="px-4 py-1">
-      <div className="flex justify-center items-center past p-1 mb-1 mt-1">
+      <div className="flex justify-center items-center past py-1 mb-1 mt-1">
         <Segmented
           size="small"
           options={["Today", "Yesterday", "Last week", "All time"]}
@@ -175,7 +176,7 @@ const EncounterTopNavBar = ({
           }
           placeholder="Select practitioner"
           onChange={(e, option) => onChange(e, option, "practitioner")}
-          loading={isEncounterListLoading} //check
+          loading={practitionerListLoading}
           value={
             selectedPractitioner
               ? selectedPractitionerObj && {
@@ -218,7 +219,7 @@ const EncounterTopNavBar = ({
                 }
                 placeholder="Select status"
                 onChange={handleStatusChange}
-                loading={isEncounterListLoading}
+                loading={practitionerListLoading}
                 value={searchFilters?.status ? searchFilters?.status : ""}
               />
             </div>

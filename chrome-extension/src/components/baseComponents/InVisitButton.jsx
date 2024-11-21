@@ -126,16 +126,15 @@ const InVisitButton = forwardRef(
 
     // const { isEntitled: hasICD10Access } = useFeatureEntitlements('icd-10');
 
-    // const { currentPractitioner } = useSelector(
-    //   (state) => state?.practitionerState
-    // );
+    const { currentPractitioner } = useSelector(
+      (state) => state?.practitionerState
+    );
     const { encounterDetails, mobileViewStatus, isEncounterDetailsLoading } =
       useSelector((state) => ({
         encounterDetails: state.encounters.encounterDetails,
         mobileViewStatus: state.encounters.mobileViewStatus,
         isEncounterDetailsLoading: state.encounters.mobileViewStatus,
       }));
-    console.log("isEncounterDetailsLoading", isEncounterDetailsLoading);
     // const { templateListLoading, templateOverridesListLoading } = useSelector(
     //   (state) => state?.summaryState
     // );
@@ -395,7 +394,7 @@ const InVisitButton = forwardRef(
     //Function when complete recording is clicked
     const handleCompleteRecording = () => {
       setEncounterStatus("summary_inprogress");
-     console.log("completed");
+      console.log("completed");
       setShowSaveDeleteButtons(false);
       dispatch(
         completeEncounter({
@@ -503,9 +502,6 @@ const InVisitButton = forwardRef(
         !encounterDetails?.encounter_id
       );
     };
-
-    // const isNotLoading =
-    //   encounterStatus && !templateListLoading && !templateOverridesListLoading;
 
     const isNotLoading = isEncounterDetailsLoading;
 
@@ -696,25 +692,6 @@ const InVisitButton = forwardRef(
                             }}
                           />
                         </div>
-                        {/* Enable encounter format option if user hasn't migrated to global preferences */}
-                        {/* {!hasGlobalNoteFormatEnabled && (
-                        <div className="mt-3">
-                          <div className="text-[#667085] mb-1">Note format</div>
-                          <ButtonGroup
-                            options={formatOptions}
-                            value={summaryFormat}
-                            onChange={(value) => {
-                              analytics.track(
-                                "Clicked Format Option In In-visit",
-                                {
-                                  format: value,
-                                }
-                              );
-                              setSummaryFormat(value);
-                            }}
-                          />
-                        </div>
-                      )} */}
                       </>
                     )}
                   </div>

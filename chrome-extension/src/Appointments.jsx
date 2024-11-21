@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef,useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import BaseNavBar from "./components/baseComponents/BaseNavBar";
 import TopNavBar from "./components/TopNavBar";
 import { Table } from "./components/baseComponents/Table";
@@ -45,10 +45,14 @@ import {
   getRecentSearchAction,
   notificationHistory,
   sendAppointmentReminders,
+  settingsOrgFlag,
 } from "./store/actions/appointment.action";
 import { DeleteAppointment } from "./components/pageComponents/DeleteAppointment";
 import { EditAppointment } from "./components/pageComponents/EditAppointmentPage";
-import { getAppointmentAllEndDateFilter, getAppointmentAllStartDateFilter } from "./utilities/commonFunction";
+import {
+  getAppointmentAllEndDateFilter,
+  getAppointmentAllStartDateFilter,
+} from "./utilities/commonFunction";
 import { TreeSelectDropdown } from "./components/baseComponents/TreeSelect";
 import { filteredApptsTotalSlice } from "./store/slice/appointment.slice";
 import { AddNewAppointment } from "./components/pageComponents/AddNewAppointment";
@@ -64,13 +68,18 @@ export const Appointments = () => {
     apptsAPICall,
     filteredApptsTotal,
     apptsTotal,
+    remainderPatientAppts,
+    settingsOrgValue,
     practitionersAndPatients,
   } = useSelector((state) => state?.appointmentState);
-  console.log("practitionersAndPatients", practitionersAndPatients);
+
+  const { currentPractitioner } = useSelector(
+    (state) => state?.practitionerState
+  );
+
   const nonVCAIntakeStatus = "Aura Only";
   const nonVCACondition = "Not Available";
-  //   const isAdmin = settingsOrgValue?.roles?.includes("admin"); //check
-  const isAdmin = true;
+  const isAdmin = settingsOrgValue?.roles?.includes("admin");
   const cachedUserEmail = getFromStorage("user_email");
   let fetchCounterRef = useRef(0);
 
@@ -80,8 +89,7 @@ export const Appointments = () => {
   const accessToken = userData?.user?.accessToken;
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const currentPractitioner = currentPractitionerJson; //check
-  //   const filteredData = appointmentJson;
+
   const [showProfileLogo, setShowProfileLogo] = useState(true);
   const [data, setData] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
@@ -104,7 +112,6 @@ export const Appointments = () => {
 
   const beforepercent = filteredData?.length / denominator;
   const [isPatientSelected, setIsPatientSelected] = useState(false);
-  //   const [showProfileLogo, setShowProfileLogo] = useState(true);
   const [dateValue, setDateValue] = useState(
     localStorage.getItem(`${currentPractitioner?.org_uuid}_dateValue`)
   );
@@ -153,23 +160,23 @@ export const Appointments = () => {
       : [];
   }, [storedPractitionerNamesLocal]);
 
-   const addAppointmentOptions = () => {
-     return (
-       <Menu>
-         <Menu.Item
-           className="font-sans"
-           key="bulk-upload"
-           onClick={() => {
-             setShowUpload(true);
-             setUploadKey((prevKey) => prevKey + 1); // Increment the key to trigger re-render
+  const addAppointmentOptions = () => {
+    return (
+      <Menu>
+        <Menu.Item
+          className="font-sans"
+          key="bulk-upload"
+          onClick={() => {
+            setShowUpload(true);
+            setUploadKey((prevKey) => prevKey + 1); // Increment the key to trigger re-render
             //  analytics.track("Clicked Bulk Upload Appointments", {});
-           }}
-         >
-           <UploadOutlined /> Bulk upload appointments
-         </Menu.Item>
-       </Menu>
-     );
-   };
+          }}
+        >
+          <UploadOutlined /> Bulk upload appointments
+        </Menu.Item>
+      </Menu>
+    );
+  };
 
   const initialfilterValue = useMemo(() => {
     return {
@@ -242,44 +249,44 @@ export const Appointments = () => {
     return practitionersWithSameName.length > 1;
   }
 
-   const statusOptions = [
-     {
-       title: "All",
-       value: "All",
-       className:
-         "flex justify-center items-center h-8 text-xs rounded-full hover:bg-[#f7f7f7]",
-     },
-     {
-       title: "Completed",
-       value: "Completed",
-       className:
-         "text-[#1ec990] bg-[#eefaf4] flex items-center justify-center text-xs rounded-full hover:bg-[#A2EFC9]  h-8",
-     },
-     {
-       title: "In Progress",
-       value: "InProgress",
-       className:
-         "text-[#ff6f00] bg-[#ffe1ca] flex items-center justify-center text-xs rounded-full hover:bg-[#F7CFB1]  h-8",
-     },
-     {
-       title: "Not Started",
-       value: "New",
-       className:
-         "text-[#5a8dda] bg-[#e7f1ff] flex items-center justify-center rounded-full text-xs hover:bg-[#BCD4F7] status-options h-8",
-     },
-     {
-       title: nonVCAIntakeStatus,
-       value: "Unavailable",
-       className:
-         "text-[#018749] bg-[#caffca] flex items-center justify-center text-xs rounded-full hover:bg-[#a8ffa8] status-options h-8",
-     },
-     {
-       title: "Partial Summary",
-       value: "partial_completed",
-       className:
-         "text-[#ff6f00] bg-[#ffe1ca] flex items-center text-xs justify-center rounded-full hover:bg-[#F7CFB1]  h-8",
-     },
-   ];
+  const statusOptions = [
+    {
+      title: "All",
+      value: "All",
+      className:
+        "flex justify-center items-center h-8 text-xs rounded-full hover:bg-[#f7f7f7]",
+    },
+    {
+      title: "Completed",
+      value: "Completed",
+      className:
+        "text-[#1ec990] bg-[#eefaf4] flex items-center justify-center text-xs rounded-full hover:bg-[#A2EFC9]  h-8",
+    },
+    {
+      title: "In Progress",
+      value: "InProgress",
+      className:
+        "text-[#ff6f00] bg-[#ffe1ca] flex items-center justify-center text-xs rounded-full hover:bg-[#F7CFB1]  h-8",
+    },
+    {
+      title: "Not Started",
+      value: "New",
+      className:
+        "text-[#5a8dda] bg-[#e7f1ff] flex items-center justify-center rounded-full text-xs hover:bg-[#BCD4F7] status-options h-8",
+    },
+    {
+      title: nonVCAIntakeStatus,
+      value: "Unavailable",
+      className:
+        "text-[#018749] bg-[#caffca] flex items-center justify-center text-xs rounded-full hover:bg-[#a8ffa8] status-options h-8",
+    },
+    {
+      title: "Partial Summary",
+      value: "partial_completed",
+      className:
+        "text-[#ff6f00] bg-[#ffe1ca] flex items-center text-xs justify-center rounded-full hover:bg-[#F7CFB1]  h-8",
+    },
+  ];
 
   const getReminderTime = (responseTime) => {
     if (!responseTime) {
@@ -381,14 +388,14 @@ export const Appointments = () => {
     };
   };
 
-   const showModal = () => {
-     setIsModalOpen(true);
+  const showModal = () => {
+    setIsModalOpen(true);
     //  analytics.track("Clicked Create New Appointment", {});
-     dispatch(patientNamesOrgAction(accessToken));
-   };
-   const handleCancel = () => {
-     setIsModalOpen(!isModalOpen);
-   };
+    dispatch(patientNamesOrgAction(accessToken));
+  };
+  const handleCancel = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   const menuOptions = (id, viewAppointment) => {
     const conditionForReminder = viewAppointment?.actions;
     const canEditAppointments =
@@ -408,16 +415,7 @@ export const Appointments = () => {
             //yes
             handleDeleteOpen(id, viewAppointment);
           }
-          //   if (key === "patientChat") {
-          //     //yes
-          //     handlePatientChatOpen(
-          //       viewAppointment?.llm_chat_url,
-          //       viewAppointment
-          //     );
-          //   }
-          // if (key === "showQRCode") {
-          //   handleShowQRCode(viewAppointment?.llm_chat_url, viewAppointment);
-          // }
+
           if (key === "editAppointment") {
             //yes
             handleEditAppointmentModal(
@@ -425,22 +423,10 @@ export const Appointments = () => {
               viewAppointment
             );
           }
-          //   if (key === "notificationHistory") {
-          //     //yes
-          //     handleNotificationHistoryModal(
-          //       viewAppointment?.appointment_id,
-          //       viewAppointment
-          //     );
-          //   }
+
           if (key === "intake") {
             handleRowClick(viewAppointment, "Menu");
           }
-          //   if (key === "convertToAuraEncounter") {
-          //     handleConvertAppointmentToAuraModal(
-          //       viewAppointment?.appointment_id,
-          //       viewAppointment
-          //     );
-          //   }
         }}
       >
         {conditionForReminder &&
@@ -458,32 +444,7 @@ export const Appointments = () => {
             <SummaryIcon /> <span>View summary</span>
           </span>
         </Menu.Item>
-        {/* {viewAppointment?.isExpired === false &&
-          viewAppointment?.intakeStatus != "Unavailable" && (
-            <Menu.Item key="patientChat">
-              <span className="dropdown-text flex items-center space-x-1">
-                <PatientIcon /> <span>Open chat as patient</span>
-              </span>
-            </Menu.Item>
-          )} */}
-        {/* {viewAppointment?.isExpired === false &&
-          currentPractitioner?.org_settings?.show_qr_code && (
-            <Menu.Item key="showQRCode">
-              <span className="dropdown-text flex items-center space-x-1">
-                <QRCodeIcon /> <span>Show QR Code</span>
-              </span>
-            </Menu.Item>
-          )} */}
 
-        {/* {viewAppointment?.intakeStatus === "New" &&
-          !!viewAppointment.llm_chat_url &&
-          !viewAppointment?.isExpired && (
-            <Menu.Item key="convertToAuraEncounter">
-              <span className="dropdown-text flex items-center space-x-2">
-                <AmbientAiIcon /> <span>Convert to Aura Encounter</span>
-              </span>
-            </Menu.Item>
-          )} */}
         {canEditAppointments && (
           <Menu.Item key="editAppointment">
             <span className="dropdown-text flex items-center space-x-2">
@@ -491,11 +452,7 @@ export const Appointments = () => {
             </span>
           </Menu.Item>
         )}
-        {/* <Menu.Item key="notificationHistory">
-          <span className="dropdown-text flex items-center space-x-2">
-            <NotificationsHistoryIcon /> <span>Show notification history</span>
-          </span>
-        </Menu.Item> */}
+
         <Menu.Item key="delete">
           <span className="dropdown-text flex items-center space-x-2">
             <BinIcon /> <span>Remove appointment</span>
@@ -935,7 +892,6 @@ export const Appointments = () => {
     },
   ].filter(Boolean);
 
-
   useEffect(() => {
     if (currentPractitioner?.org_uuid) {
       localStorage.setItem(
@@ -972,6 +928,10 @@ export const Appointments = () => {
     };
     fetchAppointments();
   }, [getAppointmentsByStatus]);
+
+  useEffect(() => {
+    dispatch(settingsOrgFlag(accessToken));
+  }, [dispatch]);
 
   useEffect(() => {
     if (
@@ -1074,45 +1034,44 @@ export const Appointments = () => {
     dispatch(getAppointmentPractitionerAndPatients(accessToken));
   }, [dispatch]);
 
+  useEffect(() => {
+    const DoctorArray = practitionersAndPatients?.practitioner?.map(
+      (practitioner, index, array) => ({
+        id: practitioner?.practitioner_id,
+        value:
+          array.filter(
+            (p) =>
+              p.practitioner_firstName === practitioner.practitioner_firstName
+          ).length > 1
+            ? `${practitioner.practitioner_firstName}`
+            : practitioner.practitioner_firstName,
+        key: practitioner?.practitioner_id,
+      })
+    );
 
-    useEffect(() => {
-      const DoctorArray = practitionersAndPatients?.practitioner?.map(
-        (practitioner, index, array) => ({
-          id: practitioner?.practitioner_id,
-          value:
-            array.filter(
-              (p) =>
-                p.practitioner_firstName === practitioner.practitioner_firstName
-            ).length > 1
-              ? `${practitioner.practitioner_firstName}`
-              : practitioner.practitioner_firstName,
-          key: practitioner?.practitioner_id,
-        })
-      );
+    DoctorArray?.unshift({ label: "All", value: "All" });
 
-      DoctorArray?.unshift({ label: "All", value: "All" });
+    const uniquePatientNames = new Set();
+    const PatientArray = practitionersAndPatients?.patient?.reduce(
+      (accumulator, patient) => {
+        const patientName = patient?.patient_Name;
+        if (!uniquePatientNames.has(patientName)) {
+          uniquePatientNames.add(patientName);
+          accumulator.push({
+            id: patientName,
+            value: patientName,
+          });
+        }
+        return accumulator;
+      },
+      []
+    );
 
-      const uniquePatientNames = new Set();
-      const PatientArray = practitionersAndPatients?.patient?.reduce(
-        (accumulator, patient) => {
-          const patientName = patient?.patient_Name;
-          if (!uniquePatientNames.has(patientName)) {
-            uniquePatientNames.add(patientName);
-            accumulator.push({
-              id: patientName,
-              value: patientName,
-            });
-          }
-          return accumulator;
-        },
-        []
-      );
-
-      setFilterOptions({
-        doctorNames: DoctorArray,
-        patientNames: PatientArray,
-      });
-    }, [practitionersAndPatients]);
+    setFilterOptions({
+      doctorNames: DoctorArray,
+      patientNames: PatientArray,
+    });
+  }, [practitionersAndPatients]);
 
   useEffect(() => {
     if (
@@ -1171,7 +1130,7 @@ export const Appointments = () => {
   }, [filteredValue]);
 
   const onChangeHandler = async (value, fieldName, dates) => {
-    console.log("onChangeHandler")
+    console.log("onChangeHandler");
     storeInLocal(
       `${currentPractitioner?.org_uuid}_show_current_practitioner`,
       false
@@ -1479,9 +1438,9 @@ export const Appointments = () => {
         setIsFilterOn(false);
       }
     } else if (fieldName === "status") {
-    //   analytics.track("Selected Status Filter", {
-    //     status: value,
-    //   });
+      //   analytics.track("Selected Status Filter", {
+      //     status: value,
+      //   });
       let startDate = "";
       let endDate = "";
       if (dateValue === "Custom") {
@@ -1543,6 +1502,9 @@ export const Appointments = () => {
     }
   };
 
+  useEffect(() => {
+    setIsLoading(tableLoader);
+  }, [tableLoader]);
   return (
     <>
       {/* <TopNavBar /> */}
@@ -1602,7 +1564,7 @@ export const Appointments = () => {
                                                         )} */}
                   {practitionersAndPatients?.practitioner?.map((names, idx) => (
                     <Select.Option
-                      key={names.id}
+                      key={idx}
                       value={names.practitioner_id}
                       email={names.email}
                       label={names.practitioner_firstName}
@@ -1654,7 +1616,7 @@ export const Appointments = () => {
             </Select>
           </div>
 
-          <div className="bg-white rounded-xl drop-shadow-sm flex items-center tree-dropdown">
+          <div className="bg-white py-[1px] px-[8px] rounded-xl drop-shadow-sm flex items-center tree-dropdown">
             <label
               for="appointments"
               className="mr-1 ml-2 text-xs text-black whitespace-nowrap"
@@ -1783,15 +1745,15 @@ export const Appointments = () => {
                   setVisible={setShowUpload}
                 />
               </span> */}
-              {currentPractitioner?.org_settings
+              {/* {currentPractitioner?.org_settings
                 ?.enable_bulk_appointment_upload ? (
                 <Dropdown.Button
-                  overlay={addAppointmentOptions()}
+                  // overlay={addAppointmentOptions()}
                   overlayStyle={{ top: "18rem" }}
                   placement="bottom"
                   rootClassName="add-appointment-dropdown rounded-xl drop-shadow-sm flex bg-[#00D090] hover:bg-[#059669]"
                   trigger={["click"]}
-                  icon={<ExpandIcon fill={"#ffffff"} />}
+                  // icon={<ExpandIcon fill={"#ffffff"} />}
                   onClick={showModal}
                 >
                   <div className="add-appointment-div flex">
@@ -1801,19 +1763,19 @@ export const Appointments = () => {
                     </span>
                   </div>
                 </Dropdown.Button>
-              ) : (
-                <button
-                  className="rounded-xl h-10 items-center p-4 flex bg-[#00D090] hover:bg-[#059669]"
-                  onClick={showModal}
-                >
-                  <div className=" flex items-center">
-                    <PlusIcon />
-                    <span className="text-white pl-3 font-normal font-sans">
-                      Add appointment
-                    </span>
-                  </div>
-                </button>
-              )}
+              ) : ( */}
+              <button
+                className="rounded-xl h-10 items-center p-4 flex bg-[#00D090] hover:bg-[#059669]"
+                onClick={showModal}
+              >
+                <div className=" flex items-center">
+                  <PlusIcon />
+                  <span className="text-white pl-3 text-xs font-normal font-sans">
+                    Add appointment
+                  </span>
+                </div>
+              </button>
+              {/* )} */}
             </div>
           </div>
         </div>
@@ -1870,7 +1832,7 @@ export const Appointments = () => {
             locale={{ emptyText: "No Data" }}
             // additionalPatientInfo={showPatientResetLink ? true : false}
             // handleReset={handleReset}
-            // remainderPatientAppts={remainderPatientAppts}
+            remainderPatientAppts={remainderPatientAppts}
           />
         </div>
 

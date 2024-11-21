@@ -2,16 +2,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./Button";
-// import { useFeatureEntitlements } from '@frontegg/react';
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
 
-// import {
-//   completeEncounter,
-//   updateEncounter,
-// } from '../../store/actions/encounter';
-
 import { CheckOutlined } from "@ant-design/icons";
-// import TemplateSelectDropdown from '../Settings/Settings.TemplateDropdown';
 import { Tooltip } from "antd";
 import { Bars } from "react-loader-spinner";
 import {
@@ -99,17 +92,6 @@ const AfterVisitControls = ({
 
   return (
     <div className="w-full">
-      {/* <label className="text-[#667085] p-2">Note template</label> */}
-      {/* <TemplateSelectDropdown
-        encounterPhase={encounterPhase}
-        currentTemplate={currentTemplate}
-        setCurrentTemplate={setCurrentTemplate}
-        commitOnChange={false}
-        templateId={templateId}
-        templateOverridesId={templateOverridesId}
-        fromAuraPage={!schedulepage}
-        restrictTemplates={restrictTemplates}
-      /> */}
       <div className="flex space-x-4 mt-4 justify-center">
         <GenerateSummaryButton
           encounter={encounter}
@@ -148,13 +130,12 @@ const AfterVisitButton = ({
 
   // const { isEntitled: hasICD10Access } = useFeatureEntitlements('icd-10');
 
-  const { encounterDetails, mobileViewStatus } =
-    useSelector((state) => ({
-      encounterDetails: state.encounters.encounterDetails,
-      mobileViewStatus: state.encounters.mobileViewStatus,
-    }));
+  const { encounterDetails, mobileViewStatus } = useSelector((state) => ({
+    encounterDetails: state.encounters.encounterDetails,
+    mobileViewStatus: state.encounters.mobileViewStatus,
+  }));
 
-    // console.log("isEncounterDetailsLoadingAfter",isEncounterDetailsLoading)
+  // console.log("isEncounterDetailsLoadingAfter",isEncounterDetailsLoading)
   // const { templateListLoading, templateOverridesListLoading } = useSelector(
   //   (state) => state?.summaryState
   // );
@@ -203,10 +184,7 @@ const AfterVisitButton = ({
     //   analytics.track(`Clicked Generate ${noteType} In Ambient From Aura`, {});
     // }
   };
-  return encounterStatus ?
-     
-    (
-     
+  return encounterStatus ? (
     <>
       <div
         style={{ maxWidth: "min(400px, 100%)", minWidth: "min(320px, 100%)" }}
@@ -232,7 +210,7 @@ const AfterVisitButton = ({
         </div>
       </div>
     </>
-   ): (
+  ) : (
     <>
       <Bars
         height="25"

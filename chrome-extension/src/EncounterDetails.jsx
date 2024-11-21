@@ -66,8 +66,6 @@ const EncounterDetails = ({
   const { currentPractitioner, currentPractitionerSettings } = useSelector(
     (state) => state?.practitionerState
   );
-  console.log("encounterDetails", encounterDetails);
-  console.log("currentPractitioner", currentPractitioner);
   // console.log("transcriptionbyIdValue", transcriptionbyIdValue);
   const userData = useAuthUserOrNull();
   const accessToken = userData?.user?.accessToken;

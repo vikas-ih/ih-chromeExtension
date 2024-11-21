@@ -1,6 +1,6 @@
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
 import { useCallback, useEffect } from "react";
-import TopNavBar from "./components/TopNavBar";
+// import TopNavBar from "./components/TopNavBar";
 const APP_URL = "http://localhost:5174/account/login"; //PORT should be where the ih-app is running
 // import { useFeatureEntitlements } from "@frontegg/react";
 

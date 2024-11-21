@@ -36,10 +36,10 @@ import { getFromStorage, storeInLocal } from "../lib/storage";
 import { useNavigate } from "react-router-dom";
 import EncounterTopNavBar from "./baseComponents/EncounterTopNavBar";
 import { MicroPhone } from "../icons/Microphone.icon";
-import { currentPractitionerJson } from "../mocks/currentPractitoner";
+import { listPractitioners } from "../store/actions/practitioner.action";
+import { getAllPractitionersNames, getRecentSearchAction } from "../store/actions/appointment.action";
 
 const Encounter = ({ schedulepage = false }) => {
-  // const encounterList = dataSource;
   const userData = useAuthUserOrNull();
   const accessToken = userData?.user?.accessToken;
   const [editingRow, setEditingRow] = useState("");
@@ -51,24 +51,22 @@ const Encounter = ({ schedulepage = false }) => {
   const navigate = useNavigate();
   const refreshInterval = 100000;
   const dispatch = useDispatch();
-  // const { encounters, loading, error, count } = useSelector(
-  //   (state) => state.encounters
-  // );
+
   const { encounterList, isEncounterListLoading, error, encounterListCount } =
     useSelector((state) => state.encounters);
+
+  const { currentPractitioner } = useSelector(
+    (state) => state?.practitionerState
+  );
   const { isMobileRecord, newEncounterfromMic } = {
     isMobileRecord: false,
     newEncounterfromMic: false,
   };
   const isMobileView = window.innerWidth <= 1260;
 
-  //useSelector(
-  //   (state) => state?.encounterState
-  // );  //env
-  const currentPractitioner = currentPractitionerJson; //check
   const savedStartDate_Storage = localStorage.getItem(
     `${currentPractitioner?.org_uuid}_startDate`
-  ); 
+  );
   const savedEndDate_Storage = localStorage.getItem(
     `${currentPractitioner?.org_uuid}_endDate`
   );
@@ -132,8 +130,8 @@ const Encounter = ({ schedulepage = false }) => {
     pageSize: 5,
   });
 
-    const [resetDateFilter, setResetDateFilter] = useState(false);
-    const [isResetFiltersOn, setIsResetFiltersOn] = useState(false);
+  const [resetDateFilter, setResetDateFilter] = useState(false);
+  const [isResetFiltersOn, setIsResetFiltersOn] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
     storeSavedTabMobile
       ? storeSavedTabMobile
@@ -142,12 +140,12 @@ const Encounter = ({ schedulepage = false }) => {
       : "Today"
   );
 
-   const [selectedFilter, setSelectedFilter] = useState(() => {
-     const storedFilter = localStorage.getItem(
-       `${currentPractitioner?.org_uuid}_selectedFilter`
-     );
-     return storedFilter == null ? "Loading..." : storedFilter || "Today";
-   });
+  const [selectedFilter, setSelectedFilter] = useState(() => {
+    const storedFilter = localStorage.getItem(
+      `${currentPractitioner?.org_uuid}_selectedFilter`
+    );
+    return storedFilter == null ? "Loading..." : storedFilter || "Today";
+  });
 
   const handleMobileRowClick = (record) => {
     dispatch(encounterDetailsSlice(record));
@@ -190,18 +188,16 @@ const Encounter = ({ schedulepage = false }) => {
     setPageState({ current, pageSize });
   };
 
-    const changeEncounterStatus = (encounter_id) => {
-      const currentEncounter =
-        encounterList &&
-        encounterList?.find(
-          (encounter) => encounter?.encounter_id === encounter_id
-        );
-      if (currentEncounter) {
-        setEncounterStatus(
-          getEncounterStatus(currentEncounter, encounterPhase)
-        );
-      }
-    };
+  const changeEncounterStatus = (encounter_id) => {
+    const currentEncounter =
+      encounterList &&
+      encounterList?.find(
+        (encounter) => encounter?.encounter_id === encounter_id
+      );
+    if (currentEncounter) {
+      setEncounterStatus(getEncounterStatus(currentEncounter, encounterPhase));
+    }
+  };
 
   const [searchFilters, setSearchFilters] = useState({
     status: "",
@@ -341,8 +337,8 @@ const Encounter = ({ schedulepage = false }) => {
                   <div className="">
                     <ActionsDropdown
                       encounterDetailsSlice={record}
-                       searchFilters={searchFilters}
-                       record={record}
+                      searchFilters={searchFilters}
+                      record={record}
                       storedParams={storedParams}
                       accessToken={accessToken}
                     />
@@ -412,61 +408,61 @@ const Encounter = ({ schedulepage = false }) => {
     setIsResetFiltersOn(true);
   };
 
-    const roundToNext15Minutes = (localTime) => {
-      console.log(
-        "Rounding to next 15 minutes, source time:",
-        localTime.toISOString()
-      );
+  const roundToNext15Minutes = (localTime) => {
+    console.log(
+      "Rounding to next 15 minutes, source time:",
+      localTime.toISOString()
+    );
 
-      const minutes = localTime.minutes();
-      const roundedMinutes = Math.ceil(minutes / 15) * 15;
+    const minutes = localTime.minutes();
+    const roundedMinutes = Math.ceil(minutes / 15) * 15;
 
-      // Set the rounded minutes and reset seconds/milliseconds
-      return localTime.minutes(roundedMinutes).seconds(0).milliseconds(0);
+    // Set the rounded minutes and reset seconds/milliseconds
+    return localTime.minutes(roundedMinutes).seconds(0).milliseconds(0);
+  };
+  const handleCreateEncounter = async (practitionerId, customOptions = {}) => {
+    console.log("store", storedParams);
+    const { description, callback, demo } = {
+      description: null,
+      ...customOptions,
     };
-   const handleCreateEncounter = async (practitionerId, customOptions = {}) => {
-    console.log("store",storedParams);
-     const { description, callback, demo } = {
-       description: null,
-       ...customOptions,
-     };
-     setSearchFilters("");
-     storeInLocal(
-       `${currentPractitioner?.org_uuid}_storePractitioner`,
-       practitionerId
-     );
-     dispatch(newEncounterfromMicSlice(true));
-     dispatch(encounterDetailsSlice(null));
-     setSelectedDate("Today");
-     setSelectedTab && setSelectedTab("Today");
-     setStartDate(null);
-     setEndDate(null);
-     // Create a new encounter
-     const current_date = moment().local();
-     const roundedDate = roundToNext15Minutes(current_date);
-     const formattedDate = `${current_date.month() + 1}/${current_date.date()}`;
-     const defaultDescription =
-       description ||
-       `Encounter - ${formattedDate} ${roundedDate.format("h:mm a")}`;
-     const data = {
-       description: defaultDescription,
-       practitioner_id:
-         !isMobileView && !schedulepage
-           ? practitionerId
-           : !isMobileView && schedulepage
-           ? currentPractitioner.practitioner_id
-           : currentPractitioner.practitioner_id,
-       start_time: moment().local().toISOString(),
-     };
+    setSearchFilters("");
+    storeInLocal(
+      `${currentPractitioner?.org_uuid}_storePractitioner`,
+      practitionerId
+    );
+    dispatch(newEncounterfromMicSlice(true));
+    dispatch(encounterDetailsSlice(null));
+    setSelectedDate("Today");
+    setSelectedTab && setSelectedTab("Today");
+    setStartDate(null);
+    setEndDate(null);
+    // Create a new encounter
+    const current_date = moment().local();
+    const roundedDate = roundToNext15Minutes(current_date);
+    const formattedDate = `${current_date.month() + 1}/${current_date.date()}`;
+    const defaultDescription =
+      description ||
+      `Encounter - ${formattedDate} ${roundedDate.format("h:mm a")}`;
+    const data = {
+      description: defaultDescription,
+      practitioner_id:
+        !isMobileView && !schedulepage
+          ? practitionerId
+          : !isMobileView && schedulepage
+          ? currentPractitioner.practitioner_id
+          : currentPractitioner.practitioner_id,
+      start_time: moment().local().toISOString(),
+    };
 
-     if (schedulepage && appointmentId) {
-       data.appointment_id = appointmentId;
-     }
+    if (schedulepage && appointmentId) {
+      data.appointment_id = appointmentId;
+    }
 
-     dispatch(selectedEncounterSlice(null));
-     setSelectedTab("Today");
-     setSelectedLastWeek(null);
-     setSelectedTabDate(today);
+    dispatch(selectedEncounterSlice(null));
+    setSelectedTab("Today");
+    setSelectedLastWeek(null);
+    setSelectedTabDate(today);
 
     //  const trackEvents = () => {
     //    if (demo) {
@@ -483,37 +479,39 @@ const Encounter = ({ schedulepage = false }) => {
     //    }
     //  };
 
-     const desktopCallback = (createdEncounter) => {
-       trackEvents();
-       setRecord(createdEncounter);
-       setEncounterStatus(createdEncounter.status);
-       setPageState({
-         current: 1,
-         pageSize: 10,
-       });
-       changeEncounterStatus(record?.encounter_id);
-       callback?.(createdEncounter);
-     };
-     const mobileCallback = (createdEncounter) => {
+    const desktopCallback = (createdEncounter) => {
+      trackEvents();
+      setRecord(createdEncounter);
+      setEncounterStatus(createdEncounter.status);
+      setPageState({
+        current: 1,
+        pageSize: 10,
+      });
+      changeEncounterStatus(record?.encounter_id);
+      callback?.(createdEncounter);
+    };
+    const mobileCallback = (createdEncounter) => {
       //  trackEvents();
 
-       // IMPORTANT: in mobile do not redirect when callback is provided to avoid unmounting the whole component
-       if (callback) {
-         callback(createdEncounter);
-       } else {
-         navigate(`/mobileEncounterDetails/${createdEncounter.encounter_id}`);
-       }
-     };
+      // IMPORTANT: in mobile do not redirect when callback is provided to avoid unmounting the whole component
+      if (callback) {
+        callback(createdEncounter);
+      } else {
+        navigate(`/mobileEncounterDetails/${createdEncounter.encounter_id}`);
+      }
+    };
 
-     if (isMobileView) {
-       setEncounterStatus("");
-       dispatch(createEncounter({ data, callback:mobileCallback, accessToken }));
-     } else {
-       dispatch(
-         createEncounter({ data, callback: mobileCallback, accessToken })
-       );
-     }
-   };
+    if (isMobileView) {
+      setEncounterStatus("");
+      dispatch(
+        createEncounter({ data, callback: mobileCallback, accessToken })
+      );
+    } else {
+      dispatch(
+        createEncounter({ data, callback: mobileCallback, accessToken })
+      );
+    }
+  };
 
   //Triggers initial api call to list encounters
   useEffect(() => {
@@ -710,6 +708,17 @@ const Encounter = ({ schedulepage = false }) => {
     convertToUTC();
   }, [browserTimezone]);
 
+  const payload = {
+    is_new_appointment: true,
+  };
+
+
+   useEffect(() => {
+     dispatch(listPractitioners(accessToken));
+     dispatch(getAllPractitionersNames(payload,accessToken));
+     dispatch(getRecentSearchAction("encounters", accessToken));
+   }, [dispatch]);
+
   return (
     <div className="page-wrapper past flex flex-col relative ">
       <EncounterTopNavBar
@@ -729,7 +738,7 @@ const Encounter = ({ schedulepage = false }) => {
         changeEncounterStatus={changeEncounterStatus}
         record={record}
       />
-      <div className="mt-2 mb-24 p-4 relative ">
+      <div className="mb-24 relative ">
         <div
           className={`min-h-screen grid shadow-xl ant-table-wrappers rounded-xl bg-white relative`}
         >
@@ -760,7 +769,7 @@ const Encounter = ({ schedulepage = false }) => {
               emptyText: "No Data",
             }}
             tableLayout="auto"
-            // Sorting
+            Sorting
             sortDirections={["asc", "desc", "asc"]}
             sortedInfo={sortState}
           />

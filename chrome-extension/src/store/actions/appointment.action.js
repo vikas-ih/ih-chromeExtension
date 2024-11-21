@@ -94,6 +94,8 @@ import { getFromStorage, storeInLocal } from "../../lib/storage";
 import { currentPractitionerJson } from "../../mocks/currentPractitoner";
 import { showToastError } from "../../utilities/errortoast";
 import { showToastSuccess } from "../../utilities/toast";
+import store from "../store";
+import { getErrorCode } from "../slice/auth.slice";
 
 export const editAppointmentAction = (
   appt_uuid,
@@ -132,7 +134,8 @@ export const editAppointmentAction = (
               null,
               null,
               "reload",
-              startIndex
+              startIndex,
+              accessToken
             )
           );
 
@@ -143,6 +146,25 @@ export const editAppointmentAction = (
         dispatch(getAppointmentPractitionerAndPatients(accessToken));
       }
     } catch (e) {}
+  };
+};
+
+export const settingsOrgFlag = (accessToken) => {
+  return async (dispatch) => {
+    dispatch(selfAPILoadingSlice(true));
+    try {
+      const { url } = settingsOrgFlagConfig();
+      const headers = getAuthHeaders(accessToken);
+
+      const result = await Axios.get(url, { headers });
+      const response = result?.data;
+      if (result?.status === 200) {
+        dispatch(settingsOrgFlagSlice(response));
+      }
+    } catch (e) {
+    } finally {
+      dispatch(selfAPILoadingSlice(false));
+    }
   };
 };
 
@@ -180,8 +202,8 @@ export const getAppointmentsByStatus = (
     dispatch(filteredApptsTotalSlice(null));
     fetchCounter === 0 ? dispatch(apptsAPICallSlice(true)) : "";
     fetchCounter === undefined ? dispatch(appointmentLoading(true)) : "";
-    // let { currentPractitioner } = store.getState().practitionerState;
-    let currentPractitioner = currentPractitionerJson;
+    let { currentPractitioner } = store.getState().practitionerState;
+    // let currentPractitioner = currentPractitionerJson;
     try {
       const tz = moment.tz.guess();
       const { url } = getAppointmentsByStatusConfig(itemsPerPage, tz);
@@ -273,7 +295,6 @@ export const getAppointmentDetailsByUuidAction = (
 
 export const getPractitionerPreferences = (
   body,
-  setFieldValue,
   accessToken
 ) => {
   return async (dispatch) => {
@@ -436,7 +457,9 @@ export const getAppointmentByFilter = (
       const tz = moment.tz.guess();
       const { url } = getAppointmentByFiltersConfig(itemsPerPage, tz);
       // let { currentPractitioner } = store
-      let currentPractitioner = currentPractitionerJson;
+      let { currentPractitioner } = store.getState().practitionerState;
+
+      // let currentPractitione r = currentPractitionerJson;
 
       type === "normal"
         ? storeInLocal(
@@ -551,7 +574,7 @@ export const getAppointmentByFilter = (
       }
       dispatch(appointmentLoading(false));
     } catch (e) {
-      // getErrorCode(500);
+      getErrorCode(500);
       console.log("e", e);
       dispatch(appointmentLoading(false));
     }
@@ -610,8 +633,8 @@ export const getAppointmentByUuid = (uuid, accessToken) => {
     try {
       const { url } = getAppointmentByUuidConfig();
       //   const token = FronteggContext.getAccessToken();
-      let currentPractitioner = currentPractitionerJson;
-      // let { currentPractitioner } = store.getState().practitionerState;
+      // let currentPractitioner = currentPractitionerJson;
+      let { currentPractitioner } = store.getState().practitionerState;
       const body = {
         appt_uuid: encodeURI(uuid),
       };

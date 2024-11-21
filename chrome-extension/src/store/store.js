@@ -5,10 +5,10 @@ import settingsReducer from "./slice/settings";
 import appointmentReducer from "./slice/appointment.slice";
 import appointmentSettingsReducer from "./slice/settings.slice";
 import practitionerReducer from "./slice/practitioner.slice";
-
-
+import authReducer from "./slice/auth.slice";
 const store = configureStore({
   reducer: {
+    authState: authReducer,
     encounters: encounterReducer,
     summarySlice: summaryReducer,
     settingsState: settingsReducer,

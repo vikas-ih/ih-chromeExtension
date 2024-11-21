@@ -1,7 +1,6 @@
 import { Axios } from "../../lib";
 
 import { showToastError } from "../../utilities/errortoast";
-import { showToastSuccess } from "../../utilities/toast";
 import { currentPractitioner, currentPractitionerLoading } from "../slice/practitioner.slice";
 import {
   CSVUploadEnabledForCurrentUserSlice,

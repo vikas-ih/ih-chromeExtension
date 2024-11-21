@@ -38,8 +38,8 @@ export const EditAppointment = ({
 }) => {
   const phoneCountryCode = "+1";
 
-  const { isEntitled: followUpFlag } = useFeatureEntitlements("followup");
-
+  // const { isEntitled: followUpFlag } = useFeatureEntitlements("followup");
+ const followUpFlag=true;
   const {
     appointmentTypeValues,
     getConditionsbyType,
@@ -54,12 +54,12 @@ export const EditAppointment = ({
     // conditionsByPractitionerLoading,
   } = useSelector((state) => state?.appointmentState);
   
-  // const { currentPractitioner } = useSelector(
-  //   (state) => state?.practitionerState
-  // ); check
+  const { currentPractitioner } = useSelector(
+    (state) => state?.practitionerState
+  );
 
 
-  const currentPractitioner = currentPractitionerJson;
+  // const currentPractitioner = currentPractitionerJson;
 
 
   const today = new Date();
@@ -799,11 +799,11 @@ export const EditAppointment = ({
         const practitionerName = selectedPractitioner
           ? selectedPractitioner.label
           : "";
-        analytics.track("Created New Appointment", {
-          appointment_date: values?.start_date,
-          appointment_status: "Booked",
-          practitioner_name: practitionerName,
-        });
+        // analytics.track("Created New Appointment", {
+        //   appointment_date: values?.start_date,
+        //   appointment_status: "Booked",
+        //   practitioner_name: practitionerName,
+        // });
         dispatch(
           editAppointmentAction(
             getAppointmentDetailsByUuid?.appointment_details?.appt_uuid,

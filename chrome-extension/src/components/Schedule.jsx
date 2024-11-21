@@ -12,7 +12,6 @@ import {
 import { useParams } from "react-router-dom";
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
 import { getAppointmentByUuid } from "../store/actions/appointment.action";
-import { currentPractitionerJson } from "../mocks/currentPractitoner";
 import { Segmented, Tooltip } from "antd";
 import { formatEncounterStatus } from "../utilities/columns";
 import { AppLoaderPage } from "./baseComponents/AppLoader";
@@ -31,14 +30,16 @@ const Schedule = () => {
   const { getUuid, scheduleLoader, newIntakeSummary } = useSelector(
     (state) => state?.appointmentState
   );
-
+ const { currentPractitioner } = useSelector(
+   (state) => state?.practitionerState
+ );
   const { selectedEncounter } = useSelector((state) => state?.encounters);
   const dispatch = useDispatch();
   const { id } = useParams();
   const userData = useAuthUserOrNull();
   const accessToken = userData?.user?.accessToken;
   const isMobile = window.innerWidth < 1260;
-  const currentPractitioner = currentPractitionerJson; //check
+//   const currentPractitioner = currentPractitionerJson; //check
   const [tabs, setTabs] = useState([]);
   const [activeButton, setActiveButton] = useState("");
   const [currentEncounter, setCurrentEncounter] = useState(null);
@@ -51,7 +52,6 @@ const Schedule = () => {
   const [inVisitTabVisible, setInVisitTabVisible] = useState(false);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
 
-  console.log("uuid", getUuid);
   const getEncounterStatus = () => {
     const { displayStatus } = formatEncounterStatus(
       selectedEncounter?.encounter_id ? selectedEncounter : currentEncounter
@@ -152,7 +152,6 @@ const Schedule = () => {
   const intakeStatus = getUuid?.appointment_details
     ? getUuid?.appointment_details?.chat_completion_status
     : getUuid?.chat_completion_status;
-  console.log("intakeStatus", intakeStatus);
 
   const createEncounterOnFirstLoad = () => {
     const searchFilters = {
@@ -161,7 +160,6 @@ const Schedule = () => {
     dispatch(
       listEncounters({ searchFilters, showLoader: false, accessToken })
     ).then((encounters) => {
-      console.log("fhwehfwiofhiofh", encounters);
       if (!encounters || encounters.length === 0) {
         dispatch(
           createNewEncounter(
@@ -249,13 +247,11 @@ const Schedule = () => {
     const chat_completion_status =
       getUuid?.appointment_details?.chat_completion_status ||
       getUuid?.chat_completion_status;
-    console.log(chat_completion_status);
 
     if (chat_completion_status === "partial_completed") {
       summaryStatus = "Partial Summary";
     }
     setSummaryStatus(summaryStatus);
-    // console.log(summaryStatus)
 
     if (
       getUuid?.appointment_details?.chat_completion_status ||
@@ -268,7 +264,6 @@ const Schedule = () => {
       setSelectedTab();
     }
   }, [getUuid, newIntakeSummary, completionStatus, currentEncounter]);
-  console.log("currentEncounter", currentEncounter);
 
   return (
     <>
