@@ -1,15 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Insight-Health AI",
+  "name": "Aura AI Scribe",
   "version": "1.0.0",
   "action": {
     "default_popup": "index.html"
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "32": "icons/icon32.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/icon.png",
+    "32": "icons/icon2.png",
+    "48": "icons/icon3.png"
   },
   "host_permissions": ["https://*/*", "http://*/*"],
   "content_security_policy": {
