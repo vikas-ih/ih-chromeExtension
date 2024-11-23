@@ -59,7 +59,6 @@ const EncounterDetails = ({
   const { encounterDetails, transcriptionbyIdValue } = useSelector(
     (state) => state.encounters
   );
-
   const { isSummaryRegenerationLoading, summaryExportLoading, summaryList } =
     useSelector((state) => state?.summarySlice);
 
@@ -288,15 +287,21 @@ const EncounterDetails = ({
   };
 
   const handlePauseResumeToggle = useCallback(() => {
-    const updateEncounterFunc = updateEncounter(encounter_id, encounterPhase, {
-      in_visit_status: "inprogress",
-    });
+    const updateEncounterFunc = updateEncounter({
+      encounter_id,
+      encounterPhase,
+     data: {
+        in_visit_status: "inprogress",
+      },
+      params:undefined,
+      accessToken
+  });
     updateEncounterFunc(dispatch);
     // analytics.track("Clicked Resume after complete button for Aura", {
     //   encounter_id: encounter_id,
     // });
     inVisitRef.current?.handlePauseResumeToggle();
-  }, [inVisitRef, inVisitRef.current]);
+  }, [inVisitRef, inVisitRef.current, dispatch]);
 
   const handleSummaryEdits = (value) => {
     if (editableSummaryRef.current) {
@@ -376,20 +381,20 @@ const EncounterDetails = ({
     return true;
   }, [isChartStreaming, isVisitStreaming, activeButton]);
 
-  //   useEffect(() => {
-  //     if (
-  //       !initTranscript.current &&
-  //       transcriptionbyIdValue?.length > 0 &&
-  //       transcriptionbyIdValue[0]?.type == "live"
-  //     ) {
-  //       let transcript = transcriptionbyIdValue[0]?.transcription_json;
-  //       if (transcript?.length > 0) {
-  //         setLiveTranscript(transcript);
-  //       }
+  useEffect(() => {
+    if (
+      !initTranscript.current &&
+      transcriptionbyIdValue?.length > 0 &&
+      transcriptionbyIdValue[0]?.type == "live"
+    ) {
+      let transcript = transcriptionbyIdValue[0]?.transcription_json;
+      if (transcript?.length > 0) {
+        setLiveTranscript(transcript);
+      }
 
-  //       initTranscript.current = true;
-  //     }
-  //   }, [transcriptionbyIdValue]);
+      initTranscript.current = true;
+    }
+  }, [transcriptionbyIdValue]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -471,10 +476,8 @@ const EncounterDetails = ({
     resetStates();
   }, []);
 
-
   return (
     <>
-      {/* <TopNavBar /> */}
       {isLoading ? (
         <SummaryLoading />
       ) : (
@@ -650,7 +653,7 @@ const EncounterDetails = ({
                       summaryId={editableSummaryRef.current?.summary_id}
                       activeButton={activeButton}
                     />
-                    {/* <CurrentTranscript
+                    <CurrentTranscript
                       encounterStatus={encounterStatus}
                       encounterPhase={encounterPhase}
                       storedParams={storedParams}
@@ -674,7 +677,7 @@ const EncounterDetails = ({
                       setLivePartialTranscript={setLivePartialTranscript}
                       restrictTemplates={restrictTemplates}
                       ref={inVisitRef}
-                    /> */}
+                    />
                   </div>
                 ) : (
                   // View when an encounter is new or inprogress

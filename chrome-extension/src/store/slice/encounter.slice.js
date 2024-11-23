@@ -160,12 +160,14 @@ export const completeEncounter = createAsyncThunk(
 export const updateEncounter = createAsyncThunk(
   "encounters/updateEncounter",
   async (
-    encounter_id,
-    encounterPhase,
-    data,
-    params,
-    showToastMessage = true,
-    accessToken,
+    {
+      encounter_id,
+      encounterPhase,
+      data,
+      params,
+      showToastMessage = true,
+      accessToken,
+    },
     { dispatch, rejectWithValue }
   ) => {
     try {
@@ -183,7 +185,7 @@ export const updateEncounter = createAsyncThunk(
           showToastSuccess("Updated encounter");
         }
         // showToastSuccess("Updated encounter");
-        dispatch(getEncounter({encounter_id,accessToken}));
+        dispatch(getEncounter({ encounter_id, accessToken }));
         dispatch(listEncounters({ searchFilters: params, accessToken }));
         return result.data;
       } else {

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import TopNavBar from "./TopNavBar";
 import { NameIcon } from "../icons/Name.icon";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -39,7 +38,6 @@ const Schedule = () => {
   const userData = useAuthUserOrNull();
   const accessToken = userData?.user?.accessToken;
   const isMobile = window.innerWidth < 1260;
-//   const currentPractitioner = currentPractitionerJson; //check
   const [tabs, setTabs] = useState([]);
   const [activeButton, setActiveButton] = useState("");
   const [currentEncounter, setCurrentEncounter] = useState(null);
@@ -267,7 +265,6 @@ const Schedule = () => {
 
   return (
     <>
-      {/* <TopNavBar></TopNavBar> */}
       {appLoading ? (
         <AppLoaderPage />
       ) : (
@@ -597,7 +594,7 @@ const Schedule = () => {
                     </div>
                   )} */}
                 </div>
-              ) : isMobile ? (
+              ) :  (
                 <div className="mt-4">
                   <EncounterDetails
                     topBarInputs={{}}
@@ -607,10 +604,7 @@ const Schedule = () => {
                     activeTab={activeButton}
                     restrictTemplates={shouldRestrictTemplates()}
                   />
-                </div>
-              ) : (
-                <h1>hey! schedule error</h1> //check
-              )}
+                </div> )}
             </div>
           </div>
         </div>
