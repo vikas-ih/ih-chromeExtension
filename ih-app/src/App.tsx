@@ -2,6 +2,7 @@ import "./App.css";
 import { useAuth, useTenantsState } from "@frontegg/react";
 // import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import SignInTab from "./SignTab";
 function App() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -24,12 +25,13 @@ function App() {
     <div>
       {isAuthenticated && (
         <>
-          <span>
+          {/* <span>
             You are authenticated, you can close this tab and open the extension
           </span>
           <div>
             <button onClick={handleLogout}>Logout</button>
-          </div>
+          </div> */}
+          <SignInTab/>
         </>
       )}
     </div>

@@ -19,7 +19,18 @@ const Home = () => {
   const loggedInUser = user?.user;
   const dispatch = useDispatch();
   const login = useCallback(() => {
-    chrome.tabs.create({ url: APP_URL });
+    // chrome.tabs.create({ url: APP_URL });
+      chrome.tabs.create({ url: APP_URL }, (tab) => {
+        if (tab && tab.id) {
+          const tabId = tab.id;
+
+          setTimeout(() => {
+            chrome.tabs.remove(tabId, () => {
+              console.log("Tab closed after 10 seconds");
+            });
+          }, 10000);
+        }
+      });
   }, []);
 
   useEffect(() => {

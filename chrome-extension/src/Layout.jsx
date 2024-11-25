@@ -8,13 +8,28 @@ import {
   getCurrentPractitionerSettings,
 } from "./store/actions/practitioner.action";
 import { storeInLocal } from "./lib/storage";
+const APP_URL = "http://localhost:5174/account/login"; //PORT should be where the ih-app is running
 
 const Layout = ({ children }) => {
   const user = useAuthUserOrNull();
   const loggedInUser = user?.user;
   const dispatch = useDispatch();
   const login = useCallback(() => {
-    chrome.tabs.create({ url: APP_URL });
+    // chrome.tabs.create({ url: APP_URL });
+    // chrome.tabs.create({ url: APP_URL });
+    chrome.tabs.create({ url: APP_URL }, (tab) => {
+      // Check if the tab was created successfully
+      if (tab && tab.id ) {
+        const tabId = tab.id;
+
+        // Set a timeout to close the tab after 5 seconds (5000ms)
+        setTimeout(() => {
+          chrome.tabs.remove(tabId, () => {
+            console.log("Tab closed after 10 seconds");
+          });
+        }, 20000); // Adjust the timeout duration as needed
+      }
+    });
   }, []);
 
   useEffect(() => {

@@ -27,6 +27,7 @@
     "webRequest",
     "*://*.frontegg.com/*",
     "identity",
-    "audioCapture"
+    "audioCapture",
+    "tabs"
   ]
 }
