@@ -1,32 +1,19 @@
-chrome.runtime.sendMessage({ message: "getFronteggScript" }, (response) => {
-  if (response && response.script) {
-    // You can evaluate the script if necessary, but be cautious with `eval`
-    const script = document.createElement("script");
-    script.textContent = response.script;
-    document.head.appendChild(script);
-  } else {
-    console.error("Failed to get Frontegg script.");
-  }
-});
+// Function to request microphone permissions
+const requestMicPermission = () => {
+  chrome.runtime.sendMessage({ action: "requestMicPermission" }, (response) => {
+    if (response?.success) {
+      // console.log("Microphone access granted.");
+      // alert("Microphone access granted.");
+    } else {
+      console.error("Microphone access denied:", response?.error);
+      alert(
+        `Microphone access denied: ${
+          response?.error || "Unknown error occurred"
+        }`
+      );
+    }
+  });
+};
 
-// contentScript.js
-// contentScript.js
-
-// Function to inject the local Frontegg script
-function injectFronteggScript() {
-  const script = document.createElement('script');
-  script.src = chrome.runtime.getURL('dist/frontegg/index.js'); // Local path to Frontegg script
-  script.onload = function() {
-    console.log("Frontegg script loaded ist/frontegg");
-    // Optional: Add any Frontegg initialization code here
-  };
-  (document.head || document.documentElement).appendChild(script);
-}
-
-// Run the function to inject the script
-injectFronteggScript();
-
-// Function to inject external Frontegg script
-
-// Run the function to inject the script
-injectFronteggScript();
+// Automatically request microphone permissions when the script loads
+requestMicPermission();

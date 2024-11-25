@@ -373,7 +373,7 @@ const Editor = forwardRef(
           }
         };
       }
-    }, [hoveredElement]);
+    }, [hoveredElement,value]);
 
     useEffect(() => {
       const editor = divRef.current;

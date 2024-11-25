@@ -30,9 +30,12 @@ import { MobileLiveTranscription } from "./components/baseComponents/MobileLiveT
 import { SummaryUpdatedStatus } from "./components/baseComponents/SummaryUpdatedStatus";
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
 import "./style/_careConnect.scss";
+import "./style/_button.scss";
+
 import {
   getEncounter,
   getTranscription,
+  partialResetEncounterState,
   resetEncounterState,
   selectedEncounterSlice,
   updateEncounter,
@@ -45,7 +48,6 @@ import MicrophoneBar from "./components/baseComponents/MicrophoneBar";
 import CurrentTranscript from "./components/baseComponents/CurrentTranscript";
 import { isEmpty } from "lodash";
 import SummaryProgressBar from "./components/baseComponents/SummaryProgressBar";
-import { currentPractitionerJson } from "./mocks/currentPractitoner";
 
 const EncounterDetails = ({
   topBarInputs,
@@ -104,7 +106,6 @@ const EncounterDetails = ({
   const editableSummaryRef = useRef(null);
   const medicalConversationBoxRef = useRef(null);
   const ambient_version = currentPractitionerSettings?.ambient_version || 2; //check currentPractitionerSettings?.ambient_version ??
-  // const currentPractitioner = currentPractitionerJson;
 
   const { encounter_id_params } = useParams();
   storeInLocal("encounter_id_params", encounter_id_params);
@@ -112,7 +113,12 @@ const EncounterDetails = ({
     `${currentPractitioner?.org_uuid}_topbar_encounter_id`,
     encounter_id
   );
-
+ useEffect(() => {
+   if (isEmpty(encounter_id)) {
+     setEncounterId(encounter_id_params);
+   }
+ }, [encounter_id, encounter_id_params]);
+ 
   const resetStates = () => {
     dispatch(resetEncounterState());
     dispatch(resetSummaryState());
@@ -285,17 +291,17 @@ const EncounterDetails = ({
       </Menu>
     );
   };
-
   const handlePauseResumeToggle = useCallback(() => {
+    console.log("fromCallBack", encounter_id);
     const updateEncounterFunc = updateEncounter({
       encounter_id,
       encounterPhase,
-     data: {
+      data: {
         in_visit_status: "inprogress",
       },
-      params:undefined,
-      accessToken
-  });
+      params: undefined,
+      accessToken,
+    });
     updateEncounterFunc(dispatch);
     // analytics.track("Clicked Resume after complete button for Aura", {
     //   encounter_id: encounter_id,
@@ -461,11 +467,7 @@ const EncounterDetails = ({
     }
   };
 
-  useEffect(() => {
-    if (isEmpty(encounter_id)) {
-      setEncounterId(encounter_id_params);
-    }
-  }, [encounter_id, encounter_id_params]);
+ 
 
   useEffect(() => {
     if (isEmpty(encounterDetails)) setIsLoading(true);
@@ -476,6 +478,17 @@ const EncounterDetails = ({
     resetStates();
   }, []);
 
+  useEffect(() => {
+    if (encounter_id) {
+      dispatch(partialResetEncounterState());
+      dispatch(getEncounter({ encounter_id, accessToken }));
+      dispatch(
+        listSummaries(encounter_id, encounterPhase, "ambient", accessToken)
+      );
+      dispatch(getTranscription({ encounter_id, encounterPhase, accessToken }));
+      initTranscript.current = false;
+    }
+  }, [encounter_id, encounterPhase]);
   return (
     <>
       {isLoading ? (
@@ -687,7 +700,7 @@ const EncounterDetails = ({
                     <div style={{ minHeight: "86vh" }}>
                       <div
                         className="flex flex-col items-center justify-center"
-                        style={{ minHeight: "60vh" }}
+                        style={{ minHeight: "50vh" }}
                       >
                         <CurrentTranscript
                           encounterStatus={encounterStatus}
@@ -741,8 +754,8 @@ const EncounterDetails = ({
                           encounterStatus === "new") && (
                           <div
                             style={{
-                              minHeight: "20vh",
-                              maxHeight: "20vh",
+                              minHeight: "30vh",
+                              maxHeight: "40vh",
                               overflowY: "scroll",
                             }}
                           >

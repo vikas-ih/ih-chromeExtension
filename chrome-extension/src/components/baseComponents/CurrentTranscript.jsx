@@ -391,7 +391,7 @@ const CurrentTranscript = forwardRef(
     return (
       <>
         {!isRecording && encounterPhase != "after-visit" && (
-          <div className="absolute top-3 right-5" id="Microphone_Open">
+          <div className="absolute top-[4px] right-[1px]" id="Microphone_Open">
             <Popover
               placement={isMobile ? "bottomRight" : "leftBottom"}
               content={

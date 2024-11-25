@@ -86,6 +86,7 @@ const EncounterTopNavBar = ({
         "text-[#5a8dda] bg-[#e7f1ff] text-xs h-8 flex items-center justify-center rounded-full hover:bg-[#BCD4F7]",
     },
   ];
+  options?.unshift({ label: "All", value: "All" });
 
   const onChange = (value, option, type) => {
     setPageState({
@@ -152,12 +153,12 @@ const EncounterTopNavBar = ({
 
   return (
     <div className="px-4 py-1">
-      <div className="flex justify-center items-center past py-1 mb-1 mt-1">
+      <div className="flex justify-center items-center past py-1 mb-1 mt-1 bg-white rounded-xl">
         <Segmented
           size="small"
           options={["Today", "Yesterday", "Last week", "All time"]}
           onChange={(key) => handleTabChange(key)}
-          className="text-xs"
+          className="text-xs bg-white"
           value={storeSavedTabMobile ? storeSavedTabMobile : selectedTab}
         />
       </div>

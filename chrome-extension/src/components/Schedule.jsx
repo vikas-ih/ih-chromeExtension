@@ -274,9 +274,9 @@ const Schedule = () => {
           }`}
         >
           <div className="bg-white rounded-xl shadow-md px-1 py-1.5">
-            <div className="text-[#000] text-lg font-semibold mb-1 mx-3 mr-4 items-center flex">
+            {/* <div className="text-[#000] text-lg font-semibold mb-1 mx-3 mr-4 items-center flex">
               Patient details{" "}
-            </div>
+            </div> */}
             <div className={"flex pt-1"}>
               <div className="circle-background lg:ml-1">
                 <NameIcon

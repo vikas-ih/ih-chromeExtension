@@ -1,25 +1,49 @@
-// background.js
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("Extension installed and background script running");
+chrome.runtime.onStartup.addListener(() => {
+  console.log(`onStartup()`);
 });
 
-async function fetchFronteggScript() {
-  try {
-    const response = await fetch(
-      "https://assets.frontegg.com/admin-box/7.19.0/admin-portal/index.js"
-    );
-    const scriptText = await response.text();
+chrome.runtime.onInstalled.addListener(() => {
+  console.log("Service worker activated.");
+});
 
-    // Send the fetched script content to a content script or popup
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      if (request.message === "getFronteggScript") {
-        sendResponse({ script: scriptText });
-      }
-    });
-  } catch (error) {
-    console.error("Failed to fetch the Frontegg script:", error);
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log("Message received in service worker:", message);
+  sendResponse({ success: true });
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log("INSIDE SERVICE ONMESSAGE")
+  if (message.action === "requestMicPermission") {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        console.log("Microphone access granted.");
+        sendResponse({ success: true });
+        // Stop the stream to release the microphone
+        stream.getTracks().forEach((track) => track.stop());
+      })
+      .catch((error) => {
+        console.error("Microphone access denied:", error);
+        sendResponse({ success: false, error: error.message });
+      });
+    // Return true to indicate asynchronous response
+    return true;
   }
-}
+});
 
-// Call the function to fetch the script
-fetchFronteggScript();
+// document.addEventListener("DOMContentLoaded", () => {
+//   // Function to request microphone permission
+//   const requestMicPermission = async () => {
+//     try {
+//       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+//       console.log("Microphone access granted worker.");
+//       // Do something with the audio stream if needed
+//       stream.getTracks().forEach((track) => track.stop()); // Stop audio stream after access
+//     } catch (error) {
+//       console.error("Microphone access denied service:", error);
+//     }
+//   };
+
+//   // Trigger microphone permission request
+//   requestMicPermission();
+// });

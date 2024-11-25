@@ -14,8 +14,8 @@ export default function AmbientAnimation() {
     },
   };
 
-  const width = isMobileView ? 200 : 200;
-  const height = isMobileView ? 200 : 200;
+  const width = 120;
+  const height = 100;
 
   return (
     <div>

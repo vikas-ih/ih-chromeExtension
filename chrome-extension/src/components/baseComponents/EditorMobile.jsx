@@ -99,7 +99,7 @@ const EditorMobile = forwardRef(
           editor.removeEventListener("mouseout", handleMouseOut);
         }
       };
-    }, [hoveredElement]);
+    }, [hoveredElement,value]);
     return (
       <>
         {/* {showEvidenceSummaryLoading && (

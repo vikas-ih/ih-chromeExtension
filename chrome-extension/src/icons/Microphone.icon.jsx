@@ -6,8 +6,8 @@ export const MicroPhone = ({ fill = '#fff', id, className, onClick }) => {
     <svg
       className={classNames('quciktext-icon', className ? className : '')}
       onClick={onClick ? onClick : () => null}
-      width="32"
-      height="33"
+      width="25"
+      height="30"
       viewBox="0 0 32 33"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

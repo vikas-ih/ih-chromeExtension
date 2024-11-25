@@ -38,7 +38,7 @@ import EncounterTopNavBar from "./baseComponents/EncounterTopNavBar";
 import { MicroPhone } from "../icons/Microphone.icon";
 import { listPractitioners } from "../store/actions/practitioner.action";
 import { getAllPractitionersNames, getRecentSearchAction } from "../store/actions/appointment.action";
-
+import "./PastEncounter.scss"
 const Encounter = ({ schedulepage = false }) => {
   const userData = useAuthUserOrNull();
   const accessToken = userData?.user?.accessToken;
@@ -199,6 +199,21 @@ const Encounter = ({ schedulepage = false }) => {
     }
   };
 
+    // Function to request microphone permissions
+    const requestMicPermission = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        console.log("Microphone access granted.");
+        // Stop the stream to release the microphone
+        stream.getTracks().forEach((track) => track.stop());
+      } catch (error) {
+        console.error("Microphone access denied:", error);
+      }
+    };
+
+   
   const [searchFilters, setSearchFilters] = useState({
     status: "",
     page: page,
@@ -215,6 +230,10 @@ const Encounter = ({ schedulepage = false }) => {
     dispatch(listEncounters({ searchFilters, accessToken }));
   }, [dispatch, page]);
 
+
+   useEffect(() => {
+     requestMicPermission();
+   }, []);
   const columns = [
     {
       title: (
@@ -791,7 +810,7 @@ const Encounter = ({ schedulepage = false }) => {
           </div>
         </div>
       </div>
-      <div className="bg-[#00D090] rounded-full w-16 h-16 fixed bottom-20 right-8 flex items-center justify-center">
+      <div className="bg-[#00D090] rounded-full w-14 h-14 fixed bottom-20 right-8 flex items-center justify-center">
         <MicroPhone
           onClick={(storedParams) => handleCreateEncounter(storedParams)}
         />

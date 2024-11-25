@@ -13,6 +13,7 @@ const BaseNavBar = () => {
     dispatch(setMobileRecord(false));
   };
 
+
   return (
     <nav className="bottom-menu fixed z-[100] h-[4rem] bottom-0 left-0 right-0 bg-white rounded-t-xl px-0">
       <ul className="flex justify-between items-center h-full">
@@ -26,10 +27,11 @@ const BaseNavBar = () => {
               <ScheduleOutlined
                 className={`${
                   location.pathname === "/mobileAppointments"
-                    ? "active-icon mb-2"
-                    : "mb-4"
+                    ? "active-icon mb-2 h-4 w-4"
+                    : "mb-2"
                 }`}
                 onClick={nullSelectedRecord}
+               style={{width:"44px",height:"44px"}}
               />
               Appointments
             </div>
@@ -48,7 +50,7 @@ const BaseNavBar = () => {
                   className={`${
                     location.pathname === "/encounters"
                       ? "active-icon mb-2"
-                      : "mb-4"
+                      : "mb-2"
                   }`}
                   onClick={nullSelectedRecord}
                 >
@@ -57,7 +59,7 @@ const BaseNavBar = () => {
               ) : (
                 <div
                   className={`${
-                    location.pathname === "/" ? "active-icon mb-2" : "mb-4"
+                    location.pathname === "/" ? "active-icon mb-2" : "mb-2"
                   }`}
                   onClick={nullSelectedRecord}
                 >

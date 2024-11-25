@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   CheckOutlined,
   ExclamationOutlined,
@@ -12,6 +12,15 @@ export const SummaryUpdatedStatus = ({
   isSummaryOutdated,
   encounterStatus,
 }) => {
+
+    useEffect(() => {
+      if (isSummaryOutdated) {
+        // Adding a slight delay before reload to show the message (optional)
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }
+    }, [isSummaryOutdated]);
   return (
     encounterStatus === 'completed' &&
     (isSummaryOutdated ? (

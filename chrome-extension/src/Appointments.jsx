@@ -759,7 +759,7 @@ export const Appointments = () => {
                           {record?.patient_Name}
                         </div>
                       </div>
-                      <div className="dob">DOB : {record?.dateofBirth}</div>
+                      {/* <div className="dob">DOB : {record?.dateofBirth}</div> */}
                     </div>
                     {/* Condition */}
                     <div>

@@ -27,7 +27,9 @@
     .ant-table-tbody
     .ant-table-row
     > .ant-table-cell-row-hover {
-    background: none;
+    background: #daf6fd; //have to add bg
+    // box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    // transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   }
 
   .ant-table-tbody .selectedAura .innerAura {
@@ -100,7 +102,7 @@
 
             tr {
               th {
-                font-family: 'Poppins', sans-serif;
+                font-family: "Poppins", sans-serif;
                 font-size: 12px;
                 font-weight: 600;
                 line-height: 7px;
@@ -109,7 +111,7 @@
 
                 .ant-table-cell {
                   .table-first-last-name {
-                    font-family: 'Poppins';
+                    font-family: "Poppins";
                     font-style: normal;
                     font-weight: 400;
                     font-size: 13px;
@@ -141,7 +143,7 @@
   }
 
   .ant-picker .ant-picker-input {
-    font-family: 'Poppins';
+    font-family: "Poppins";
   }
 
   .style-15::-webkit-scrollbar-track {
@@ -306,7 +308,7 @@
   // }
 
   .ant-segmented {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     color: #000;
     width: 100%;
 
@@ -331,9 +333,7 @@
   .ant-select-single .ant-select-selector .ant-select-selection-item {
     padding: 0;
     line-height: 25px;
-    transition:
-      all 0.3s,
-      visibility 0s;
+    transition: all 0.3s, visibility 0s;
     align-self: normal;
   }
 
@@ -347,9 +347,7 @@
     .ant-select-selection-item {
     padding: 0;
     line-height: 40px;
-    transition:
-      all 0.3s,
-      visibility 0s;
+    transition: all 0.3s, visibility 0s;
     align-self: center;
   }
 
@@ -521,7 +519,7 @@
     z-index: 1;
     border: 1px solid #00d090;
     border-radius: 4px;
-    content: '';
+    content: "";
   }
 
   .ant-picker-dropdown
