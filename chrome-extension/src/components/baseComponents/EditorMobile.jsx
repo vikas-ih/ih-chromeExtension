@@ -32,33 +32,31 @@ const EditorMobile = forwardRef(
     const [copiedSectionText, setCopiedSectionText] = useState("");
     const [hoveredElement, setHoveredElement] = useState(null);
 
-     const handleMouseOver = (event) => {
-       const target = event.target;
+    const handleMouseOver = (event) => {
+      const target = event.target;
 
-       // Check if the clicked element is a <strong> tag
-       if (target.tagName === "STRONG") {
-         setShowCopyTooltip(true);
-         setCopyTooltipPosition({ x: event.pageX, y: event.pageY });
-         setHoveredElement(target);
+      // Check if the clicked element is a <strong> tag
+      if (target.tagName === "STRONG") {
+        setShowCopyTooltip(true);
 
-         // getting the complete section Text and storing it in state
-         const currentText = target.outerHTML;
-         const currentPosInValue = value.indexOf(currentText);
-         let endingPosition = value.indexOf(
-           "<p><strong",
-           currentPosInValue - 2
-         );
+        setCopyTooltipPosition({ x: event.clientX, y: event.clientY });
+        setHoveredElement(target);
 
-         if (endingPosition === -1) {
-           endingPosition = value.length - 1;
-         }
-         const sectionTextToCopy = value.substring(
-           currentPosInValue,
-           endingPosition
-         );
-         setCopiedSectionText(sectionTextToCopy);
-       }
-     };
+        // getting the complete section Text and storing it in state
+        const currentText = target.outerHTML;
+        const currentPosInValue = value.indexOf(currentText);
+        let endingPosition = value.indexOf("<p><strong", currentPosInValue - 2);
+
+        if (endingPosition === -1) {
+          endingPosition = value.length - 1;
+        }
+        const sectionTextToCopy = value.substring(
+          currentPosInValue,
+          endingPosition
+        );
+        setCopiedSectionText(sectionTextToCopy);
+      }
+    };
     const handleMouseOut = (event) => {
       const target = event.target;
       const copySection = copySectionRef?.current;
@@ -99,7 +97,7 @@ const EditorMobile = forwardRef(
           editor.removeEventListener("mouseout", handleMouseOut);
         }
       };
-    }, [hoveredElement,value]);
+    }, [hoveredElement, value, window.scrollY]);
     return (
       <>
         {/* {showEvidenceSummaryLoading && (
