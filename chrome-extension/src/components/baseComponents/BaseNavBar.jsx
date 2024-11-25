@@ -31,7 +31,7 @@ const BaseNavBar = () => {
                     : "mb-2"
                 }`}
                 onClick={nullSelectedRecord}
-               style={{width:"44px",height:"44px"}}
+               style={{}}
               />
               Appointments
             </div>
