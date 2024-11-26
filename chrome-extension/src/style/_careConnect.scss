@@ -53,5 +53,10 @@
 
   .ant-segmented.ant-segmented-sm {
     border-radius: 10px !important;
+    background: white;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
