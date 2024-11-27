@@ -9,9 +9,9 @@
     "default_path": "index.html"
   },
   "icons": {
-    "16": "icons/icon.png",
-    "32": "icons/icon2.png",
-    "48": "icons/icon3.png"
+    "16": "icons/group2.png",
+    "32": "icons/group1.png",
+    "48": "icons/group.png"
   },
   "host_permissions": ["https://*/*", "http://*/*"],
   "content_security_policy": {

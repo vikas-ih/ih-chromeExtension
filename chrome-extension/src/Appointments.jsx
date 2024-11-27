@@ -121,11 +121,11 @@ export const Appointments = () => {
   );
   const [modalVisible, setModalVisible] = useState(false);
   const [renameTitle, setRenameTitle] = useState("");
- const [myAppointments, setMyAppointments] = useState(
-   () =>
-     localStorage.getItem(`${currentPractitioner?.org_uuid}_myAppointments`) ||
-     ""
- );
+  const [myAppointments, setMyAppointments] = useState(
+    () =>
+      localStorage.getItem(`${currentPractitioner?.org_uuid}_myAppointments`) ||
+      ""
+  );
 
   const [selectedTitle, setSelectedTitle] = useState(
     () =>
@@ -338,7 +338,6 @@ export const Appointments = () => {
 
     return tooltipTimeText;
   };
-
 
   const handleMonthChange = (increment) => {
     const newDate = new Date(currentDate);
@@ -1161,11 +1160,10 @@ export const Appointments = () => {
   const payload = {
     is_new_appointment: true,
   };
-   const handleCustomSelect = () => {
-     setIsCustomSelected(true);
-     setModalVisible(true);
-   };
-
+  const handleCustomSelect = () => {
+    setIsCustomSelected(true);
+    setModalVisible(true);
+  };
 
   useEffect(() => {
     dispatch(appointmentTypesAction(accessToken));
@@ -1759,66 +1757,66 @@ export const Appointments = () => {
               )}
             </Select>
           </div>
-          <div className="" style={{ position: "relative", zIndex: "10" }}>
-            <ModalPopup
-              currentDate={currentDate}
-              handleMonthChange={handleMonthChange}
-              handleYearChange={handleYearChange}
-              renderCalendar={renderCalendar}
-              onChangeHandler={onChangeHandler}
-              isfilterOn={isfilterOn}
-              dateValue={filterValue?.datefilter}
-              setFilterValue={setFilterValue}
-              filterValue={filterValue}
-              resetDateFilter={resetDateFilter}
-              setResetDateFilter={setResetDateFilter}
-              selectDates={selectDates}
-              setSelectDates={setSelectDates}
-              setSelectedFilters={setSelectedFilters}
-              selectedFilters={selectedFilters}
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-            />
-          </div>
-          <div className="bg-white py-[1px] px-[8px] rounded-xl drop-shadow-sm flex items-center tree-dropdown">
-            <label
-              for="appointments"
-              className="mr-1 ml-2 text-xs text-black whitespace-nowrap"
-            >
-              Status
-            </label>
-            <div className="flex flex-col md:flex-row gap-3 justify-between items-center flex-nowrap ">
-              <div className=" grow shrink-0 w-full ">
-                <TreeSelectDropdown
-                  suffixIcon={
-                    <ExpandIcon
-                      fill={"#000000"}
-                      className="-mr-2 absolute right-0 "
-                    />
-                  }
-                  name="datefilter"
-                  showSearch={false}
-                  bordered={false}
-                  className="h-8 !w-32 bg-transparent border-none focus:border-none rounded-xl focus:bg-gray-100 caret-transparent flex items-center hover:bg-gray-100 pr-2 placeholder:text-sm text-center"
-                  placeholder={"All"}
-                  value={
-                    isfilterOn && filterValue?.status !== null
-                      ? filterValue?.status
-                      : ""
-                  }
-                  options={statusOptions}
-                  onChange={(value, valueString) =>
-                    onChangeHandler(value, "status")
-                  }
-                  popupClassName={"!w-36"}
-                ></TreeSelectDropdown>
-              </div>
-            </div>
-          </div>
 
           <div className="flex justify-between w-full">
+            <div className="" style={{ position: "relative", zIndex: "10" }}>
+              <ModalPopup
+                currentDate={currentDate}
+                handleMonthChange={handleMonthChange}
+                handleYearChange={handleYearChange}
+                renderCalendar={renderCalendar}
+                onChangeHandler={onChangeHandler}
+                isfilterOn={isfilterOn}
+                dateValue={filterValue?.datefilter}
+                setFilterValue={setFilterValue}
+                filterValue={filterValue}
+                resetDateFilter={resetDateFilter}
+                setResetDateFilter={setResetDateFilter}
+                selectDates={selectDates}
+                setSelectDates={setSelectDates}
+                setSelectedFilters={setSelectedFilters}
+                selectedFilters={selectedFilters}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+              />
+            </div>
+            <div className="bg-white py-[1px] px-[8px] rounded-xl drop-shadow-sm flex items-center tree-dropdown">
+              <label
+                for="appointments"
+                className="mr-1 ml-2 text-xs text-black whitespace-nowrap"
+              >
+                Status
+              </label>
+              <div className="flex flex-col md:flex-row gap-3 justify-between items-center flex-nowrap ">
+                <div className=" grow shrink-0 w-full ">
+                  <TreeSelectDropdown
+                    suffixIcon={
+                      <ExpandIcon
+                        fill={"#000000"}
+                        className="-mr-2 absolute right-0 "
+                      />
+                    }
+                    name="datefilter"
+                    showSearch={false}
+                    bordered={false}
+                    className="h-8 !w-32 bg-transparent border-none focus:border-none rounded-xl focus:bg-gray-100 caret-transparent flex items-center hover:bg-gray-100 pr-2 placeholder:text-sm text-center"
+                    placeholder={"All"}
+                    value={
+                      isfilterOn && filterValue?.status !== null
+                        ? filterValue?.status
+                        : ""
+                    }
+                    options={statusOptions}
+                    onChange={(value, valueString) =>
+                      onChangeHandler(value, "status")
+                    }
+                    popupClassName={"!w-36"}
+                  ></TreeSelectDropdown>
+                </div>
+              </div>
+            </div>
             <div className=" w-36">
               {(localStorage.getItem(
                 `${currentPractitioner?.org_uuid}_selectedFilters`
@@ -1896,22 +1894,24 @@ export const Appointments = () => {
                 </button>
               )}
             </div>
-            <div className="">
-              <AddNewAppointment
-                isOpen={isModalOpen}
-                onCancel={handleCancel}
-                setIsOpen={setIsModalOpen}
-                startIndex={startIndex}
-                isfilterOn={isfilterOn}
-                accessToken={accessToken}
-              />
-              {/* <span style={{ position: "absolute" }}>
+          </div>
+        </div>
+        <div className="">
+          <AddNewAppointment
+            isOpen={isModalOpen}
+            onCancel={handleCancel}
+            setIsOpen={setIsModalOpen}
+            startIndex={startIndex}
+            isfilterOn={isfilterOn}
+            accessToken={accessToken}
+          />
+          {/* <span style={{ position: "absolute" }}>
                 <AppointmentsCSVUploader
                   visible={showUpload}
                   setVisible={setShowUpload}
                 />
               </span> */}
-              {/* {currentPractitioner?.org_settings
+          {/* {currentPractitioner?.org_settings
                 ?.enable_bulk_appointment_upload ? (
                 <Dropdown.Button
                   // overlay={addAppointmentOptions()}
@@ -1930,20 +1930,15 @@ export const Appointments = () => {
                   </div>
                 </Dropdown.Button>
               ) : ( */}
-              <button
-                className="rounded-xl h-10 items-center p-4 flex bg-[#00D090] hover:bg-[#059669]"
-                onClick={showModal}
-              >
-                <div className=" flex items-center">
-                  <PlusIcon />
-                  <span className="text-white pl-3 text-xs font-normal font-sans">
-                    Add appointment
-                  </span>
-                </div>
-              </button>
-              {/* )} */}
+          <button
+            className="rounded-full h-14 w-14 items-center px-[1.3rem] py-4 flex bg-[#00D090] hover:bg-[#059669] fixed bottom-[15%] right-[10%] z-50"
+            onClick={showModal}
+          >
+            <div className=" flex items-center">
+              <PlusIcon />
             </div>
-          </div>
+          </button>
+          {/* )} */}
         </div>
         {deleteText && (
           <div className="">
