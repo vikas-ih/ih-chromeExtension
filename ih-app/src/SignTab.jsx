@@ -4,7 +4,6 @@ import HourGlass from "./assets/hour_glass.gif";
 import { useAuth } from "@frontegg/react";
 import { useNavigate } from "react-router-dom";
 import { NewInsightIcon } from "./NewInsight.icon";
-import { SignoutIcon } from "./Signout.icon";
 const SignInTab = () => {
   const [countdown, setCountdown] = useState(10);
   const params = new URLSearchParams(window.location.search);
