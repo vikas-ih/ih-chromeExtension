@@ -3,7 +3,10 @@
   "name": "Aura AI Scribe",
   "version": "1.0.0",
   "action": {
-    "default_popup": "index.html"
+    "default_title": "Aura AI Scribe"
+  },
+  "side_panel": {
+    "default_path": "index.html"
   },
   "icons": {
     "16": "icons/icon.png",
@@ -27,7 +30,10 @@
     "webRequest",
     "*://*.frontegg.com/*",
     "identity",
+    "audio",
     "audioCapture",
-    "tabs"
+     "contextMenus",
+    "tabs",
+    "sidePanel"
   ]
 }

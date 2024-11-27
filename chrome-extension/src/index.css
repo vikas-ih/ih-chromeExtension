@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   height: 900px;
   width: 390px;
-}
+} */
 
 h1{
   font-size: 1.2em;

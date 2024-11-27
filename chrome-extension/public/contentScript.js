@@ -6,11 +6,11 @@ const requestMicPermission = () => {
       // alert("Microphone access granted.");
     } else {
       console.error("Microphone access denied:", response?.error);
-      alert(
-        `Microphone access denied: ${
-          response?.error || "Unknown error occurred"
-        }`
-      );
+      // alert(
+      //   `Microphone access denied: ${
+      //     response?.error || "Unknown error occurred"
+      //   }`
+      // );
     }
   });
 };

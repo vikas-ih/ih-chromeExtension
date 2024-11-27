@@ -10,7 +10,9 @@ import {
   AmbientAiIcon,
   BinIcon,
   CalendarMobileIcon,
+  ClickedIcon,
   EditAppointmentIcon,
+  EmailClickedTooltipIcon,
   EmailOpenedTooltipIcon,
   EmailOpenIcon,
   EmailTooltipIcon,
@@ -56,6 +58,7 @@ import {
 import { TreeSelectDropdown } from "./components/baseComponents/TreeSelect";
 import { filteredApptsTotalSlice } from "./store/slice/appointment.slice";
 import { AddNewAppointment } from "./components/pageComponents/AddNewAppointment";
+import ModalPopup from "./components/baseComponents/ModalPopup";
 
 export const Appointments = () => {
   //   const { currentPractitioner } = useSelector(
@@ -109,13 +112,26 @@ export const Appointments = () => {
   const [editAppointmentOpen, setEditAppointmentOpen] = useState(false);
   const [isnotificationHistoryOpen, setIsnotificationHistoryOpen] =
     useState(false);
+  const [isCustomSelected, setIsCustomSelected] = useState(false);
 
   const beforepercent = filteredData?.length / denominator;
   const [isPatientSelected, setIsPatientSelected] = useState(false);
   const [dateValue, setDateValue] = useState(
     localStorage.getItem(`${currentPractitioner?.org_uuid}_dateValue`)
   );
+  const [modalVisible, setModalVisible] = useState(false);
+  const [renameTitle, setRenameTitle] = useState("");
+ const [myAppointments, setMyAppointments] = useState(
+   () =>
+     localStorage.getItem(`${currentPractitioner?.org_uuid}_myAppointments`) ||
+     ""
+ );
 
+  const [selectedTitle, setSelectedTitle] = useState(
+    () =>
+      localStorage.getItem(`${currentPractitioner?.org_uuid}_selectedTitle`) ||
+      ""
+  );
   const filter_status =
     getFromStorage(`${currentPractitioner?.org_uuid}_filter_status`) || "";
   const filter_startDate =
@@ -210,8 +226,20 @@ export const Appointments = () => {
   const [isfilterOn, setIsFilterOn] = useState(false);
   const [filterValue, setFilterValue] = useState(initialfilterValue);
   const [filterOptions, setFilterOptions] = useState(initialfilterOptions);
+  const [startDate, setStartDate] = useState(
+    localStorage.getItem(`${currentPractitioner?.org_uuid}_startDate`)
+  );
+  const [endDate, setEndDate] = useState(
+    localStorage.getItem(`${currentPractitioner?.org_uuid}_endDate`)
+  );
+  const [resetDateFilter, setResetDateFilter] = useState(false);
 
-  const [patientSearchKeyword, setPatientSearchKeyword] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState(
+    localStorage.getItem(`${currentPractitioner?.org_uuid}_selectedFilters`)
+  );
+
+  const [currentDate, setCurrentDate] = useState(new Date());
+
   const [practitionerSearchKeyword, setpractitionerSearchKeyword] =
     useState(null);
   const [selectedPractitioners, setSelectedPractitioners] = useState(() => {
@@ -309,6 +337,113 @@ export const Appointments = () => {
     }
 
     return tooltipTimeText;
+  };
+
+
+  const handleMonthChange = (increment) => {
+    const newDate = new Date(currentDate);
+    newDate.setMonth(newDate.getMonth() + increment);
+    setCurrentDate(newDate);
+  };
+
+  const handleYearChange = (increment) => {
+    const newDate = new Date(currentDate);
+    newDate.setFullYear(newDate.getFullYear() + increment);
+    setCurrentDate(newDate);
+  };
+
+  const renderCalendar = (date, onSelectDateRange, selectDates) => {
+    const daysInMonth = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      0
+    ).getDate();
+    const firstDayOfMonth = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      1
+    ).getDay();
+    const today = new Date();
+
+    const dates = [];
+    let startSelection = selectDates?.[0] ? new Date(selectDates[0]) : null;
+    let endSelection = selectDates?.[1] ? new Date(selectDates[1]) : null;
+
+    const selectDate = (currentDate) => {
+      setFilterValue({
+        ...filterValue,
+        datefilter: "Custom",
+      });
+      if (!startSelection || (startSelection && endSelection)) {
+        startSelection = currentDate;
+        endSelection = null;
+      } else {
+        endSelection = currentDate;
+      }
+      onSelectDateRange(startSelection, endSelection);
+    };
+
+    for (let i = 1; i <= daysInMonth; i++) {
+      const currentDate = new Date(date.getFullYear(), date.getMonth(), i);
+      let className = "calendar-day";
+
+      if (startSelection && endSelection) {
+        if (currentDate.getTime() === startSelection.getTime()) {
+          className += " selected-start";
+        } else if (currentDate.getTime() === endSelection.getTime()) {
+          className += " selected-end";
+        } else if (currentDate > startSelection && currentDate < endSelection) {
+          className += " selected-middle";
+        }
+      } else if (
+        startSelection &&
+        currentDate.getTime() === startSelection.getTime()
+      ) {
+        className += " selected-start";
+      }
+
+      if (currentDate.toDateString() === today.toDateString()) {
+        className += " current-date";
+      }
+
+      if (startSelection && !endSelection && currentDate < startSelection) {
+        className += " disabled";
+      }
+
+      if (endSelection) {
+        className = className.replace("disabled", "");
+      }
+
+      dates.push(
+        <div
+          key={currentDate}
+          className={className}
+          onClick={() => selectDate(currentDate)}
+        >
+          {i}
+        </div>
+      );
+    }
+
+    // Empty divs to fill up the grid until the first day of the month
+    for (let i = 0; firstDayOfMonth > 0 && i < firstDayOfMonth; i++) {
+      dates.unshift(
+        <div key={`empty-${i}`} className="calendar-day empty"></div>
+      );
+    }
+
+    return (
+      <div className="calendar">
+        <div className="calendar-grid">
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+            <div className="calendar-day-name" key={day}>
+              {day}
+            </div>
+          ))}
+          {dates}
+        </div>
+      </div>
+    );
   };
 
   const handleDeleteOpen = (appt_uuid, record) => {
@@ -1026,6 +1161,11 @@ export const Appointments = () => {
   const payload = {
     is_new_appointment: true,
   };
+   const handleCustomSelect = () => {
+     setIsCustomSelected(true);
+     setModalVisible(true);
+   };
+
 
   useEffect(() => {
     dispatch(appointmentTypesAction(accessToken));
@@ -1130,15 +1270,14 @@ export const Appointments = () => {
   }, [filteredValue]);
 
   const onChangeHandler = async (value, fieldName, dates) => {
-    console.log("onChangeHandler");
     storeInLocal(
       `${currentPractitioner?.org_uuid}_show_current_practitioner`,
       false
     );
     if (fieldName === "datefilter") {
-      analytics.track("Entered Date Filter", {
-        date_filter: value,
-      });
+      // analytics.track("Entered Date Filter", {
+      //   date_filter: value,
+      // });
       let startDate = "";
       let endDate = "";
       if (value === "Custom…🗓️") {
@@ -1187,7 +1326,8 @@ export const Appointments = () => {
               getAppointmentAllEndDateFilter(endDate),
               filterValue?.status === null ? "" : filterValue.status,
               "normal",
-              startIndex
+              startIndex,
+              accessToken
             )
           ) && setIsFilterOn(true);
         } else if (value === "All time") {
@@ -1209,7 +1349,8 @@ export const Appointments = () => {
                 getAppointmentAllEndDateFilter(""),
                 filterValue?.status === null ? "" : filterValue.status,
                 "normal",
-                startIndex
+                startIndex,
+                accessToken
               )
             ) && setIsFilterOn(true);
           }
@@ -1329,7 +1470,7 @@ export const Appointments = () => {
       });
       setSelectedPractitionerNamesLocal(updatedSelectedPractitionerNames);
     } else if (fieldName === "patientName") {
-      analytics.track("Entered Patient Name Search", {});
+      // analytics.track("Entered Patient Name Search", {});
       setFilterValue({
         ...filterValue,
         ["patientName"]: value,
@@ -1372,7 +1513,8 @@ export const Appointments = () => {
               getAppointmentAllEndDateFilter(endDate),
               filterValue?.status === null ? "" : filterValue.status,
               "normal",
-              startIndex
+              startIndex,
+              accessToken
             )
           ) && setIsFilterOn(true);
         }
@@ -1391,7 +1533,8 @@ export const Appointments = () => {
               getAppointmentAllEndDateFilter(endDate),
               filterValue?.status === null ? "" : filterValue.status,
               "normal",
-              startIndex
+              startIndex,
+              accessToken
             )
           ) && setIsFilterOn(true);
         }
@@ -1417,10 +1560,10 @@ export const Appointments = () => {
         patientName ||
         filterValue.status
       ) {
-        analytics.track("Applied Date Range Filter", {
-          start_date: start,
-          end_date: end,
-        });
+        // analytics.track("Applied Date Range Filter", {
+        //   start_date: start,
+        //   end_date: end,
+        // });
         dispatch(
           getAppointmentByFilter(
             filterValue?.doctorName?.[0] === "" ? [] : filterValue?.doctorName,
@@ -1429,7 +1572,8 @@ export const Appointments = () => {
             getAppointmentAllEndDateFilter(endDate),
             filterValue?.status === null ? "" : filterValue.status,
             "normal",
-            startIndex
+            startIndex,
+            accessToken
           )
         );
         setIsFilterOn(true);
@@ -1615,7 +1759,29 @@ export const Appointments = () => {
               )}
             </Select>
           </div>
-
+          <div className="" style={{ position: "relative", zIndex: "10" }}>
+            <ModalPopup
+              currentDate={currentDate}
+              handleMonthChange={handleMonthChange}
+              handleYearChange={handleYearChange}
+              renderCalendar={renderCalendar}
+              onChangeHandler={onChangeHandler}
+              isfilterOn={isfilterOn}
+              dateValue={filterValue?.datefilter}
+              setFilterValue={setFilterValue}
+              filterValue={filterValue}
+              resetDateFilter={resetDateFilter}
+              setResetDateFilter={setResetDateFilter}
+              selectDates={selectDates}
+              setSelectDates={setSelectDates}
+              setSelectedFilters={setSelectedFilters}
+              selectedFilters={selectedFilters}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+            />
+          </div>
           <div className="bg-white py-[1px] px-[8px] rounded-xl drop-shadow-sm flex items-center tree-dropdown">
             <label
               for="appointments"
@@ -1695,7 +1861,7 @@ export const Appointments = () => {
                     setSelectedPractitioners([]);
                     setRenameTitle("");
                     setMyAppointments("");
-                    setPatientSearchKeyword("");
+                    // setPatientSearchKeyword("");
                     setSelectedTitle("");
                     setDateValue("Today");
                     setIsFilterOn(true);

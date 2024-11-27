@@ -1,9 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 // import Image from "next/image";
 import HourGlass from "./assets/hour_glass.gif";
 import { useAuth } from "@frontegg/react";
 import { useNavigate } from "react-router-dom";
+import { NewInsightIcon } from "./NewInsight.icon";
+import { SignoutIcon } from "./Signout.icon";
 const SignInTab = () => {
   const [countdown, setCountdown] = useState(10);
   const params = new URLSearchParams(window.location.search);
@@ -37,21 +38,11 @@ const SignInTab = () => {
     return () => clearInterval(interval);
   }, [countdown]);
 
-
   return (
-    <div className="flex flex-col justify-center items-center h-screen bg-black text-white text-center p-5">
-      <img
-        src={HourGlass}
-        alt="loader"
-        style={{
-          display: "block",
-          marginLeft: "auto",
-          marginRight: "auto",
-          marginTop: "60px",
-          width: "25%",
-        }}
-      />
-      <h1 className="text-3xl font-bold mb-4">
+    <div className="flex flex-col justify-center items-center h-screen text-center p-5">
+      <NewInsightIcon className={"mr-2 mb-8"} />
+
+      <h1 className="text-3xl text-black font-bold mb-4">
         You are authenticated, you can close this tab and open the extension
       </h1>
       {/* <p className="text-lg mb-8">
@@ -62,8 +53,9 @@ const SignInTab = () => {
         onClick={handleLogout}
         className="bg-white text-black px-6 py-2 rounded-md hover:bg-gray-200 transition"
       >
-        Logout
+        Sign out
       </button>
+     
     </div>
   );
 };
