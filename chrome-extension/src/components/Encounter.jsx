@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import { EncounterTable } from "./baseComponents/EncounterTable";
 import {
-  dataSource,
   formatEncounterStatus,
   getEncounterStatus,
 } from "../utilities/columns";
@@ -200,18 +199,18 @@ const Encounter = ({ schedulepage = false }) => {
   };
 
     // Function to request microphone permissions
-    const requestMicPermission = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-        console.log("Microphone access granted.");
-        // Stop the stream to release the microphone
-        stream.getTracks().forEach((track) => track.stop());
-      } catch (error) {
-        console.error("Microphone access denied:", error);
-      }
-    };
+    // const requestMicPermission = async () => {
+    //   try {
+    //     const stream = await navigator.mediaDevices.getUserMedia({
+    //       audio: true,
+    //     });
+    //     console.log("Microphone access granted.");
+    //     // Stop the stream to release the microphone
+    //     stream.getTracks().forEach((track) => track.stop());
+    //   } catch (error) {
+    //     console.error("Microphone access denied:", error);
+    //   }
+    // };
 
    
   const [searchFilters, setSearchFilters] = useState({
@@ -231,9 +230,9 @@ const Encounter = ({ schedulepage = false }) => {
   }, [dispatch, page]);
 
 
-   useEffect(() => {
-     requestMicPermission();
-   }, []);
+  //  useEffect(() => {
+  //    requestMicPermission();
+  //  }, []);
   const columns = [
     {
       title: (

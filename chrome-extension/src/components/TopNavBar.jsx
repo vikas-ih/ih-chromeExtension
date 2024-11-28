@@ -33,7 +33,7 @@ const TopNavBar = ({ list }) => {
   const data = useAuthUserOrNull();
   const { user, tenants } = data;
   const dispatch = useDispatch();
-  console.log("user", data.user);
+  // console.log("user", data.user);
   const location = useLocation();
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -62,12 +62,6 @@ const TopNavBar = ({ list }) => {
   };
 
   const nullSelectedRecord = () => {
-    // if (location.pathname === `/schedule/${appointmentUUID}`) {
-    // } else if (location.pathname === `/appointmentsettings`) {
-    //   navigate(`/appointments`);
-    // } else {
-    //   navigate(`/encounters`);
-    // }
     history.back();
     dispatch(setMobileRecord(false));
   };
@@ -287,7 +281,6 @@ const TopNavBar = ({ list }) => {
         </div>
       </nav>
 
-      {/* {list && <Encounter />} */}
     </>
   );
 };

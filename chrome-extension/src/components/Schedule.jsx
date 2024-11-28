@@ -2,16 +2,21 @@ import React, { useEffect, useState } from "react";
 import { NameIcon } from "../icons/Name.icon";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  AmbientloadIcon,
   ConditionIcon,
   CopiesIcon,
   DictateMic,
   DobIcon,
+  ExpandIcon,
   PhoneIcon,
 } from "../icons";
 import { useParams } from "react-router-dom";
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
-import { getAppointmentByUuid } from "../store/actions/appointment.action";
-import { Segmented, Tooltip } from "antd";
+import {
+  getAppointmentByUuid,
+  regenerateIntakeSummary,
+} from "../store/actions/appointment.action";
+import { Dropdown, Segmented, Tooltip, Menu } from "antd";
 import { formatEncounterStatus } from "../utilities/columns";
 import { AppLoaderPage } from "./baseComponents/AppLoader";
 import { isEmpty } from "lodash";
@@ -23,15 +28,18 @@ import {
   listEncounters,
 } from "../store/slice/encounter.slice";
 import moment from "moment";
-import { Button } from "./baseComponents/Button";
+// import { Button } from "./baseComponents/Button";
+import { showToastSuccess } from "../utilities/toast";
+import { scheduleLoading } from "../store/slice/appointment.slice";
+import { Button } from "./pageComponents/Button";
 
 const Schedule = () => {
   const { getUuid, scheduleLoader, newIntakeSummary } = useSelector(
     (state) => state?.appointmentState
   );
- const { currentPractitioner } = useSelector(
-   (state) => state?.practitionerState
- );
+  const { currentPractitioner } = useSelector(
+    (state) => state?.practitionerState
+  );
   const { selectedEncounter } = useSelector((state) => state?.encounters);
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -49,7 +57,7 @@ const Schedule = () => {
   const [summaryStatus, setSummaryStatus] = useState("");
   const [inVisitTabVisible, setInVisitTabVisible] = useState(false);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
-
+  const [isIntakeSummaryLoading, setIsIntakeSummaryLoading] = useState(false);
   const getEncounterStatus = () => {
     const { displayStatus } = formatEncounterStatus(
       selectedEncounter?.encounter_id ? selectedEncounter : currentEncounter
@@ -60,6 +68,28 @@ const Schedule = () => {
   const handleTabClick = (tabValue) => {
     setActiveButton(tabValue);
     // setAutoResumeVisitEnabled(false);
+  };
+
+  const handleReloadIntakeSummary = () => {
+    setIsOverlayVisible(true);
+    setIsIntakeSummaryLoading(true);
+    // analytics.track("Regenerated CareConnect Summary", {
+    //   appointment_date: getUuid?.appointment_details?.created_at,
+    //   appointment_id: getUuid?.appointment_details?.appointment_id,
+    //   appointment_status: getUuid?.appointment_details?.chat_completion_status,
+    //   practitioner_name: `${getUuid?.appointment_details?.practitioner_firstName} ${getUuid?.appointment_details?.practitioner_last_name}`,
+    // });
+    dispatch(
+      regenerateIntakeSummary(
+        getUuid?.appointment_details?.appointment_id,
+        accessToken
+      )
+    ).then(() => {
+      dispatch(getAppointmentByUuid(id, accessToken));
+      dispatch(scheduleLoading(false));
+      setIsIntakeSummaryLoading(false);
+      setIsOverlayVisible(false);
+    });
   };
 
   const configureTabs = () => {
@@ -181,6 +211,72 @@ const Schedule = () => {
         setCurrentEncounter(encounters?.payload?.encounters[0]);
       }
     });
+  };
+
+  const copyOptions = () => {
+    return (
+      <Menu
+        onClick={({ key }) => {
+          if (key === "copy-editor") {
+            handleCopyRichText();
+          }
+        }}
+      >
+        <Menu.Item key="copy-editor">
+          <span className="dropdown-text">Copy as rich text</span>
+        </Menu.Item>
+      </Menu>
+    );
+  };
+
+  const handleCopyPlainText = () => {
+    const CopyText = textAreaValue;
+    const patientInfo = `Patient Name: ${getUuid?.patient_details?.first_name} ${getUuid?.patient_details?.last_name}\nDOB: ${getUuid?.patient_details?.birth_date}\n\n`;
+    const plainText =
+      patientInfo +
+      CopyText.replace(/<p>/g, "")
+        .replace(/<\/p>/g, "\n")
+        .replace(/<strong style="color: rgb\(0, 208, 145\);">/g, "| ")
+        .replace(/<strong style="color: rgb\(0, 0, 0\);">/g, "")
+        .replace(/<strong>/g, "")
+        .replace(/<\/strong>/g, "")
+        .replace(/<br>/g, "\n")
+        .replace(/\n\n+/g, "\n\n")
+        .replace(/^\|+/gm, "")
+        .trim();
+
+    // Create a temporary textarea element
+    const tempTextArea = document.createElement("textarea");
+    tempTextArea.style.position = "fixed";
+    tempTextArea.style.opacity = "0";
+    tempTextArea.value = plainText;
+
+    document.body.appendChild(tempTextArea);
+
+    // Select and copy the content from the temporary textarea
+    tempTextArea.select();
+    document.execCommand("copy");
+
+    document.body.removeChild(tempTextArea);
+
+    showToastSuccess("Copied to clipboard");
+  };
+
+  const handleCopyRichText = () => {
+    const CopyText = textAreaValue;
+    const tempElement = document.createElement("div");
+    const patientName = `Patient Name: ${getUuid?.patient_details?.first_name} ${getUuid?.patient_details?.last_name}`;
+    const patientDob = `DOB: ${getUuid?.patient_details?.birth_date}`;
+    tempElement.innerHTML =
+      patientName + "<br>" + patientDob + "<br><br>" + CopyText;
+    document.body.appendChild(tempElement);
+    const range = document.createRange();
+    range.selectNode(tempElement);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+    document.body.removeChild(tempElement);
+    showToastSuccess("Copied to clipboard");
   };
 
   useEffect(() => {
@@ -413,7 +509,7 @@ const Schedule = () => {
                           </span>
                         )}
 
-                      {inVisitTabVisible && isMobile ? (
+                      {inVisitTabVisible ? (
                         <div className="flex justify-center text-xs text-gray-400 mx-2">
                           <Tooltip
                             title={isMobile ? null : "Start Aura visit"}
@@ -443,7 +539,7 @@ const Schedule = () => {
                           isMobile ? "p-2 gap-1" : "mx-3 gap-3"
                         }`}
                       >
-                        {/* <div className="flex" style={{ fontFamily: "Poppins" }}>
+                        <div className="flex" style={{ fontFamily: "Poppins" }}>
                           <Tooltip
                             title={isMobile ? null : tooltipCopyTitle}
                             placement="topLeft"
@@ -468,28 +564,21 @@ const Schedule = () => {
                         </div>
                         <div className="flex items-center">
                           <span className="custom-category-text">
-                            <Tooltip
-                              title={isMobile ? null : tooltipTitle}
-                              placement="topLeft"
+                            <Button
+                              className={`rounded-xl drop-shadow-sm flex bg-[#00D090] hover:bg-[#059669] p-2`}
+                              onClick={handleReloadIntakeSummary}
                             >
-                              <>
-                                <Button
-                                  className={`rounded-xl drop-shadow-sm flex bg-[#00D090] hover:bg-[#059669] p-2`}
-                                  onClick={handleReloadIntakeSummary}
-                                >
-                                  <div className="flex items-center mx-1.5 cursor-pointer">
-                                    <AmbientloadIcon
-                                      className={`cursor-pointer mr-2.5`}
-                                    />
-                                    {isOverlayVisible
-                                      ? "Regenerating..."
-                                      : "Regenerate"}
-                                  </div>
-                                </Button>
-                              </>
-                            </Tooltip>
+                              <div className="flex items-center mx-1.5 cursor-pointer">
+                                <AmbientloadIcon
+                                  className={`cursor-pointer mr-2.5`}
+                                />
+                                {isOverlayVisible
+                                  ? "Regenerating..."
+                                  : "Regenerate"}
+                              </div>
+                            </Button>
                           </span>
-                        </div> */}
+                        </div>
                       </span>
                     </div>
                   )}
@@ -594,7 +683,7 @@ const Schedule = () => {
                     </div>
                   )} */}
                 </div>
-              ) :  (
+              ) : (
                 <div className="mt-4">
                   <EncounterDetails
                     topBarInputs={{}}
@@ -604,7 +693,8 @@ const Schedule = () => {
                     activeTab={activeButton}
                     restrictTemplates={shouldRestrictTemplates()}
                   />
-                </div> )}
+                </div>
+              )}
             </div>
           </div>
         </div>

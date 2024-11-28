@@ -2,16 +2,8 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useWakeLock } from "react-screen-wake-lock";
-// import { doStream, endStream } from '../../utils/listen';
-import { useFeatureEntitlements } from "@frontegg/react";
-// import { CheckOutlined } from '@ant-design/icons';
-// import TemplateSelectDropdown from '../Settings/Settings.TemplateDropdown';
 import { Popover, Select } from "antd";
-// import { Bars } from 'react-loader-spinner';
-// import { MicTest } from './MicTest';
-// import { ButtonGroup } from './ButtonGroup';
-// import { PatientNotes } from '../PatinetNotes/PatientNotes';
-// import PreChartButton from './PreChartButton';
+
 import InVisitButton from "./InVisitButton";
 // import { MicTest } from './MicTest';
 import { CloseAiIcon, MicOn, SettingsMicIcon } from "../../icons";
@@ -414,7 +406,7 @@ const CurrentTranscript = forwardRef(
             </Popover>
           </div>
         )}
-        {(encounterPhase === "in-visit" && encounterStatus!=="completed") ? (
+        {encounterPhase === "in-visit" && encounterStatus !== "completed" ? (
           <InVisitButton
             encounterPhase={encounterPhase}
             autoResumeVisit={autoResumeVisit}

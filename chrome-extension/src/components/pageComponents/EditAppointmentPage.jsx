@@ -26,7 +26,6 @@ import {
   getConditionByAppointmentType,
   patientAutoCompleteAction,
 } from "../../store/actions/appointment.action";
-import { currentPractitionerJson } from "../../mocks/currentPractitoner";
 
 export const EditAppointment = ({
   isOpen,
@@ -59,7 +58,6 @@ export const EditAppointment = ({
   );
 
 
-  // const currentPractitioner = currentPractitionerJson;
 
 
   const today = new Date();

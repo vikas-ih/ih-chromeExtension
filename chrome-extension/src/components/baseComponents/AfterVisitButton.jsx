@@ -135,10 +135,7 @@ const AfterVisitButton = ({
     mobileViewStatus: state.encounters.mobileViewStatus,
   }));
 
-  // console.log("isEncounterDetailsLoadingAfter",isEncounterDetailsLoading)
-  // const { templateListLoading, templateOverridesListLoading } = useSelector(
-  //   (state) => state?.summaryState
-  // );
+  
 
   const dispatch = useDispatch();
   const [currentTemplate, setCurrentTemplate] = useState(null);

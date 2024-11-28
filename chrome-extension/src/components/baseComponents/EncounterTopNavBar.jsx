@@ -7,7 +7,6 @@ import { ExpandIcon } from "../../icons";
 import { selectedEncounterSlice } from "../../store/slice/encounter.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectHover } from "./SelectHover";
-import { PractitionerJson } from "../../mocks/pracitioners";
 
 const EncounterTopNavBar = ({
   searchFilters,

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { classNames } from '../../utilities';
-// import { Dropdown } from 'src/icons';
 
 export const Button = ({
   type,

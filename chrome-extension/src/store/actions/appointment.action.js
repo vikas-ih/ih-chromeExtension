@@ -91,7 +91,6 @@ import {
 } from "../slice/appointment.slice";
 import { getAuthHeaders } from "../apiConfig";
 import { getFromStorage, storeInLocal } from "../../lib/storage";
-import { currentPractitionerJson } from "../../mocks/currentPractitoner";
 import { showToastError } from "../../utilities/errortoast";
 import { showToastSuccess } from "../../utilities/toast";
 import store from "../store";
@@ -293,10 +292,7 @@ export const getAppointmentDetailsByUuidAction = (
   };
 };
 
-export const getPractitionerPreferences = (
-  body,
-  accessToken
-) => {
+export const getPractitionerPreferences = (body, accessToken) => {
   return async (dispatch) => {
     try {
       const { url } = practitionerPreferencesConfig();
@@ -456,10 +452,7 @@ export const getAppointmentByFilter = (
     try {
       const tz = moment.tz.guess();
       const { url } = getAppointmentByFiltersConfig(itemsPerPage, tz);
-      // let { currentPractitioner } = store
       let { currentPractitioner } = store.getState().practitionerState;
-
-      // let currentPractitione r = currentPractitionerJson;
 
       type === "normal"
         ? storeInLocal(
@@ -838,6 +831,28 @@ export const createAppointment = (
       showToastError("Error creating appointment");
       dispatch(appointmentLoading(true));
       setSubmitLoading(false);
+    }
+  };
+};
+
+export const regenerateIntakeSummary = (id, accessToken) => {
+  return async (dispatch) => {
+    dispatch(appointmentLoading(true));
+    try {
+      const { url } = getRegenerateIntakeConfig();
+      const data = {
+        appointment_id: id,
+      };
+      const headers = getAuthHeaders(accessToken);
+
+      const result = await Axios.post(url, data, { headers });
+      const response = result?.data?.New_Intake_Summary;
+      if (result?.status === 200 && response) {
+        dispatch(getNewIntakeSummary(response));
+      }
+    } catch (e) {
+      getErrorCode(500);
+      dispatch(appointmentLoading(false));
     }
   };
 };

@@ -5,7 +5,6 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import TopNavBar from "./components/TopNavBar";
 import { useDispatch, useSelector } from "react-redux";
 import { formatEncounterStatus, getEncounterStatus } from "./utilities/columns";
 import AmbientMicIcon from "./assets/ambient_mic-02646837.svg";
@@ -118,7 +117,7 @@ const EncounterDetails = ({
      setEncounterId(encounter_id_params);
    }
  }, [encounter_id, encounter_id_params]);
- 
+
   const resetStates = () => {
     dispatch(resetEncounterState());
     dispatch(resetSummaryState());

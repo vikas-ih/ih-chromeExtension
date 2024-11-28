@@ -365,7 +365,7 @@ const ModalPopup = ({
 
   return (
     <div
-      className="h-10 rounded-xl cursor-pointer bg-white drop-shadow-sm flex items-center tree-dropdown"
+      className="h-10 rounded-xl cursor-pointer mr-2 bg-white drop-shadow-sm flex items-center tree-dropdown"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

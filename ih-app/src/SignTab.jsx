@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 // import Image from "next/image";
-import HourGlass from "./assets/hour_glass.gif";
 import { useAuth } from "@frontegg/react";
 import { useNavigate } from "react-router-dom";
 import { NewInsightIcon } from "./NewInsight.icon";
@@ -44,17 +43,13 @@ const SignInTab = () => {
       <h1 className="text-3xl text-black font-bold mb-4">
         You are authenticated, you can close this tab and open the extension
       </h1>
-      {/* <p className="text-lg mb-8">
-        This tab will close automatically in{" "}
-        <span className="font-semibold">{countdown}</span> seconds.
-      </p> */}
+
       <button
         onClick={handleLogout}
         className="bg-white text-black px-6 py-2 rounded-md hover:bg-gray-200 transition"
       >
         Sign out
       </button>
-     
     </div>
   );
 };

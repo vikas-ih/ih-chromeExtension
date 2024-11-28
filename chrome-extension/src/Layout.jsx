@@ -15,11 +15,9 @@ const Layout = ({ children }) => {
   const loggedInUser = user?.user;
   const dispatch = useDispatch();
   const login = useCallback(() => {
-    // chrome.tabs.create({ url: APP_URL });
-    // chrome.tabs.create({ url: APP_URL });
     chrome.tabs.create({ url: APP_URL }, (tab) => {
       // Check if the tab was created successfully
-      if (tab && tab.id ) {
+      if (tab && tab.id) {
         const tabId = tab.id;
 
         // Set a timeout to close the tab after 5 seconds (5000ms)
@@ -41,10 +39,6 @@ const Layout = ({ children }) => {
       storeInLocal(`user_name`, loggedInUser?.name);
       storeInLocal(`user_email`, loggedInUser?.email);
       storeInLocal(`user_id`, loggedInUser?.id);
-      // window.analytics.identify(localStorage.getItem("user_id"), {
-      //   email: localStorage.getItem("user_email"),
-      //   name: localStorage.getItem("user_name"),
-      // });
     }
   }, [user]);
 

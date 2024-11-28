@@ -1,13 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import BaseNavBar from "./components/baseComponents/BaseNavBar";
-import TopNavBar from "./components/TopNavBar";
 import { Table } from "./components/baseComponents/Table";
 import { useAuthUserOrNull } from "@frontegg/react-hooks";
 import { UploadOutlined, CloseOutlined } from "@ant-design/icons";
 
 import {
   ActionMenuIcon,
-  AmbientAiIcon,
   BinIcon,
   CalendarMobileIcon,
   ClickedIcon,
@@ -18,10 +16,7 @@ import {
   EmailTooltipIcon,
   ExpandIcon,
   FailedEmailIcon,
-  NotificationsHistoryIcon,
-  PatientIcon,
   PlusIcon,
-  QRCodeIcon,
   SendIntakeIcon,
   SmsTooltipIcon,
   StethMobileIcon,
@@ -34,7 +29,6 @@ import { Dropdown, Menu, Progress, Select, Tooltip } from "antd";
 import moment from "moment";
 import { getFromStorage, storeInLocal } from "./lib/storage";
 import { ProfileLogo } from "./components/baseComponents/ProfileLogo";
-import { currentPractitionerJson } from "./mocks/currentPractitoner";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -59,11 +53,10 @@ import { TreeSelectDropdown } from "./components/baseComponents/TreeSelect";
 import { filteredApptsTotalSlice } from "./store/slice/appointment.slice";
 import { AddNewAppointment } from "./components/pageComponents/AddNewAppointment";
 import ModalPopup from "./components/baseComponents/ModalPopup";
+import { Bars } from "react-loader-spinner";
 
 export const Appointments = () => {
-  //   const { currentPractitioner } = useSelector(
-  //     (state) => state?.practitionerState
-  //   );
+
   const {
     getAppointmentStatusList,
     filteredValue,
@@ -85,6 +78,7 @@ export const Appointments = () => {
   const isAdmin = settingsOrgValue?.roles?.includes("admin");
   const cachedUserEmail = getFromStorage("user_email");
   let fetchCounterRef = useRef(0);
+  const itemsPerPage = 25;
 
   const today = moment().format("YYYY-MM-DD");
   const navigate = useNavigate();
@@ -92,7 +86,7 @@ export const Appointments = () => {
   const accessToken = userData?.user?.accessToken;
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [visibleItems, setVisibleItems] = useState([]);
   const [showProfileLogo, setShowProfileLogo] = useState(true);
   const [data, setData] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
@@ -316,6 +310,36 @@ export const Appointments = () => {
     },
   ];
 
+    useEffect(() => {
+      const queryParams = new URLSearchParams(window.location.search);
+      const perPageSize = queryParams.get("per_page");
+      if (perPageSize) {
+        const pageSizeToSet = apptsTotal
+          ? Math.min(Number(perPageSize), apptsTotal)
+          : Number(perPageSize);
+        setStartIndex(pageSizeToSet);
+        setVisibleItems((prevItems) => [
+          ...prevItems,
+          ...filteredData.slice(startIndex, perPageSize),
+        ]);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+  const handleShowMore = () => {
+    setIsLoading(true);
+    const endIndex = startIndex + itemsPerPage;
+
+    const url = new URL(window.location);
+    url.searchParams.set("per_page", endIndex);
+    window.history.pushState({}, "", url);
+
+    setStartIndex(endIndex);
+    setVisibleItems((prevItems) => [
+      ...prevItems,
+      ...filteredData.slice(startIndex, endIndex),
+    ]);
+  };
   const getReminderTime = (responseTime) => {
     if (!responseTime) {
       return null;
@@ -1050,18 +1074,60 @@ export const Appointments = () => {
     );
   }, [selectedPractitionerNamesRecent]);
 
+  const isTenantMatching =
+    userData?.user?.tenantId === settingsOrgValue?.org_uuid;
+
   useEffect(() => {
     let isFetching = false;
     const fetchAppointments = async () => {
-      try {
-        await dispatch(getAppointmentsByStatus(25, 0, accessToken));
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
+      if (!isFetching && isTenantMatching) {
+        isFetching = true;
+        try {
+          if (isfilterOn && storage_condition) {
+            await dispatch(
+              getAppointmentByFilter(
+                null,
+                null,
+                getAppointmentAllStartDateFilter(""),
+                getAppointmentAllEndDateFilter(""),
+                null,
+                "reload",
+                startIndex,
+                isfilterOn,
+                accessToken
+              )
+            );
+          } else if (isfilterOn && !storage_condition) {
+            /* empty */
+          } else {
+            await dispatch(
+              getAppointmentsByStatus(
+                startIndex,
+                fetchCounterRef.current,
+                accessToken
+              )
+            );
+            fetchCounterRef.current++;
+          }
+        } catch (error) {
+          console.error("Error fetching appointments:", error);
+        }
+        isFetching = false;
       }
-      isFetching = false;
     };
+
+    const intervalId = setInterval(fetchAppointments, 15000);
     fetchAppointments();
-  }, [getAppointmentsByStatus]);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [
+    isfilterOn,
+    isfilterOn ? storage_condition : null,
+    startIndex,
+    isTenantMatching,
+    settingsOrgValue,
+  ]);
 
   useEffect(() => {
     dispatch(settingsOrgFlag(accessToken));
@@ -1799,14 +1865,14 @@ export const Appointments = () => {
                       />
                     }
                     name="datefilter"
+                    placeholder={"All"}
                     showSearch={false}
                     bordered={false}
                     className="h-8 !w-32 bg-transparent border-none focus:border-none rounded-xl focus:bg-gray-100 caret-transparent flex items-center hover:bg-gray-100 pr-2 placeholder:text-sm text-center"
-                    placeholder={"All"}
                     value={
                       isfilterOn && filterValue?.status !== null
                         ? filterValue?.status
-                        : ""
+                        : "All"
                     }
                     options={statusOptions}
                     onChange={(value, valueString) =>
@@ -1905,31 +1971,7 @@ export const Appointments = () => {
             isfilterOn={isfilterOn}
             accessToken={accessToken}
           />
-          {/* <span style={{ position: "absolute" }}>
-                <AppointmentsCSVUploader
-                  visible={showUpload}
-                  setVisible={setShowUpload}
-                />
-              </span> */}
-          {/* {currentPractitioner?.org_settings
-                ?.enable_bulk_appointment_upload ? (
-                <Dropdown.Button
-                  // overlay={addAppointmentOptions()}
-                  overlayStyle={{ top: "18rem" }}
-                  placement="bottom"
-                  rootClassName="add-appointment-dropdown rounded-xl drop-shadow-sm flex bg-[#00D090] hover:bg-[#059669]"
-                  trigger={["click"]}
-                  // icon={<ExpandIcon fill={"#ffffff"} />}
-                  onClick={showModal}
-                >
-                  <div className="add-appointment-div flex">
-                    <PlusIcon />
-                    <span className="text-white pl-3 text-xs font-normal font-sans">
-                      Add appointment
-                    </span>
-                  </div>
-                </Dropdown.Button>
-              ) : ( */}
+
           <button
             className="rounded-full h-14 w-14 items-center px-[1.3rem] py-4 flex bg-[#00D090] hover:bg-[#059669] fixed bottom-[15%] right-[10%] z-50"
             onClick={showModal}
@@ -1995,31 +2037,75 @@ export const Appointments = () => {
             // handleReset={handleReset}
             remainderPatientAppts={remainderPatientAppts}
           />
-        </div>
-
-        <div className="flex justify-center items-center mt-4">
-          <p>
-            {filteredData?.length > 0
-              ? `Showing ${filteredData?.length} of ${
-                  filteredApptsTotal ? filteredApptsTotal : apptsTotal
-                } `
-              : ""}{" "}
-          </p>
-        </div>
-        {filteredData?.length > 0 && (
-          <div className="flex justify-center items-center ">
-            <Progress
-              percent={beforepercent * 100}
-              strokeColor="#00D090"
-              showInfo={false}
-              size="small"
-              style={{
-                width: "200px",
-                height: "2px",
-              }}
-            />
+          <div className="flex justify-center items-center mt-4">
+            <p>
+              {filteredData?.length > 0
+                ? `Showing ${filteredData?.length} of ${
+                    filteredApptsTotal ? filteredApptsTotal : apptsTotal
+                  } `
+                : ""}{" "}
+            </p>
           </div>
-        )}
+          {filteredData?.length > 0 && (
+            <div className="flex justify-center items-center ">
+              <Progress
+                percent={beforepercent * 100}
+                strokeColor="#00D090"
+                showInfo={false}
+                size="small"
+                style={{
+                  width: "200px",
+                  height: "2px",
+                }}
+              />
+            </div>
+          )}
+          <div className=" flex justify-center items-center p-4 mt-2">
+            {filteredData?.length > 0 &&
+              filteredData.length >= itemsPerPage &&
+              ((!isfilterOn && apptsTotal >= startIndex) ||
+                (isfilterOn && filteredApptsTotal >= startIndex)) && (
+                <button
+                  onClick={handleShowMore}
+                  disabled={isLoading ? true : false}
+                  className="show-more-button bg-[#00D090] rounded-full hover:bg-[#059669] text-white font-semibold  mb-10 p-2 py-2 px-16"
+                >
+                  {isfilterOn &&
+                  filteredData?.length !== startIndex &&
+                  apptsTotal > startIndex ? (
+                    <Bars
+                      height="25"
+                      width="25"
+                      color="#ffffff"
+                      ariaLabel="bars-loading"
+                      wrapperStyle={{}}
+                      wrapperClass=" justify-center"
+                      visible={true}
+                    />
+                  ) : !isfilterOn && data?.length !== startIndex ? (
+                    <Bars
+                      height="25"
+                      width="25"
+                      color="#ffffff"
+                      ariaLabel="bars-loading"
+                      wrapperStyle={{}}
+                      wrapperClass=" justify-center"
+                      visible={true}
+                    />
+                  ) : (
+                    ""
+                  )}
+                  {isfilterOn &&
+                  filteredData?.length !== startIndex &&
+                  apptsTotal > startIndex
+                    ? ""
+                    : !isfilterOn && data?.length !== startIndex
+                    ? ""
+                    : "Show More"}
+                </button>
+              )}
+          </div>
+        </div>
       </div>
       <BaseNavBar />
     </>

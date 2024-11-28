@@ -1,18 +1,11 @@
-// import { FronteggContext } from "@frontegg/rest-api";
 import { io } from "socket.io-client";
 import { getAuthHeaders } from "../store/apiConfig";
 // import { useAuthUserOrNull } from "@frontegg/react-hooks";
 
 let audioContext, socket, input, micStream, scriptNode;
 
-let url = "https://ambient.api.lumi.build" + "/listen"; //env
+let url = import.meta.env.VITE_AMBIENT_API_BASE_URL + "/listen"; //env
 
-// export function FronteggAccessToken(){
-//   const userData = useAuthUserOrNull();
-//   const accessToken = userData?.user?.accessToken;
-// return accessToken;
-// }
-//  console.log("FronteggAccessToken", FronteggAccessToken());
 export function doStream(
   encounter_id,
   encounter_phase,
