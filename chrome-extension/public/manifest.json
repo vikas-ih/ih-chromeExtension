@@ -1,24 +1,47 @@
 {
   "manifest_version": 3,
-  "name": "Insight-Health AI",
+  "name": "Aura AI Scribe",
   "version": "1.0.0",
   "action": {
-    "default_popup": "index.html"
+    "default_title": "Aura AI Scribe"
+  },
+  "side_panel": {
+    "default_path": "index.html"
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "32": "icons/icon32.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/group2.png",
+    "32": "icons/group1.png",
+    "48": "icons/group.png"
   },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "index.html",
+        "src/requestPermissions.ts"
+      ],
+      "matches": ["*://*/*"]
+    }
+  ],
   "host_permissions": ["https://*/*", "http://*/*"],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; connect-src *"
   },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"]
+    }
+  ],
   "permissions": [
     "webRequest",
-    "webRequestBlocking",
     "*://*.frontegg.com/*",
-    "identity"
+    "identity",
+    "audio",
+    "audioCapture",
+    "tabs",
+    "sidePanel"
   ]
 }

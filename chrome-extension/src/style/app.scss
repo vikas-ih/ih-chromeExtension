@@ -1,0 +1,142 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Viga&display=swap');
+
+// Start :: Includes
+@import './includes/variables';
+@import './mixin/breakpoints';
+// End :: Includes
+
+// Start :: Base Components
+@import './components/baseComponents/logo';
+@import './components/baseComponents/text';
+// @import "./components/baseComponents/dropdown";
+@import './components/baseComponents/profileLogo';
+@import './components/baseComponents/modal';
+@import './components/baseComponents/singleselect';
+@import './components/baseComponents/nameLogo';
+// @import "./components/baseComponents/daterangePicker";
+@import './components/baseComponents/datePicker';
+@import './components/baseComponents/form';
+@import './components/baseComponents/button';
+// End :: Base Components
+
+// Start :: Group Components
+@import './components/groupComponents/navbar';
+@import './components/groupComponents/table';
+// End :: Group Components
+
+// Start :: Page Components
+@import './components/pageComponents/auth';
+@import './components/pageComponents/careConnect';
+@import './components/pageComponents/appoinments';
+@import './components/pageComponents/careplan';
+@import './components/pageComponents/editprofile';
+@import './components/pageComponents/quicktext';
+// @import "../assets/Ambient.jpg";
+
+// Module: AmbientAI
+@import './encounter.scss';
+
+// End :: Page Components
+
+#root {
+  font-family: 'Poppins', sans-serif;
+
+  .master-layout {
+    height: 100dvh;
+    overflow-y: auto;
+    // background-color: $app-gray-background;
+    // background-image:url('../assets/signin_page_img.png') !important;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    @include media-max-md {
+      height: 100dvh;
+    }
+
+    .page-wrapper {
+      // padding: 10px 8px;
+      margin: 0 16px 16px;
+
+      @include media-min-md {
+        padding: 10px;
+        margin: 0 10px 25px;
+        // height: calc(100vh - 120px);
+      }
+
+      @include media-min-xl {
+        margin-left: 240px;
+        // margin-right: 5px;
+        // height: calc(100vh - 140px);
+      }
+
+      .page-title {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 24px;
+        padding: 0 8px;
+      }
+    }
+  }
+}
+
+.rs-picker-menu {
+  z-index: 1000 !important;
+}
+
+/* For WebKit (Chrome, Safari) */
+/* You can adjust the colors and other properties as needed */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.ant-message {
+  .ant-message-notice .ant-message-success > .anticon {
+    color: #01d091;
+  }
+  .ant-message-notice .ant-message-info > .anticon {
+    color: #5667e9;
+  }
+}
+
+.ant-message .ant-message-notice-wrapper .ant-message-notice-content {
+  font-family: 'Poppins';
+}
+
+.insight-background {
+  background: linear-gradient(
+    135deg,
+    rgb(228, 240, 243) 0%,
+    rgba(235, 246, 255, 1) 46%,
+    rgba(203, 227, 230, 1) 100%
+  );
+}
+
+// # style for CelloWidgedComponent referral-link button
+.cello-referral button {
+  div [class^='cello-'] {
+    top: -4px;
+    right: -2px;
+  }
+}
+
+.ant-upload-wrapper {
+  .ant-upload-drag {
+    background: #ffffffbf !important;
+  }
+}

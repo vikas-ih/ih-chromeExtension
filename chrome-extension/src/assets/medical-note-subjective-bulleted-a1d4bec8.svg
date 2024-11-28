@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&amp;display=swap');
+    </style>
+  </defs>
+  <rect width="600" height="400" fill="#ffffff"/>
+  <text x="20" y="40" font-family="Poppins, sans-serif" font-size="24" font-weight="bold">Subjective:</text>
+  <text x="40" y="80" font-family="Poppins, sans-serif" font-size="16">
+    <tspan x="40" dy="0">- Chief complaint: Persistent cough and fatigue for 5 days</tspan>
+    <tspan x="40" dy="30">- Cough: Dry, non-productive; worse at night</tspan>
+    <tspan x="40" dy="30">- Fatigue: Moderate, interfering with daily activities</tspan>
+    <tspan x="40" dy="30">- No fever, chills, or shortness of breath</tspan>
+    <tspan x="40" dy="30">- Sleep: Disrupted due to coughing fits</tspan>
+    <tspan x="40" dy="30">- Stress levels increased due to upcoming work deadline</tspan>
+    <tspan x="40" dy="30">- No changes in chronic conditions or medications</tspan>
+  </text>
+</svg>

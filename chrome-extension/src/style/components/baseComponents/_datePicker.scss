@@ -1,0 +1,303 @@
+.custom-date-picker {
+  border: 1px solid #e5e8eb;
+  box-shadow: none !important;
+  border-radius: 12px !important;
+
+  &:hover {
+    border: 1px solid #e5e8eb !important;
+  }
+
+  &:focus {
+    outline: 1px solid #def2f0 !important;
+  }
+
+  &.has-error {
+    border-color: #c70039 !important;
+  }
+
+  .ant-picker-input {
+    input {
+      font-family: 'Poppins';
+      font-weight: 400 !important;
+      font-size: 14px !important;
+
+      &::placeholder {
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        color: #abaaaa !important;
+      }
+    }
+
+    .ant-picker-suffix svg,
+    .ant-picker-clear svg {
+      fill: $app-color;
+      color: #fff;
+    }
+  }
+
+  height: 50px;
+  width: 100%;
+
+  .rs-picker-toggle {
+    border: none !important;
+    box-shadow: none;
+
+    &:focus-visible {
+      outline: none !important;
+    }
+
+    &:hover {
+      border: none !important;
+    }
+
+    .rs-picker-toggle-value,
+    .rs-picker-toggle-textbox {
+      font-family: 'Poppins', sans-serif !important;
+      font-weight: 400 !important;
+      font-size: 14px !important;
+      color: $black !important;
+
+      &::placeholder {
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        color: #627770 !important;
+      }
+    }
+
+    .rs-picker-toggle-placeholder {
+      font-family: 'Poppins', sans-serif !important;
+      font-weight: 400 !important;
+      font-size: 12px !important;
+      color: #627770 !important;
+    }
+  }
+}
+
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+  background-color: #00d090 !important;
+  box-shadow: none;
+  color: #fff;
+  color: var(--rs-calendar-date-selected-text);
+}
+
+.rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
+  box-shadow: inset 0 0 0 1px #00d090 !important;
+}
+
+// .rs-picker-menu .rs-calendar .rs-calendar-table-cell:hover .rs-calendar-table-cell-content {
+//     background-color: rgba(0, 208, 144, 0.5) !important;
+//     color: #000000 !important;
+// }
+
+.rs-btn-subtle {
+  background-color: transparent;
+  border: none;
+  color: #000000 !important;
+}
+
+.rs-picker-toggle-placeholder {
+  font-size: 15px;
+}
+
+.custom-date-picker-panel {
+  .ant-picker-header {
+    .ant-picker-header-view {
+      .ant-picker-month-btn:hover {
+        color: rgba(0, 208, 144, 0.5) !important;
+      }
+
+      .ant-picker-year-btn:hover {
+        color: rgba(0, 208, 144, 0.5) !important;
+      }
+    }
+  }
+
+  .ant-picker-cell-selected {
+    .ant-picker-cell-inner {
+      color: $white !important;
+      border-color: transparent !important;
+      background: $app-color !important;
+    }
+  }
+
+  .ant-picker-cell-today .ant-picker-cell-inner::before {
+    border-color: $app-color !important;
+  }
+
+  .ant-picker-cell {
+    &:hover {
+      .ant-picker-cell-inner {
+        border-color: transparent !important;
+        background: rgba(0, 208, 144, 0.5) !important;
+      }
+    }
+  }
+
+  .ant-picker-footer {
+    .ant-picker-today-btn {
+      color: $app-color !important;
+
+      &:hover {
+        color: rgba(0, 208, 144, 0.5) !important;
+      }
+    }
+  }
+
+  .ant-picker-time-panel-cell-inner:hover {
+    background: #e6f4ff !important;
+  }
+
+  .ant-btn-primary {
+    color: #fff;
+    background-color: #00d090 !important;
+    box-shadow: rgba(0, 208, 144, 0.5);
+  }
+}
+
+.ant-picker-dropdown .ant-picker-header-view {
+  font-family: 'Poppins';
+}
+
+.ant-picker-dropdown .ant-picker-date-panel .ant-picker-body {
+  font-family: 'Poppins';
+}
+
+.ant-picker-dropdown .ant-picker-content td {
+  font-family: 'Poppins';
+}
+
+.ant-picker-dropdown .ant-picker-prev-icon::before {
+  color: #000000e0;
+}
+
+.ant-picker-dropdown .ant-picker-header > button {
+  color: #000000e0;
+}
+
+.ant-picker-dropdown .ant-picker-prev-icon::after {
+  color: #000000e0;
+}
+
+svg:not(:root) {
+  color: inherit;
+}
+
+.ant-picker-dropdown .ant-picker-header-view {
+  font-family: 'Poppins';
+}
+
+.ant-picker-dropdown .ant-picker-content td {
+  font-family: 'Poppins';
+}
+
+.ant-picker-dropdown .ant-picker-prev-icon::before {
+  color: #000000e0;
+}
+
+.ant-picker-dropdown .ant-picker-header > button {
+  color: #000000e0;
+}
+
+.ant-picker-dropdown .ant-picker-prev-icon::after {
+  color: #000000e0;
+}
+
+svg:not(:root) {
+  color: inherit;
+}
+
+.ant-picker-dropdown .ant-picker-header-view {
+  font-family: 'Poppins';
+}
+
+.rs-calendar-header-month-toolbar {
+  font-family: 'Poppins';
+}
+
+.rs-picker-menu .rs-calendar-body {
+  font-family: 'Poppins';
+}
+
+.rs-calendar-month-dropdown-row {
+  font-family: 'Poppins';
+}
+
+.field-placeholder {
+  color: #000000 !important;
+  font-size: 14px;
+  font-family: 'Poppins';
+}
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-cell-inner::before {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  bottom: 0;
+  inset-inline-start: 0;
+  z-index: 1;
+  border: 1px solid $app-color;
+  border-radius: 4px;
+  content: '';
+}
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start
+  .ant-picker-cell-inner {
+  background-color: $app-color;
+}
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-selected
+  .ant-picker-cell-inner {
+  background-color: $app-color;
+}
+
+.createDateRangePicker .ant-picker-active-bar {
+  background-color: $app-color !important;
+}
+.ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner {
+  background-color: $app-color !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+  background-color: $app-color !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+  border-color: $app-color !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+    .ant-picker-cell-range-start-single
+  )::before,
+.ant-picker-cell-in-view.ant-picker-cell-in-range::before,
+.ant-picker-cell-in-view.ant-picker-cell-range-end:not(
+    .ant-picker-cell-range-end-single
+  )::before,
+.ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner {
+  background: #e6ffe8 !important;
+}
+
+.ant-btn-primary {
+  background-color: $app-color !important;
+  border-color: $app-color !important;
+}
+
+.ant-picker-dropdown .ant-picker-panel-container .ant-picker-panels {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  direction: ltr;
+  @media only screen and (max-width: 767px) {
+    display: grid;
+  }
+}
+
+.ant-picker-dropdown .ant-picker-range-wrapper {
+  display: flex;
+  position: relative;
+
+  @media only screen and (max-width: 767px) {
+    justify-content: center;
+  }
+}

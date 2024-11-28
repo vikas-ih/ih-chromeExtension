@@ -1,0 +1,12 @@
+.profile-picture-name {
+    background: rgb(226, 150, 192);
+    width: 40px;
+    border-radius: 50%;
+    font-family: Poppins, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #fff;
+    padding: 5px;
+    height: 40px;
+}

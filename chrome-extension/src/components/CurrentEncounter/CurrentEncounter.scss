@@ -1,0 +1,167 @@
+.current {
+  .encounter_quill {
+    display: flex;
+    flex-direction: row-reverse;
+    resize: none;
+    background-color: #fff;
+    outline: none !important;
+    font-family: 'Poppins' !important;
+    resize: none;
+    white-space: pre-wrap;
+    border: none;
+    overflow-y: auto;
+    max-height: 700px;
+  }
+
+  .ql-container.ql-snow {
+    font-size: 14px;
+    outline: none !important;
+    width: 100%;
+    margin: 0px;
+    font-family: 'Poppins' !important;
+    position: relative;
+    border: none;
+  }
+
+  .ql-toolbar .ql-snow {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    padding: 0px;
+    margin: 0px;
+  }
+  .ql-editor {
+    padding-top: 0px;
+    height: 60vh;
+    scroll-behavior: smooth;
+  }
+  @media only screen and (max-width: 1260px) {
+    .ql-editor {
+      height: 78vh;
+      overflow-y: scroll;
+      &::-webkit-scrollbar {
+        width: 0;
+        background: transparent;
+      }
+    }
+  }
+
+  .ant-tabs-nav-wrap {
+    justify-content: space-around;
+    cursor: pointer;
+    background: white;
+    border: 0;
+    outline: 0;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 400 !important;
+    font-size: 18px !important;
+    line-height: 18px;
+    position: relative;
+    display: flex;
+    flex: auto;
+    overflow: hidden;
+    white-space: pre !important;
+    transform: translate(0);
+  }
+
+  .ant-tabs .ant-tabs-ink-bar {
+    position: absolute;
+    pointer-events: none;
+    border: 2px solid #00d090;
+    border-radius: 10px;
+    // width: 8rem !important; /* Extend the line to 150 pixels */
+  }
+
+  .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #000;
+  }
+
+  .dotss {
+    width: 5px;
+    height: 5px;
+    border-radius: 100%;
+    background-color: white;
+    margin-right: 6px;
+    transition: background-color 0.3s ease;
+  }
+
+  .active-dots {
+    animation: bounce 1s infinite alternate;
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: translateY(0);
+    }
+
+    100% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .pause-animation {
+    animation-play-state: paused !important;
+  }
+
+  .active-bounce {
+    animation: pulse 2s infinite;
+    transition: transform 0.5s ease;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.2);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  // .active-bounce {
+  //   animation: pulse 2s infinite;
+  //    transition: transform 0.5s ease;
+  // }
+
+  // @keyframes pulse {
+  //   0% {
+  //       transform: scale(1);
+  //   }
+  //   50% {
+  //       transform: scale(1.2);
+  //   }
+  //   100% {
+  //       transform: scale(1);
+  //   }
+  // }
+
+  // .ant-segmented {
+  //   font-family: 'Poppins';
+  //   color: #000;
+  // }
+
+  // .ant-segmented .ant-segmented-item-label {
+  //   padding: 5px 11px;
+  //   // width: 150px;
+  //   line-height: 20px;
+  // }
+
+  // .ant-segmented .ant-segmented-item-selected {
+  //   color: #fff;
+  //   background-color: #00d091;
+  //   // box-shadow: 0 3px 3px rgba(0, 0, 0, 0.16);
+  //   position: relative;
+  //   border-bottom: 2px #000;
+  //   border-top: 2px #000;
+  // }
+
+  // .ant-segmented .ant-segmented-item {
+  //   border: 1px solid #d9c7c7;
+  // }
+}

@@ -1,0 +1,513 @@
+.past {
+    /* CSS for the fixed text "Encounters" */
+}
+
+.past .ant-select-customize-input .ant-select-selector {
+    border: none;
+    box-shadow: none;
+}
+
+.past .ant-picker-focused {
+    border: none;
+    box-shadow: none;
+}
+
+.past .ant-input-affix-wrapper-disabled:hover {
+    border-color: none;
+}
+
+.past .ant-table-wrapper .ant-table-tbody>tr>td {
+    border-bottom: 0px;
+    padding: 0px;
+    border-radius: 6px;
+}
+
+@media only screen and (max-width: 1260px) {
+    .past .ant-table-wrapper .ant-table-tbody>tr>td {
+        border-radius: 0px;
+    }
+}
+
+.past .ant-table-wrapper .ant-table-tbody .ant-table-row>.ant-table-cell-row-hover {
+    background: none;
+}
+
+.past .ant-table-tbody .selectedAura .innerAura {
+    border-bottom: 0px;
+}
+
+.past .ant-table-tbody .selectedAuraTop .innerAura {
+    border-bottom: 0px;
+}
+
+.past .ant-table-wrappers {
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
+
+.past .ant-table-wrappers .ant-table-wrappers::-webkit-scrollbar {
+    width: 0;
+}
+
+.past .ant-table-wrappers .ant-table-pagination-right {
+    justify-content: space-around;
+    padding: 4px;
+}
+
+.past .ant-table-wrappers .ant-table {
+    background: none;
+}
+
+@media only screen and (max-width: 1260px) {
+    .past .ant-table-wrappers .ant-table {
+        padding: 10px;
+    }
+}
+
+@media only screen and (max-width: 1260px) {
+    .past .ant-table-wrappers .ant-table .ant-table-row {
+        box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+    }
+}
+
+.past .ant-table-wrappers .ant-table .ant-table-container {
+    padding: 5px 10px;
+}
+
+.past .ant-table-wrappers .ant-table .ant-table-cell {
+    width: 20px !important;
+}
+
+@media only screen and (max-width: 1260px) {
+    .past .ant-table-wrappers .ant-table .ant-table-cell {
+        width: 100% !important;
+        padding: 10px !important;
+    }
+}
+
+@media only screen and (max-width: 1260px) {
+    .past .ant-table-wrappers .ant-table .ant-table-wrapper .ant-table-tbody>tr>td {
+        border-bottom: 0px;
+    }
+}
+
+.past .ant-table-wrappers .ant-table .ant-table-content table thead {
+    background-color: white;
+}
+
+.past .ant-table-wrappers .ant-table .ant-table-content table thead tr th {
+    font-family: "Poppins", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 7px;
+    background: #000;
+    color: #667085;
+}
+
+.past .ant-table-wrappers .ant-table .ant-table-content table thead tr th .ant-table-cell .table-first-last-name {
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 15px;
+    color: #595959;
+}
+
+.past .ant-table-wrappers .ant-table .ant-table-content table thead tr th:hover {
+    background: none;
+}
+
+.past .ant-table-wrappers .ant-table .ant-table-content table thead tr th .ant-table-column-sorters .ant-table-column-sorter {
+    display: none;
+}
+
+.past .ant-table-wrappers .ant-table .ant-table-content table thead tr th::before {
+    content: none;
+    display: none;
+}
+
+.past .ant-picker .ant-picker-input {
+    font-family: "Poppins";
+}
+
+.past .style-15::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.past .style-15::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+.past .style-15::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #cbc9c9;
+}
+
+.past .search-width {
+    width: 290px;
+}
+
+.past .custom-pagination-class .ant-pagination {
+    margin-top: 16px;
+}
+
+.past .custom-pagination-class .ant-pagination-item,
+.past .custom-pagination-class .ant-pagination-prev,
+.past .custom-pagination-class .ant-pagination-next,
+.past .custom-pagination-class .ant-pagination-jump-prev,
+.past .custom-pagination-class .ant-pagination-jump-next {
+    border-radius: 50%;
+    /* Make pagination buttons circular */
+}
+
+.past .custom-pagination-class .ant-pagination-item-active {
+    background-color: #EEFAF4;
+    /* Active page background color */
+    border: none;
+    /* Remove the border */
+}
+
+.past .custom-pagination-class .ant-pagination-item-active a {
+    color: #fff;
+    /* Active page text color */
+}
+
+.past .custom-pagination-class .ant-pagination-item a,
+.past .custom-pagination-class .ant-pagination-prev a,
+.past .custom-pagination-class .ant-pagination-next a,
+.past .custom-pagination-class .ant-pagination-jump-prev-icon,
+.past .custom-pagination-class .ant-pagination-jump-next-icon {
+    color: #0F9F67;
+    font-size: 18px;
+    /* Pagination button text color */
+}
+
+.past .custom-pagination-class .ant-pagination-prev-icon,
+.past .custom-pagination-class .ant-pagination-next-icon {
+    border-radius: 30px;
+    background-color: #E5E5E5;
+    padding: 2px;
+}
+
+.past .custom-pagination-class .ant-pagination-disabled a {
+    color: rgba(0, 0, 0, 0.25);
+}
+
+.past .custom-pagination-class.ant-pagination .ant-pagination-disabled .ant-pagination-item-link {
+    border-radius: 8px;
+    border: 2px solid #E5E8EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.past .custom-pagination-class.ant-pagination .ant-pagination-prev .ant-pagination-item-link {
+    border-radius: 8px;
+    border: 2px solid #E5E8EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.past .custom-pagination-class.ant-pagination .ant-pagination-next .ant-pagination-item-link {
+    border-radius: 8px;
+    border: 2px solid #E5E8EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.past :where(.css-dev-only-do-not-override-190m0jy).ant-pagination.ant-pagination-mini .ant-pagination-prev .ant-pagination-item-link,
+.past :where(.css-dev-only-do-not-override-190m0jy).ant-pagination.ant-pagination-mini .ant-pagination-next .ant-pagination-item-link {
+    border-radius: 8px;
+    border: 2px solid #E5E8EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.past .tableai {
+    overflow-y: auto;
+}
+
+.past .custom-pagination-class {
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+    z-index: 999;
+    width: 100%;
+    padding: 20px !important;
+}
+
+.past .encounter-text {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    padding: 1rem;
+    z-index: 1;
+}
+
+.past .ant-select-single.ant-select-sm {
+    text-align: center;
+    font-size: 14px;
+}
+
+.past .ant-pagination.ant-pagination-mini:not(.ant-pagination-disabled) .ant-pagination-item:not(.ant-pagination-item-active) {
+    margin: 0 5px;
+}
+
+.past .ant-segmented {
+    font-family: "Poppins";
+    color: #000;
+    width: 100%;
+}
+
+.past .ant-segmented .ant-segmented-item {
+    flex-grow: 1;
+}
+
+.past .ant-segmented .ant-segmented-item-label {
+    padding: 5px 15px;
+    line-height: 20px;
+}
+
+.past .ant-segmented .ant-segmented-item-selected {
+    color: #fff;
+    background-color: #00d091;
+    position: relative;
+    border-bottom: 2px #000;
+    border-top: 2px #000;
+}
+
+.past .ant-select-single .ant-select-selector .ant-select-selection-item {
+    padding: 0;
+    line-height: 25px;
+    transition: all 0.3s, visibility 0s;
+    align-self: normal;
+}
+
+.past .past-encounter-page-wrapper {
+    height: 80dvh;
+}
+
+.past .tree-dropdown .ant-select-single .ant-select-selector .ant-select-selection-item {
+    padding: 0;
+    line-height: 40px;
+    transition: all 0.3s, visibility 0s;
+    align-self: center;
+}
+
+.past .ant-space-compact-block {
+    width: auto !important;
+}
+
+.remove-modal {
+    width: 530px !important;
+}
+
+.remove-modal .modal_background {
+    position: relative;
+}
+
+.remove-modal .modal_background .modal__form-footer .submit-button {
+    height: 44px;
+    border: 1px solid #d63232;
+    border-radius: 5px;
+    padding: 10px 30px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    letter-spacing: 0.4px;
+    background-color: #d63232;
+    color: white;
+}
+
+.remove-modal .modal_background .modal__form-footer .submit-button:hover {
+    background-color: #a30000;
+    color: #fff;
+    border-color: #a30000;
+}
+
+.remove-modal .modal_background .modal__form-footer .cancel-button {
+    height: 44px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 8px 30px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    letter-spacing: 0.4px;
+    background-color: gray;
+    color: white;
+}
+
+.remove-modal .modal_background .modal__form-footer .cancel-button:hover {
+    background-color: darkgray;
+    border: 1px solid darkgray;
+}
+
+.SummaryComment-modal {
+    width: 530px !important;
+}
+
+.SummaryComment-modal .modal_background {
+    position: relative;
+}
+
+.SummaryComment-modal .modal_background .modal__form-footer .submit-button {
+    height: 44px;
+    border: 1px solid #00D090;
+    border-radius: 5px;
+    padding: 10px 30px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    letter-spacing: 0.4px;
+    background-color: #00D090;
+    color: white;
+}
+
+.SummaryComment-modal .modal_background .modal__form-footer .submit-button:hover {
+    background-color: #059669;
+    color: #fff;
+    border-color: #059669;
+}
+
+.SummaryComment-modal .modal_background .modal__form-footer .cancel-button {
+    height: 44px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 8px 30px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    letter-spacing: 0.4px;
+    background-color: gray;
+    color: white;
+}
+
+.SummaryComment-modal .modal_background .modal__form-footer .cancel-button:hover {
+    background-color: darkgray;
+    border: 1px solid darkgray;
+}
+
+.stop-modal {
+    width: 509px !important;
+}
+
+.stop-modal .modal_background {
+    position: relative;
+}
+
+.stop-modal .modal_background .modal__form-footer .submit-button {
+    height: 44px;
+    border: 1px solid #00D090;
+    border-radius: 5px;
+    padding: 10px 30px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    letter-spacing: 0.4px;
+    background-color: #00D090;
+    color: white;
+}
+
+.stop-modal .modal_background .modal__form-footer .submit-button:hover {
+    background-color: #059669;
+    color: #fff;
+    border-color: #059669;
+}
+
+@media only screen and (max-width: 768px) {
+    .stop-modal .modal_background .modal__form-footer .submit-button {
+        margin-right: 0px;
+        padding: 10px 30px;
+    }
+}
+
+.stop-modal .modal_background .modal__form-footer .cancel-button {
+    height: 44px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 8px 30px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    letter-spacing: 0.4px;
+    background-color: gray;
+    color: white;
+}
+
+.stop-modal .modal_background .modal__form-footer .cancel-button:hover {
+    background-color: darkgray;
+    border: 1px solid darkgray;
+}
+
+@media only screen and (max-width: 768px) {
+    .stop-modal .modal_background .modal__form-footer .cancel-button {
+        padding: 10px;
+    }
+}
+
+.stop-modal .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+    position: absolute;
+    top: 0;
+    inset-inline-end: 0;
+    bottom: 0;
+    inset-inline-start: 0;
+    z-index: 1;
+    border: 1px solid #00D090;
+    border-radius: 4px;
+    content: "";
+}
+
+.stop-modal .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner {
+    background-color: #00D090;
+}
+
+.stop-modal .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+    background-color: #00D090;
+}
+
+.stop-modal .createDateRangePicker .ant-picker-active-bar {
+    background-color: #00D090 !important;
+}
+
+.stop-modal .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner {
+    background-color: #00D090 !important;
+}
+
+.stop-modal .ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+    background-color: #00D090 !important;
+}
+
+.stop-modal .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+    border-color: #00D090 !important;
+}
+
+.stop-modal .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single)::before,
+.stop-modal .ant-picker-cell-in-view.ant-picker-cell-in-range::before,
+.stop-modal .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single)::before,
+.stop-modal .ant-picker-time-panel-column>li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
+    background: #e6ffe8 !important;
+}
+
+.stop-modal .ant-btn-primary {
+    background-color: #00D090 !important;
+    border-color: #00D090 !important;
+}
+
+.ant-progress-line {
+    margin-inline-end: 0px !important;
+}
+
+.past-encounter-div {
+    align-items: center;
+    font-size: 14px;
+}
+
+/*# sourceMappingURL=PastEncounter.css.map */

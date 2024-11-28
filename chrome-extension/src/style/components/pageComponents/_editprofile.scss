@@ -1,0 +1,137 @@
+// editprofile.scss
+.editprofile-form {
+  width: 100%;
+
+  @include media-min-lg {
+    width: 40%;
+  }
+
+  .form {
+    .editprofile_form {
+      max-width: 462px;
+      margin: 0 auto;
+
+      &-el {
+        margin-top: 30px;
+
+        @include media-min-lg {
+          margin-top: 40px;
+        }
+
+        &-field {
+          height: 44px;
+          font-size: 14px;
+          border-radius: 8px;
+          padding: 13px 18px;
+          font-weight: 400;
+          border: 0.5px solid $field-border;
+          color: $field-text;
+
+          &::placeholder {
+            font-weight: 400;
+            font-size: 14px;
+            color: $field-text;
+          }
+
+          @include media-min-lg {
+            padding: 13px 21px;
+            height: 48px;
+          }
+        }
+      }
+
+      .editprofile-button {
+        width: 45%;
+        height: 40px;
+        border-radius: 10px;
+        background-color: #059669;
+        margin-top: 20px;
+
+        @include media-min-xl {
+          font-weight: 400;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  .profile-wrapper {
+    .profile-popover-logo {
+      width: 50px; /* Adjust the width as desired */
+      height: 50px; /* Adjust the height as desired */
+
+      @include media-min-sm {
+        width: 60px; /* Adjust for larger screens if needed */
+        height: 60px;
+      }
+
+      @include media-min-lg {
+        width: 70px; /* Adjust for larger screens if needed */
+        height: 70px;
+      }
+    }
+
+    .user-edit {
+      color: $black;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+
+  &_logo {
+    .logo-icon {
+      width: 30px;
+
+      @include media-min-lg {
+        width: 32px;
+      }
+
+      @include media-min-xl {
+        width: 34px;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .editprofile-content {
+    flex-direction: column;
+    text-align: center;
+
+    .editprofile-form {
+      .editprofile_form-el {
+        margin-top: 20px;
+      }
+    }
+  }
+}
+
+.editprofile-heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px;
+}
+
+.Rectangle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  width: 300px;
+  border: 1px solid #ccc;
+  height: 250px;
+  border-radius: 15px;
+}
+
+.RectangleIcon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: flex-end;
+}
+
+.profile-popover-logo {
+  /* Add your styles for the ProfileLogo component here */
+}

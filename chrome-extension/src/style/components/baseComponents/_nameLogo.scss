@@ -1,0 +1,23 @@
+.profile-logo,
+.profile-picture-text {
+  width: 90%;
+  height: 90%;
+}
+.profile-picture-text {
+  border-radius: 50%;
+  font-family: 'Poppins';
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+  color: $black;
+}
+.circle-background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  width: 50px;
+  border: 1px solid #b2ffde;
+  height: 50px;
+  border-radius: 100%;
+}

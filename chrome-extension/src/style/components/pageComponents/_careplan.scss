@@ -1,0 +1,318 @@
+.care-plan-page {
+  .page-title {
+    display: flex;
+    align-items: center;
+
+    .arrow-icon.open {
+      transition: transform 0.3s ease;
+      transform: rotate(180deg);
+    }
+  }
+
+  .chat-header {
+    min-height: 60px;
+    max-height: fit-content;
+    overflow: hidden;
+    border-radius: 5px;
+    margin: 0.5%;
+
+    .chat-content {
+      display: flex;
+      align-items: center;
+
+      .circle-background {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0px;
+        width: 30px;
+        height: 30px;
+        border: 1px solid rgba(18, 137, 131, 0.6);
+        border-radius: 100%;
+
+        .patientname {
+          font-size: 12px;
+        }
+      }
+
+      .pl-3 {
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .patient-info {
+        justify-content: space-between;
+        display: flex;
+
+        .info-label {
+          min-width: 40px;
+          font-size: 12px;
+          font-weight: 400;
+          line-height: normal;
+          color: #000;
+        }
+
+        .info-value {
+          padding-left: 10px;
+          min-width: 160px;
+          font-size: 12px;
+          font-weight: 600;
+          line-height: normal;
+          color: $gray-text;
+          margin-top: 0px;
+        }
+      }
+    }
+  }
+}
+
+.row {
+  display: flex;
+
+  @include media-max-sm {
+    flex-direction: column;
+
+    .flex-70,
+    .flex-30 {
+      flex: 1;
+    }
+  }
+
+  .flex-70 {
+    flex: 1;
+    padding-right: 7px;
+  }
+
+  .flex-30 {
+    flex: 0.3;
+  }
+
+  .careplan-column {
+    @include media-max-sm {
+      .careplan-column-1,
+      .careplan-column-2,
+      .careplan-column-3 {
+        flex: 1;
+        margin: 10px 0;
+      }
+    }
+
+    .careplan-column-1,
+    .careplan-column-2 {
+      padding: 16px;
+      margin: 3px;
+      height: 45%;
+      border-radius: 5px;
+      background-color: #ffffff;
+    }
+
+    .circle-background {
+      height: 100px;
+
+      // margin-top: 10px;
+      @include media-max-2xl {
+        height: 90px;
+        margin-top: 10px;
+      }
+
+      @include media-max-lg {
+        height: 90px;
+        margin-top: 10px;
+      }
+
+      @include media-max-md {
+        height: 60px;
+        width: 70px;
+        margin-top: 10px;
+      }
+
+      @include media-min-sm {
+        height: 70px;
+        width: 70px;
+        margin-top: 10px;
+      }
+    }
+
+    .careplan-column-3 {
+      padding: 16px;
+      margin: 10px;
+    }
+  }
+
+  .icon-text-area {
+    position: relative;
+  }
+
+  .careplan-label {
+    display: inline-block;
+    min-width: 93px;
+    max-width: 93px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .careplan-value {
+    display: inline-block;
+    min-width: 175px;
+    max-width: 100px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .voice-icon-carplan {
+    position: absolute;
+    top: 92%;
+    right: 10px;
+    transform: translateY(-50%);
+  }
+
+  .Edit-icon-carplan {
+    position: absolute;
+    top: 83%;
+    right: 31px;
+    transform: translateY(-50%);
+  }
+
+  .text-style {
+    font-family: 'Poppins';
+    font-size: 14px;
+  }
+}
+
+.text {
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+
+  .grey-text {
+    font-weight: 400;
+    font-size: 14px;
+    color: $black;
+  }
+
+  .grey {
+    font-weight: 400;
+    font-size: 13px;
+    color: $black;
+  }
+
+  .black {
+    font-weight: 400;
+    font-size: 13px;
+    color: #000000;
+  }
+
+  .heading {
+    font-weight: 500;
+    font-size: 16px;
+    color: #000000;
+  }
+
+  .name {
+    font-weight: 500;
+    font-size: 18px;
+    margin-top: 20px;
+    color: #000000;
+  }
+
+  .timeline {
+    font-weight: 400;
+    font-size: 12px;
+    color: rgba(56, 66, 71, 1);
+  }
+}
+
+.careplan-button {
+  position: absolute;
+  top: 92%;
+  right: 50%;
+  transform: translate(50%, -50%);
+
+  .button {
+    width: 150px;
+    height: 41px;
+    border-radius: 5px;
+    background-color: #059669;
+  }
+}
+
+.textarea-ant-careplan {
+  .textarea-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    // .careplan-column-1.text-style {
+    //     width: 142%;
+    // }
+  }
+
+  .ant-input {
+    max-width: 200%;
+    height: auto;
+    min-height: 32px;
+    line-height: 1.5714285714285714;
+    vertical-align: bottom;
+    transition:
+      all 0.3s,
+      height 0s;
+    resize: vertical;
+  }
+
+  .button-container {
+    margin-top: 10px;
+  }
+
+  /* Style for the "Approve Plan" button */
+  // .button {
+  //     width: 150px;
+  //     height: 41px;
+  //     border-radius: 5px;
+  //     background-color: #059669;
+  //     margin-top: 10px; /* Adjust the margin-top as needed */
+  //     margin-left: 45%;
+  //     @include media-max-md {
+  //         width: 150px;
+  //         margin-left: 30%;
+  //     }
+  //     @include media-max-sm {
+  //         width: 130px;
+  //         margin-left: 35%;
+  //     }
+  // }
+
+  .ant-timeline-item-head {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(5, 150, 105, 1);
+    border: 3px solid transparent;
+    border-radius: 50%;
+  }
+
+  .ant-timeline-item-head-blue {
+    color: rgba(5, 150, 105, 1);
+    border-color: rgba(5, 150, 105, 1);
+  }
+
+  .ant-timeline-item-tail {
+    position: absolute;
+    inset-block-start: 13px;
+    inset-inline-start: 4px;
+    height: calc(100% - 10px);
+    border-inline-start: 2px solid rgba(5, 150, 105, 1);
+  }
+
+  .voice-icon-carplan {
+    position: absolute;
+    top: 83%;
+    right: 24px;
+    transform: translateY(-50%);
+  }
+
+  .Edit-icon-carplan {
+    position: absolute;
+    top: 75%;
+    right: 36px;
+    transform: translateY(-50%);
+  }
+}

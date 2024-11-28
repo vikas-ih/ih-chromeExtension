@@ -1,25 +1,29 @@
-// background.js
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("Extension installed and background script running");
-});
+const APP_URL = "http://localhost:5174/account/login"; //PORT should be where the ih-app is running
 
-async function fetchFronteggScript() {
-  try {
-    const response = await fetch(
-      "https://assets.frontegg.com/admin-box/7.19.0/admin-portal/index.js"
-    );
-    const scriptText = await response.text();
+// chrome.runtime.onInstalled.addListener(() => {
+//   chrome.contextMenus.create({
+//     id: "openSidePanel",
+//     title: "Open side panel",
+//     contexts: ["all"],
+//   });
+//   chrome.tabs.create({ url: APP_URL });
+// });
 
-    // Send the fetched script content to a content script or popup
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      if (request.message === "getFronteggScript") {
-        sendResponse({ script: scriptText });
-      }
-    });
-  } catch (error) {
-    console.error("Failed to fetch the Frontegg script:", error);
-  }
-}
+chrome.sidePanel
+  .setPanelBehavior({ openPanelOnActionClick: true })
+  .catch((error) => console.error("error SidePanel", error));
 
-// Call the function to fetch the script
-fetchFronteggScript();
+// chrome.runtime.onMessage.addListener((message, sender) => {
+//   // The callback for runtime.onMessage must return falsy if we're not sending a response
+//   (async () => {
+//     if (message.type === "open_side_panel") {
+//       // This will open a tab-specific side panel only on the current tab.
+//       await chrome.sidePanel.open({ tabId: sender.tab.id });
+//       await chrome.sidePanel.setOptions({
+//         tabId: sender.tab.id,
+//         path: "index.html",
+//         enabled: true,
+//       });
+//     }
+//   })();
+// });

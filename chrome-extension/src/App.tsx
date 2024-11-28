@@ -1,22 +1,23 @@
-// import { FronteggProvider } from "@frontegg/react";
-// import {
-//   BrowserRouter as Router,
-//   Routes,
-//   Route,
-//   // Navigate,
-//   // useLocation,
-// } from "react-router-dom";
-import './App.css'
+
+import "./App.css";
 import { FronteggStoreProvider } from "@frontegg/react-hooks";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+
 import { FronteggApp } from "@frontegg/js";
 import {
   ContextHolder,
   ContextOptions,
   createApiClient,
 } from "@frontegg/rest-api";
-import Home from './Home';
+import Home from "./Home";
 import { useEffect } from "react";
-
+import { Provider } from "react-redux";
+import store from "./store/store";
+import EncounterDetails from "./EncounterDetails";
+import "./style/app.scss";
+import { Appointments } from "./Appointments";
+import Schedule from "./components/Schedule";
+import Layout from "./Layout";
 
 // const contextOptions = {
 //   baseUrl: "https://auth.lumi.build",
@@ -24,7 +25,7 @@ import { useEffect } from "react";
 //   // appId: "[YOUR_APP_ID]",
 // };
 const contextOptions: ContextOptions = {
-  baseUrl: "https://app-dur7z3jxz6xz.us.frontegg.com",
+  baseUrl: "https://auth.lumi.build",
   clientId: "a2232153-71a3-4b40-a026-4d6051b47564",
   appId: "5597c702-9c72-4643-aed8-029f27283aa9",
   requestCredentials: "include",
@@ -66,11 +67,38 @@ function App() {
         });
       });
   }, []);
+  // console.log("fronteggApp", fronteggApp.getEntitlementsFromStore());
   return (
-    <FronteggStoreProvider app={fronteggApp} contextOptions={contextOptions}>
-      <Home />
+    <FronteggStoreProvider
+      app={fronteggApp}
+      contextOptions={contextOptions}
+      // entitlementsOptions={{ enabled: true }}
+    >
+      <Provider store={store}>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/mobileEncounterDetails/:encounter_id_params"
+                element={
+                  <EncounterDetails
+                    topBarInputs={{}}
+                    storedParams={{}}
+                    restrictTemplates={false}
+                    searchFilters={{}}
+                    schedulepage={false}
+                  />
+                }
+              />
+              <Route path="/mobileAppointments" element={<Appointments />} />
+              <Route path="/schedule/:id" element={<Schedule />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </Provider>
     </FronteggStoreProvider>
   );
 }
 
-export default App
+export default App;

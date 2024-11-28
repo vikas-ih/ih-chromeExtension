@@ -1,0 +1,21 @@
+.label,
+.error {
+  font-weight: 400;
+}
+.error {
+  font-size: 14px;
+  line-height: 23px;
+  color: $error-text;
+  // padding: 2px 0 0 0;
+}
+.navlink {
+  color: rgba(90, 141, 218, 1);
+}
+.dashboard-text {
+  font-size: 14px;
+  color: #c9c6c6;
+}
+.appointment-text {
+  font-size: 14px;
+  color: #000000;
+}

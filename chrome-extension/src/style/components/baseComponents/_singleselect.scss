@@ -1,0 +1,125 @@
+.single-select {
+  height: unset !important;
+
+  .ant-select-selector {
+    width: 100%;
+    height: auto !important;
+    background: $white;
+    border: 1px solid #e5e8eb !important;
+    font-family: "Poppins";
+    font-size: 14px;
+    font-weight: 400 !important;
+    border-radius: 12px;
+    padding: 10px 16px 10px 16px !important;
+
+    .ant-select-selection-overflow {
+      padding: 0px !important;
+
+      .ant-select-selection-search {
+        margin-left: 0;
+      }
+    }
+
+    .ant-select-selection-placeholder {
+      font-family: "Poppins";
+      font-weight: 400;
+      font-size: 12px !important;
+    }
+  }
+
+  .anticon-loading {
+    font-size: 20px;
+    font-weight: 700;
+    color: $app-color;
+    opacity: 0.8;
+  }
+
+  .ant-select-arrow {
+    right: 4%;
+    font-weight: 400;
+    font-size: 14px;
+
+    svg {
+      // fill: $field-placeholder;
+    }
+  }
+}
+
+.multi-select.ant-select-multiple {
+  .ant-select-selector {
+    .ant-select-selection-overflow {
+      padding: 0 !important;
+    }
+  }
+}
+
+.single-select.error .ant-select-selector {
+  border-color: #c70039 !important;
+}
+
+.single-select__dropdown {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 0 0;
+
+  .rc-virtual-list {
+    .ant-select-item {
+      padding: 10px 16px;
+    }
+
+    .ant-select-item-option-selected {
+      background-color: unset;
+      font-weight: 400;
+      display: flex;
+      flex-direction: row-reverse;
+
+      .ant-select-item-option-content {
+        padding-left: 8px;
+      }
+
+      .anticon {
+        width: 1rem;
+        height: 1rem;
+        border: 1px solid $field_border !important;
+        border-radius: 4px;
+        background: #eeeeee;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        align-items: center;
+
+        svg {
+          width: 13px;
+          height: 10px;
+        }
+      }
+
+      .anticon-check {
+        border: 1px solid $app-color !important;
+        background: $app-color;
+
+        svg {
+          fill: $white;
+        }
+      }
+    }
+  }
+}
+
+.ant-select-dropdown .ant-select-item-option-content {
+  font-family: "Poppins" !important;
+  font-size: 12px;
+}
+
+.ant-tree-select-dropdown
+  .ant-select-tree
+  .ant-select-tree-treenode.filter-node
+  .ant-select-tree-title {
+  font-weight: 400 !important;
+}
+
+.user-placeholder-select .ant-select-selection-placeholder {
+  color: #abaaaa !important;
+}
