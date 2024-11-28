@@ -1825,7 +1825,7 @@ export const Appointments = () => {
           </div>
 
           <div className="flex justify-between w-full">
-            <div className="" style={{ position: "relative", zIndex: "10" }}>
+            <div className="" style={{ width: "100%", zIndex: "10" }}>
               <ModalPopup
                 currentDate={currentDate}
                 handleMonthChange={handleMonthChange}
@@ -1848,6 +1848,9 @@ export const Appointments = () => {
                 setEndDate={setEndDate}
               />
             </div>
+          </div>
+
+          <div className="flex justify-between w-full">
             <div className="bg-white py-[1px] px-[8px] rounded-xl drop-shadow-sm flex items-center tree-dropdown">
               <label
                 for="appointments"
